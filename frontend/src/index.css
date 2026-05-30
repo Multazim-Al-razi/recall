@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #f5f0eb;
+  --color-surface: #fffdf9;
+  --color-ink: #1a1a1a;
+  --color-muted: #999999;
+  --color-hairline: rgba(26, 26, 26, 0.04);
+  --color-rausch: #d4443a;
+  --color-rausch-hover: #c23a31;
+  --color-rausch-glow: rgba(212, 68, 58, 0.12);
+  --color-success: #28a745;
+  --color-warning: #b8860b;
+  --color-dark: #1a1a1a;
+
+  --font-sans: "Inter", -apple-system, system-ui, Roboto, "Helvetica Neue", sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Dashboard layout — fixed dimensions */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 72px;
+  --header-height: 64px;
+  --tabbar-height: 44px;
+
+  /* Dashboard layout — colors (light; dark mode added later via overrides) */
+  --color-sidebar-bg: #fffdf9;        /* same as --color-surface */
+  --color-sidebar-text: #1a1a1a;      /* same as --color-ink */
+  --color-sidebar-hover: rgba(26, 26, 26, 0.04);
+  --color-sidebar-active: rgba(212, 68, 58, 0.08);
+  --color-sidebar-border: rgba(26, 26, 26, 0.06);
+  --color-header-bg: #fffdf9;
+  --color-tab-bg: #f5f0eb;            /* same as --color-canvas */
+  --color-tab-active: #fffdf9;
+}
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    overflow-x: hidden;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  button {
+    border: none;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  /* Focus-visible: only show focus ring for keyboard navigation */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-rausch);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Reduced motion: disable animations for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

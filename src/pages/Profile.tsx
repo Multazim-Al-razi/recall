@@ -191,7 +191,7 @@ export function ProfilePage() {
               </div>
 
               <Link
-                to="/pricing"
+                to="/dashboard/upgrade"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-rausch px-5 py-3 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5"
               >
                 {plan === 'max' ? 'View plans' : 'Upgrade plan'}
@@ -212,7 +212,7 @@ export function ProfilePage() {
       <MaskDivider />
       <section className="pb-24 pt-8 text-center text-[13px] text-muted">
         Manage your subscriptions from the{' '}
-        <Link to="/subscriptions" className="border-b border-rausch/30 text-rausch">
+        <Link to="/dashboard/subscriptions" className="border-b border-rausch/30 text-rausch">
           Subscriptions
         </Link>{' '}
         page.

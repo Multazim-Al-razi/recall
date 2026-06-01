@@ -81,7 +81,7 @@ export function RenewalTimeline({ limit }: Props) {
 
       {remaining > 0 && (
         <Link
-          to="/subscriptions"
+          to="/dashboard/subscriptions"
           className="mt-auto inline-flex items-center gap-1.5 pt-4 text-[12px] font-medium text-muted transition-colors hover:text-ink"
         >
           +{remaining} more upcoming

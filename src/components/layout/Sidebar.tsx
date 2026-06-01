@@ -50,7 +50,7 @@ export function Sidebar({ collapsed, onToggle }: Props) {
       <div className="flex h-16 shrink-0 items-center justify-between px-4">
         {(isMobile || !collapsed) && (
           <NavLink
-            to="/"
+            to="/dashboard"
             onClick={() => setMobileOpen(false)}
           >
             <Logo className="text-[19px] text-[var(--color-sidebar-text)]" />

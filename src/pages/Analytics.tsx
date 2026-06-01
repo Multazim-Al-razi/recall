@@ -166,7 +166,7 @@ export function AnalyticsPage() {
       <MaskDivider />
 
       <section className="pb-25 pt-8 text-center">
-        <Link to="/subscriptions" className="inline-flex items-center gap-2 rounded-full bg-rausch px-9 py-4 text-[15px] font-semibold text-white shadow-[0_4px_20px_rgba(212,68,58,0.2)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(212,68,58,0.3)]">
+        <Link to="/dashboard/subscriptions" className="inline-flex items-center gap-2 rounded-full bg-rausch px-9 py-4 text-[15px] font-semibold text-white shadow-[0_4px_20px_rgba(212,68,58,0.2)] transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(212,68,58,0.3)]">
           <Plus size={18} strokeWidth={2.5} />
           Add new subscription
         </Link>

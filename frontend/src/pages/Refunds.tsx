@@ -21,93 +21,23 @@ export function RefundsPage() {
       <div className="prose-mt mt-10 space-y-8 text-[15.5px] leading-[1.85] text-ink-soft">
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            All Sales Are Final
+            Recall Is Free
           </h2>
           <p>
-            Recall's free Local plan requires no payment and no account — it is
-            free forever. The optional Sync plan is a monthly subscription at
-            $1.99/month.{" "}
-            <strong className="text-ink">
-              All payments for the Sync plan are final and non-refundable.
-            </strong>
-          </p>
-          <p className="mt-3">
-            We do not offer:
-          </p>
-          <ul className="mt-2 list-disc pl-5 space-y-1.5">
-            <li>Full or partial refunds for any subscription period</li>
-            <li>Credits toward future billing periods</li>
-            <li>Pro-rated refunds for mid-period cancellations</li>
-            <li>Refunds for unused features</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            Why No Refunds?
-          </h2>
-          <p>
-            The Sync plan is a low-cost digital service. The $1.99 monthly fee
-            covers server costs, email delivery for reminders, and encryption
-            infrastructure. These costs are incurred immediately when the billing
-            period begins. Because the service is delivered instantly and
-            continuously, we are unable to offer refunds for any portion of a
-            billing period.
+            Recall is completely free to use. We do not charge for any features
+            or subscriptions, so there is nothing to refund.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            Cancellation
+            Voluntary Donations
           </h2>
           <p>
-            You can cancel your Sync subscription at any time from the Settings
-            page in your dashboard. Upon cancellation:
-          </p>
-          <ul className="mt-2 list-disc pl-5 space-y-1.5">
-            <li>
-              Your Sync features remain active until the end of your current
-              billing period
-            </li>
-            <li>
-              No further charges will be made after the current period ends
-            </li>
-            <li>
-              You can export your data at any time before or after cancellation
-            </li>
-            <li>
-              After cancellation, your account reverts to the free Local plan
-            </li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            Exceptional Circumstances
-          </h2>
-          <p>
-            In the rare event of a billing error (e.g., being charged twice for
-            the same period), please contact us at{" "}
-            <a
-              href="mailto:hello@recall.app"
-              className="text-rausch hover:underline"
-            >
-              hello@recall.app
-            </a>{" "}
-            and we will resolve it promptly. Billing errors are the only
-            circumstance under which a refund may be issued.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            Payment Provider
-          </h2>
-          <p>
-            Payments are processed by Lemon Squeezy. If you believe a charge
-            was made in error, you may also contact Lemon Squeezy support
-            directly. However, Lemon Squeezy's own refund terms apply, and
-            Recall's no-refund policy remains in effect for the service itself.
+            If you choose to support the project via voluntary cryptocurrency
+            donations, those transactions are processed directly on the
+            blockchain and are <strong className="text-ink">non-refundable</strong>.
+            We have no ability to reverse or recall blockchain transactions.
           </p>
         </section>
 

@@ -60,8 +60,8 @@ export function CookiesPage() {
                 <tr>
                   <td className="px-4 py-3 font-medium">sb-*-auth-token</td>
                   <td className="px-4 py-3 text-muted">
-                    Supabase authentication session. Keeps you signed in when
-                    using the Sync plan.
+                    Supabase authentication session. Keeps you signed in after
+                    GitHub OAuth.
                   </td>
                   <td className="px-4 py-3 text-muted">Session / 1 year</td>
                 </tr>
@@ -69,7 +69,7 @@ export function CookiesPage() {
                   <td className="px-4 py-3 font-medium">sb-*-refresh-token</td>
                   <td className="px-4 py-3 text-muted">
                     Supabase refresh token. Allows your session to be renewed
-                    without re-entering your magic link.
+                    without re-authenticating.
                   </td>
                   <td className="px-4 py-3 text-muted">Until revoked</td>
                 </tr>
@@ -118,8 +118,7 @@ export function CookiesPage() {
             You can control or delete cookies through your browser settings.
             Most browsers allow you to block all cookies or only third-party
             cookies. However, blocking the essential Supabase authentication
-            cookies described above will prevent you from signing in to the
-            Sync plan.
+            cookies described above will prevent you from signing in.
           </p>
           <p className="mt-3">
             Browser-specific instructions:

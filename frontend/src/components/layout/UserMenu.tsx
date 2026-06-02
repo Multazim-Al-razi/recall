@@ -184,9 +184,9 @@ export function UserMenu() {
             {/* Support group */}
             <div className="flex flex-col">
               <MenuLink
-                to="/pricing"
+                to="/donate"
                 icon={<Heart size={16} />}
-                label="Plans & pricing"
+                label="Support us"
                 onClick={close}
               />
               <MenuLink

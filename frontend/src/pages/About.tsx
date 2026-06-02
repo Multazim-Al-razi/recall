@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { clsx } from "clsx";
+import { CREDITS } from "@/lib/credits";
 import { Illustration } from "@/components/ui/Illustration";
+import { Logo } from "@/components/ui/Logo";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 
 /** Left-rail index — every entry maps to a section id below. */
@@ -24,19 +26,15 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is my data sent to a server?",
-    a: "On the free Local web plan, no — everything is stored in your browser and never leaves your device. The optional Sync plan (in development) will mirror your subscriptions to our server so reminders can reach you across devices. Either way, your data is never sold. The upcoming mobile app is fully local with no account.",
+    a: "No — everything is stored in your browser and never leaves your device. Your data is never sold. The upcoming mobile app is also fully local with no account required.",
   },
   {
     q: "How much does Recall cost?",
-    a: "The web app is free to use on the Local plan — all tracking, charts, and unlimited subscriptions, no account needed. The optional Sync plan is $1.99/mo and adds email & push reminders plus multi-device sync; it is in development today, with rollout tracked in the project docs. The mobile app (coming soon) is free, with native on-device reminders and no sign-up.",
-  },
-  {
-    q: "Why does the web Sync plan cost money if Recall is local?",
-    a: "A browser tab that's closed can't wake itself up to remind you — that needs a server running around the clock, which has a real cost. The $1.99/mo Sync plan will pay for exactly that: reliable reminder delivery and multi-device sync. We plan to charge a small honest amount rather than show ads or sell data. Local web use stays free, and mobile reminders run on-device for free.",
+    a: "Recall is completely free. All tracking, charts, and unlimited subscriptions are available with no account needed. The upcoming mobile app will also be free, with native on-device reminders.",
   },
   {
     q: "Can I export my data?",
-    a: "Yes. You can export all your subscriptions as a JSON file from Settings. This file can be re-imported anytime or kept as a backup. CSV export is also available from the Subscriptions page.",
+    a: "Yes. You can export all your subscriptions as a JSON file from Settings. This file can be re-imported anytime or kept as a backup.",
   },
   {
     q: "Does Recall connect to my bank?",
@@ -44,15 +42,15 @@ const FAQ_ITEMS = [
   },
   {
     q: "What happens if I clear my browser data?",
-    a: "Clearing browser data will erase your Recall data on the free Local plan. We recommend exporting a JSON backup from Settings regularly. You can re-import it anytime to restore everything. When the Sync plan ships, your data will be mirrored to the server, so it will survive a cleared browser.",
+    a: "Clearing browser data will erase your Recall data. We recommend exporting a JSON backup from Settings regularly. You can re-import it anytime to restore everything.",
   },
   {
     q: "Can I use Recall on multiple devices?",
-    a: "On the free Local plan each device keeps its own data, and you can use export/import in Settings to move it between devices. The Sync plan ($1.99/mo, in development) will keep every device up to date automatically. The mobile app (coming soon) can optionally import your web data, or start fresh and stay fully local.",
+    a: "Each device keeps its own data, and you can use export/import in Settings to move it between devices. The upcoming mobile app can optionally import your web data, or start fresh and stay fully local.",
   },
   {
     q: "How do renewal reminders work?",
-    a: "On the free Local web plan, Recall shows in-app alerts and can export your renewals to your calendar (.ics), so your own calendar app notifies you — even cross-device. The Sync plan (in development) will add email & push reminders that reach you when the tab is closed. The mobile app will fire native on-device notifications for free.",
+    a: "Recall shows in-app alerts and can export your renewals to your calendar (.ics), so your own calendar app notifies you. The upcoming mobile app will fire native on-device notifications.",
   },
 ] as const;
 
@@ -114,6 +112,7 @@ function useScrollSpy(ids: readonly string[]) {
 
 export function AboutPage() {
   const { hash } = useLocation();
+  const [creditsOpen, setCreditsOpen] = useState(false);
   const active = useScrollSpy(SECTIONS.map((s) => s.id));
   const didScroll = useRef(false);
 
@@ -327,17 +326,16 @@ export function AboutPage() {
               </div>
               <p className="mt-5 text-[15.5px] leading-[1.8] text-ink-soft">
                 The honest trade-off: local data does not automatically follow
-                you across devices. If you want that — plus reminders that
-                arrive when the tab is closed — the optional Sync plan mirrors
-                your data to a server for exactly those features, and nothing
-                more. It is a choice you opt into, never the default.
+                you across devices. You can export your data from Settings and
+                re-import it on any device. The upcoming mobile app will offer
+                optional cloud sync for cross-device use.
               </p>
             </section>
 
             {/* Philosophy */}
             <section id="philosophy" className="scroll-mt-[100px]">
               <h2 className="font-display text-[26px] font-light tracking-[-0.5px] md:text-[30px]">
-                Why we built Recall
+                Why we built <Logo className="text-[26px] md:text-[30px]" />
               </h2>
               <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
                 We were tired of two things: surprise charges, and the kind of
@@ -356,6 +354,7 @@ export function AboutPage() {
               </p>
             </section>
 
+
             {/* FAQ */}
             <section id="faq" className="scroll-mt-[100px]">
               <h2 className="font-display text-[26px] font-light tracking-[-0.5px] md:text-[30px]">
@@ -365,7 +364,7 @@ export function AboutPage() {
                 Everything you need to know about how Recall handles your data,
                 your money, and your reminders.
               </p>
-              <div className="mt-5">
+              <div className="mt-5 rounded-xl bg-surface px-6 pb-2 shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-sm)] sm:px-8">
                 {FAQ_ITEMS.map((item) => (
                   <FaqItem key={item.q} q={item.q} a={item.a} />
                 ))}
@@ -377,60 +376,69 @@ export function AboutPage() {
               <h2 className="font-display text-[26px] font-light tracking-[-0.5px] md:text-[30px]">
                 Credits
               </h2>
-              <div className="mt-4 space-y-2 text-[14.5px] text-muted">
-                <p>
-                  <a
-                    href="https://storyset.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink hover:text-rausch"
+              <p className="mt-3 text-[14.5px] leading-[1.7] text-muted">
+                Recall is built on the work of generous open-source and design
+                communities. We credit every one of them here.
+              </p>
+              <button
+                onClick={() => setCreditsOpen((v) => !v)}
+                aria-expanded={creditsOpen}
+                className="mt-4 flex items-center gap-2 text-[13px] font-medium text-rausch transition-colors hover:text-rausch-hover"
+              >
+                {creditsOpen ? "Hide" : "Show"} the full list
+                <ChevronDown
+                  size={15}
+                  className={`transition-transform ${creditsOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+              <AnimatePresence>
+                {creditsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden"
                   >
-                    Storyset
-                  </a>
-                  {" "}— Character illustrations on this page.
-                </p>
-                <p>
-                  <a
-                    href="https://simpleicons.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-ink hover:text-rausch"
-                  >
-                    Simple Icons
-                  </a>
-                  {" "}— Brand logos for subscription providers.
-                </p>
-              </div>
+                    <ul className="mt-4 space-y-3">
+                      {CREDITS.map((c) => (
+                        <li
+                          key={c.name}
+                          className="rounded-lg bg-surface-2 p-4"
+                        >
+                          <a
+                            href={c.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[14px] font-semibold transition-colors hover:text-rausch"
+                          >
+                            {c.name}
+                            <span className="font-normal text-muted">
+                              {" "}
+                              · {c.author}
+                            </span>
+                          </a>
+                          <p className="mt-1 text-[12.5px] leading-[1.5] text-muted">
+                            {c.usage}
+                          </p>
+                          <span className="mt-1.5 inline-block text-[11px] font-medium uppercase tracking-[0.5px] text-ink/35">
+                            {c.licence}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </section>
           </div>
         </div>
       </div>
 
       <MaskDivider />
-
-      {/* Donate */}
-      <section className="mx-auto max-w-[1000px] px-5 pb-20 pt-14 sm:px-8 md:px-12">
-        <div className="flex flex-col-reverse items-center gap-8 md:flex-row-reverse md:gap-12">
-          <Illustration
-            name="donateCharity"
-            decorative={false}
-            className="h-[160px] w-full max-w-[240px] shrink-0 object-contain"
-          />
-          <div className="text-center md:text-left">
-            <p className="text-[16px] leading-[1.7] text-muted">
-              If Recall has saved you money or hassle,{' '}
-              <a
-                href="https://buymeacoffee.com/recall"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-rausch underline decoration-rausch/30 underline-offset-2 transition-colors hover:text-rausch-hover"
-              >
-                consider buying us a coffee
-              </a>
-              . It keeps this project free for everyone.
-            </p>
-          </div>
-        </div>
+      <section className="pb-24 pt-8 text-center text-[13px] text-muted">
+        Recall — track every subscription, never forget to cancel. Free on the
+        web, free forever on mobile.
       </section>
     </motion.div>
   );

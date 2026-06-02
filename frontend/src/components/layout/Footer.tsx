@@ -14,8 +14,8 @@ export function Footer() {
         <Link to="/about" className="transition-colors hover:text-ink">
           About
         </Link>
-        <Link to="/pricing" className="transition-colors hover:text-rausch">
-          Pricing
+        <Link to="/donate" className="transition-colors hover:text-rausch">
+          Donate
         </Link>
         <span>v1.1.0</span>
       </div>

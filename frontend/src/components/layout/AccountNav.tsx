@@ -130,7 +130,7 @@ export function AccountNav() {
                   Sign in
                 </button>
                 <p className="px-2.5 pb-1 pt-2 text-center text-[11px] leading-[1.5] text-muted">
-                  Web is free · Sync is $1.99/mo · Mobile coming soon
+                  Free on the web · Mobile coming soon
                 </p>
               </>
             )}

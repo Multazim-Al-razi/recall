@@ -8,8 +8,6 @@ import { Testimonials } from "@/components/marketing/Testimonials";
 import { StepThread } from "@/components/marketing/StepThread";
 import { Illustration } from "@/components/ui/Illustration";
 import type { IllustrationKey } from "@/lib/visuals";
-import { FLAGS } from "@/lib/featureFlags";
-import { COPY } from "@/lib/copyContract";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 
 type Feature = {
@@ -20,17 +18,17 @@ type Feature = {
 
 const FEATURES: Feature[] = [
   {
-    title: COPY.homeFeatures[0],
+    title: "Never miss a renewal",
     body: "Recall watches every billing date and nudges you before a charge lands — so trials never convert behind your back.",
     art: "notification",
   },
   {
-    title: COPY.homeFeatures[1],
+    title: "See where money goes",
     body: "Category breakdowns turn a pile of charges into one clear picture of your true monthly burn.",
     art: "revenueChart",
   },
   {
-    title: COPY.homeFeatures[2],
+    title: "Find quiet savings",
     body: "Recall spots overlapping services and forgotten trials, then shows you exactly what to cut.",
     art: "savingsGoal",
   },
@@ -54,7 +52,12 @@ const STEPS = [
   },
 ];
 
-const TRUST = COPY.homeTrustSignals;
+const TRUST = [
+  "Runs locally",
+  "No sign-up",
+  "No ads",
+  "We never see your data",
+];
 
 export function HomePage() {
   return (
@@ -68,13 +71,13 @@ export function HomePage() {
       <section className="relative overflow-hidden">
         <div className="mx-auto flex max-w-[1240px] flex-col items-center justify-between gap-12 px-5 pt-12 pb-16 sm:px-8 md:flex-row md:gap-10 md:px-12 md:pt-16 md:pb-24">
           <div className="w-full max-w-[560px] text-center md:text-left">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-ink/8 bg-surface/70 px-3.5 py-1.5 text-[12px] font-medium text-muted backdrop-blur">
+              <Heart size={13} className="text-rausch" />
+              Your subscriptions, on your device, under your control
+            </div>
             <h1 className="font-display text-[42px] font-light leading-[1.02] tracking-[-1.5px] sm:text-[52px] md:text-[60px]">
-              {COPY.homeHeroHeadline.replace(` ${COPY.homeHeroAccent}.`, " ")}
-              <span className="text-gradient-rausch font-normal">
-                {" "}
-                {COPY.homeHeroAccent}
-              </span>
-              .
+              The money leaving your account, finally in your{" "}
+              <span className="text-gradient-rausch font-normal">hands</span>.
             </h1>
             <p className="mx-auto mt-6 max-w-[460px] text-[17px] leading-[1.6] text-muted md:mx-0 md:text-[18px]">
               Recall tracks every recurring charge right in your browser — no
@@ -86,15 +89,15 @@ export function HomePage() {
                 to="/onboarding"
                 className="sheen inline-flex w-full items-center justify-center gap-2 rounded-full bg-rausch px-8 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] sm:w-auto"
               >
-                {COPY.homePrimaryCta}
+                Start tracking free
                 <ArrowRight size={18} />
               </Link>
               <Link
-                to="/pricing"
+                to="/about"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-ink/12 px-8 py-4 text-[15px] font-semibold text-ink transition-all hover:border-rausch/40 hover:text-rausch sm:w-auto"
               >
                 <Heart size={16} />
-                {COPY.homeSecondaryCta}
+                Learn more
               </Link>
             </div>
             <div className="mt-7 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 md:justify-start">
@@ -197,15 +200,14 @@ export function HomePage() {
           <span className="text-gradient-rausch font-normal">hands</span>.
         </h2>
         <p className="mx-auto mt-4 max-w-[460px] text-[15px] text-muted">
-          {FLAGS.syncPlan
-            ? "Free, and it stays free — your data lives on your device. The only thing we charge for is cloud reminders that reach you with the tab closed: Sync, $1.99/mo, optional."
-            : "Free, and it stays free — your data lives on your device. Sync ($1.99/mo, cloud-delivered reminders) is on the way; everything else ships today."}
+          Your data lives on your device. Everything you need to take back
+          control of your subscriptions, right in your browser.
         </p>
         <Link
           to="/onboarding"
           className="sheen mt-8 inline-flex items-center gap-2 rounded-full bg-rausch px-9 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
         >
-          {COPY.homeBottomCta}
+          Get started
           <ArrowRight size={17} />
         </Link>
       </section>

@@ -49,11 +49,10 @@ export function TermsPage() {
             3. Accounts and Eligibility
           </h2>
           <p>
-            You must be at least 13 years old to use Recall. The free Local plan
-            requires no account — your data stays in your browser. The optional
-            Sync plan requires a valid email address for authentication via
-            magic link. You are responsible for the security of your email
-            account.
+            You must be at least 13 years old to use Recall. Recall requires no
+            account to get started — your data stays in your browser. If you
+            choose to sign in with GitHub, you are responsible for the security
+            of your GitHub account.
           </p>
         </section>
 
@@ -62,12 +61,10 @@ export function TermsPage() {
             4. Your Data
           </h2>
           <p>
-            On the free Local plan, all subscription data is stored in your
-            browser's local storage and never transmitted to our servers. You
-            can export your data at any time. On the Sync plan, your
-            subscription data is encrypted and stored on our servers solely for
-            the purpose of providing multi-device sync and reminder delivery. We
-            do not sell, share, or monetize your data in any way. See our{" "}
+            All subscription data is stored in your browser's local storage and
+            never transmitted to our servers. You can export your data at any
+            time. We do not sell, share, or monetize your data in any way. See
+            our{" "}
             <a href="/privacy" className="text-rausch hover:underline">
               Privacy Policy
             </a>{" "}
@@ -110,29 +107,13 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            6. Payments and Subscriptions
+            6. Payments and Donations
           </h2>
           <p>
-            The free Local plan is free forever with no account required. The
-            optional Sync plan costs $1.99/month. Payments are processed by our
-            payment provider (currently Lemon Squeezy). By subscribing to the
-            Sync plan, you agree to the payment provider's terms as well. We do
-            not store your payment card details.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            7. No Refunds
-          </h2>
-          <p>
-            All payments for the Sync plan are final. We do not offer refunds,
-            credits, or partial billing for unused portions of a subscription
-            period. See our{" "}
-            <a href="/refunds" className="text-rausch hover:underline">
-              Refund Policy
-            </a>{" "}
-            for details.
+            Recall is completely free to use. We do not charge for any features
+            or subscriptions. If you choose to support the project via voluntary
+            cryptocurrency donations, those transactions are handled directly
+            on the blockchain and are non-refundable.
           </p>
         </section>
 
@@ -188,12 +169,11 @@ export function TermsPage() {
             11. Termination
           </h2>
           <p>
-            You may stop using Recall at any time. On the Local plan, simply
-            close your browser — your data stays in local storage until you
-            clear it. On the Sync plan, you can delete your account from
-            Settings, which permanently removes your data from our servers. We
-            reserve the right to suspend or terminate access to the Service if
-            you violate these terms.
+            You may stop using Recall at any time. Simply close your browser —
+            your data stays in local storage until you clear it. You can delete
+            your linked GitHub account from Settings at any time. We reserve the
+            right to suspend or terminate access to the Service if you violate
+            these terms.
           </p>
         </section>
 

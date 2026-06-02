@@ -21,8 +21,7 @@ export interface AuthState {
  *   - Reactive `user` / `session` / `loading` state
  */
 export function useAuth(): AuthState & {
-  signInWithOtp: (email: string) => Promise<{ error: string | null }>;
-  verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
+  signInWithGitHub: () => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 } {
   const [user, setUser] = useState<User | null>(null);
@@ -51,9 +50,14 @@ export function useAuth(): AuthState & {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signInWithOtp = useCallback(async (email: string) => {
+  const signInWithGitHub = useCallback(async () => {
     if (!supabase) return { error: 'Supabase is not configured' };
-    const { error } = await supabase.auth.signInWithOtp({ email });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: typeof window !== 'undefined' ? window.location.origin + '/dashboard' : undefined,
+      },
+    });
     return { error: error?.message ?? null };
   }, []);
 
@@ -72,5 +76,5 @@ export function useAuth(): AuthState & {
     await supabase.auth.signOut();
   }, []);
 
-  return { user, session, loading, signInWithOtp, verifyOtp, signOut };
+  return { user, session, loading, signInWithGitHub, signOut };
 }

@@ -15,7 +15,6 @@ const DONATE_URL = 'https://buymeacoffee.com/recall';
 
 const NAV_ITEMS = [
   { path: "/", label: "Home" },
-  { path: "/pricing", label: "Pricing" },
   { path: "/about", label: "About" },
   { path: "/blog", label: "Blog" },
 ];

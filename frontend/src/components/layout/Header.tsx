@@ -50,12 +50,12 @@ export function Header() {
 
         {/* Support link */}
         <Link
-          to="/pricing"
-          aria-label="Recall plans and pricing"
+          to="/donate"
+          aria-label="Support Recall"
           className="hidden h-9 items-center gap-1.5 rounded-full border border-ink/8 px-3 text-[12px] font-medium text-muted transition-colors hover:border-rausch/30 hover:text-rausch sm:inline-flex"
         >
           <Heart size={14} />
-          Pricing
+          Donate
         </Link>
 
         {/* Notifications — count reflects real urgent items */}

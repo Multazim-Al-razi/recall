@@ -30,9 +30,6 @@ const BlogPage = lazy(() =>
 const BlogPostPage = lazy(() =>
   import("@/pages/BlogPost").then((m) => ({ default: m.BlogPostPage })),
 );
-const PricingPage = lazy(() =>
-  import("@/pages/Pricing").then((m) => ({ default: m.PricingPage })),
-);
 const TermsPage = lazy(() =>
   import("@/pages/Terms").then((m) => ({ default: m.TermsPage })),
 );
@@ -44,6 +41,9 @@ const RefundsPage = lazy(() =>
 );
 const CookiesPage = lazy(() =>
   import("@/pages/Cookies").then((m) => ({ default: m.CookiesPage })),
+);
+const DonatePage = lazy(() =>
+  import("@/pages/Donate").then((m) => ({ default: m.DonatePage })),
 );
 const OnboardingPage = lazy(() =>
   import("@/pages/Onboarding").then((m) => ({ default: m.OnboardingPage })),
@@ -91,13 +91,14 @@ function AnimatedRoutes() {
           <Route element={<MarketingLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/pricing" element={<Navigate to="/about" replace />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/refunds" element={<RefundsPage />} />
             <Route path="/cookies" element={<CookiesPage />} />
+            <Route path="/donate" element={<DonatePage />} />
           </Route>
 
           {/* Auth routes — no nav */}
@@ -122,7 +123,6 @@ function AnimatedRoutes() {
           </Route>
 
           {/* Legacy flat-route redirects */}
-          <Route path="/donate" element={<Navigate to="/pricing" replace />} />
           <Route path="/faq" element={<Navigate to="/about#faq" replace />} />
           <Route
             path="/subscriptions"

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { Check, RotateCcw, Bell } from "lucide-react";
+import { Check, RotateCcw, Bell, Heart } from "lucide-react";
 import { useAccountActions } from "@/hooks/useApiSync";
 import { Illustration } from "@/components/ui/Illustration";
 import { MaskDivider } from "@/components/layout/MaskDivider";
@@ -175,16 +175,15 @@ export function ProfilePage() {
                 Your plan
               </div>
               <div className="mt-3 text-[15px] text-muted">
-                Web · Local — free. All tracking and insights in your browser.
-                Add email & push reminders with Sync for $1.99/mo.
+                All tracking and insights, right in your browser. Free forever.
               </div>
 
               <Link
-                to="/pricing"
+                to="/donate"
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-rausch px-5 py-3 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5"
               >
-                <Bell size={16} />
-                See plans
+                <Heart size={16} />
+                Support us
               </Link>
             </div>
 

@@ -38,7 +38,7 @@ export function PrivacyPage() {
           <p>We want to be clear about what we never collect:</p>
           <ul className="mt-2 list-disc pl-5 space-y-1.5">
             <li>Bank account or credit card information</li>
-            <li>Login credentials or passwords (we use passwordless magic links)</li>
+            <li>Login credentials or passwords (we use GitHub OAuth)</li>
             <li>Transaction history from your bank</li>
             <li>Personal financial data beyond what you voluntarily enter</li>
             <li>Third-party tracking cookies or advertising data</li>
@@ -48,12 +48,11 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            3. Data Stored Locally (Free Plan)
+            3. Data Stored Locally
           </h2>
           <p>
-            On the free Local plan, all your subscription data — names, costs,
-            billing dates, categories, and notes — is stored in your browser's
-            local storage. This data:
+            All your subscription data — names, costs, billing dates, categories,
+            and notes — is stored in your browser's local storage. This data:
           </p>
           <ul className="mt-2 list-disc pl-5 space-y-1.5">
             <li>Never leaves your device</li>
@@ -65,34 +64,14 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            4. Data Stored on Our Servers (Sync Plan)
+            4. Authentication
           </h2>
           <p>
-            If you subscribe to the optional Sync plan ($1.99/month), the
-            following data is stored on our servers to enable multi-device sync
-            and reminder delivery:
-          </p>
-          <ul className="mt-2 list-disc pl-5 space-y-1.5">
-            <li>Your email address (for authentication and reminder delivery)</li>
-            <li>Your subscription list (names, amounts, dates, categories)</li>
-            <li>Your preferences (currency, reminder lead time)</li>
-          </ul>
-          <p className="mt-3">
-            This data is encrypted in transit (TLS) and at rest. It is used
-            solely to provide the Sync service. We do not access, analyze, or
-            monetize your subscription data for any other purpose.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            5. Authentication
-          </h2>
-          <p>
-            We use Supabase Auth for passwordless sign-in via magic link. When
-            you enter your email, Supabase sends a one-time link to your inbox.
-            We never store passwords. Your authentication session is managed by
-            Supabase and persisted in your browser's local storage.
+            Recall uses GitHub OAuth for sign-in. When you click "Continue with
+            GitHub," you are redirected to GitHub's authentication page. We
+            never see or store your GitHub password. Your authentication session
+            is managed by Supabase and persisted in your browser's local
+            storage.
           </p>
         </section>
 
@@ -105,10 +84,10 @@ export function PrivacyPage() {
             analytics service. We do not set advertising or tracking cookies.
           </p>
           <p className="mt-3">
-            We may use essential cookies required for authentication (Supabase
-            session tokens) and preference storage (theme, currency). These are
-            strictly necessary for the Service to function and are not used for
-            tracking.
+            We may use essential cookies required for authentication (GitHub
+            OAuth session tokens) and preference storage (theme, currency).
+            These are strictly necessary for the Service to function and are
+            not used for tracking.
           </p>
         </section>
 
@@ -127,8 +106,8 @@ export function PrivacyPage() {
               processing agreements.
             </li>
             <li>
-              <strong>Lemon Squeezy</strong> — our payment processor (Sync plan
-              only). They handle payment details; we never see your card number.
+              <strong>GitHub</strong> — used for authentication only. We receive
+              your GitHub username and public profile; nothing else.
             </li>
             <li>
               <strong>Vercel</strong> — our hosting provider. They serve the
@@ -146,14 +125,10 @@ export function PrivacyPage() {
             8. Data Retention
           </h2>
           <p>
-            <strong>Local plan:</strong> Your data stays in your browser until
-            you clear it. We have no server-side copy.
-          </p>
-          <p className="mt-3">
-            <strong>Sync plan:</strong> Your data is retained on our servers as
-            long as your account is active. If you delete your account from
-            Settings, your data is permanently removed from our servers within
-            30 days.
+            Your data stays in your browser until you clear it. We have no
+            server-side copy. If you sign in with GitHub, your authentication
+            session is stored locally in your browser and expires when you sign
+            out.
           </p>
         </section>
 
@@ -173,16 +148,16 @@ export function PrivacyPage() {
             <li>Object to processing of your data</li>
           </ul>
           <p className="mt-3">
-            Since the Local plan stores data entirely on your device, you have
-            full control — simply export or clear your browser data. For Sync
-            plan users, email{" "}
+            Since Recall stores data entirely on your device, you have full
+            control — simply export or clear your browser data. To exercise any
+            of these rights for your GitHub authentication data, email{" "}
             <a
               href="mailto:hello@recall.app"
               className="text-rausch hover:underline"
             >
               hello@recall.app
-            </a>{" "}
-            to exercise any of these rights.
+            </a>
+            .
           </p>
         </section>
 

@@ -10,6 +10,7 @@ const PRODUCT_LINKS = [
 const RESOURCE_LINKS = [
   { label: "Blog", to: "/blog" },
   { label: "FAQ", to: "/about#faq" },
+  { label: "Support us", to: "/donate" },
   { label: "Terms of Service", to: "/terms" },
   { label: "Privacy Policy", to: "/privacy" },
   { label: "Refund Policy", to: "/refunds" },
@@ -19,7 +20,6 @@ const RESOURCE_LINKS = [
 const START_LINKS = [
   { label: "Get started", to: "/onboarding" },
   { label: "Dashboard", to: "/dashboard" },
-  { label: "Plans & pricing", to: "/pricing" },
 ];
 
 export function MarketingFooter() {

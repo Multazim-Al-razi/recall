@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { PlanTier } from '@/types/plan';
 
+export type AccountTier = 'local' | 'sync';
+
 export interface UserProfile {
   name: string;
   email: string;
@@ -10,6 +12,7 @@ export interface UserProfile {
   currency: string;
   /** Notify this many days before a renewal. */
   reminderLeadDays: number;
+  tier: AccountTier;
 }
 
 interface AccountState {
@@ -28,6 +31,7 @@ const DEFAULT_PROFILE: UserProfile = {
   email: '',
   currency: 'USD',
   reminderLeadDays: 3,
+  tier: 'local',
 };
 
 export const useAccountStore = create<AccountState>()(
@@ -54,4 +58,3 @@ export const useAccountStore = create<AccountState>()(
     { name: 'recall-account' }
   )
 );
-

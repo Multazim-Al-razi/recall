@@ -1,0 +1,182 @@
+/**
+ * Recall Backend API Client
+ *
+ * Provides typed functions for every backend endpoint.
+ * Falls back gracefully when the backend is unavailable
+ * (local-first mode continues to work via Zustand stores).
+ *
+ * After Workstream 2, every request (except /api/health) carries
+ * `Authorization: Bearer <jwt>` from the Supabase session.
+ * See docs/BACKEND_ROADMAP.md §2.
+ */
+
+import { supabase } from '@/lib/supabaseClient';
+
+// Use relative path so Vite proxy forwards to backend in dev.
+// In production, set VITE_API_URL to the deployed backend URL.
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+
+/** Default per-request timeout (ms) so a dead backend never hangs the UI. */
+const REQUEST_TIMEOUT = 5000;
+
+/**
+ * Normalize a non-2xx response into a friendly `Error` (5.1). The backend
+ * returns `{ error: string }` JSON for 4xx; everything else is coerced to
+ * a generic message so we never surface raw HTML or stack text to the UI.
+ */
+async function readErrorBody(res: Response): Promise<string> {
+  const contentType = res.headers.get('content-type') ?? '';
+  if (contentType.includes('application/json')) {
+    try {
+      const data = (await res.clone().json()) as { error?: unknown };
+      if (typeof data?.error === 'string' && data.error.trim()) {
+        return data.error;
+      }
+    } catch {
+      // fall through
+    }
+  }
+  // Avoid leaking HTML / non-JSON bodies.
+  return `Request failed (${res.status})`;
+}
+
+/**
+ * Retrieves the current Supabase access token. Returns null if no session
+ * is active or Supabase is not configured — the caller decides whether to
+ * proceed without auth or wait.
+ */
+async function getAccessToken(): Promise<string | null> {
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  return data.session?.access_token ?? null;
+}
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = await getAccessToken();
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_BASE}${path}`, {
+    headers,
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT),
+    ...options,
+  });
+  if (!res.ok) {
+    const message = await readErrorBody(res);
+    throw new Error(message);
+  }
+  return res.json();
+}
+
+
+// ── Subscriptions ─────────────────────────────────────────────────────
+
+export interface ApiSubscription {
+  id: string;
+  name: string;
+  amount: number;
+  currency: string;
+  billingCycle: string;
+  customCycleDays?: number;
+  category: string;
+  startDate: string;
+  nextRenewalDate: string;
+  reminderDaysBefore: number;
+  autoReminder: boolean;
+  isFreeTrial: boolean;
+  trialEndDate?: string;
+  providerIcon?: string;
+  notes?: string;
+  status: string;
+}
+
+export const subscriptionsApi = {
+  list(status?: string) {
+    const qs = status ? `?status=${status}` : '';
+    return request<{ subscriptions: ApiSubscription[] }>(`/subscriptions${qs}`);
+  },
+  get(id: string) {
+    return request<ApiSubscription>(`/subscriptions/${id}`);
+  },
+  create(data: Partial<ApiSubscription>) {
+    return request<ApiSubscription>('/subscriptions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  update(id: string, data: Partial<ApiSubscription>) {
+    return request<ApiSubscription>(`/subscriptions/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+  delete(id: string) {
+    return request<{ success: boolean }>(`/subscriptions/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// ── Account ───────────────────────────────────────────────────────────
+
+export interface ApiAccount {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  currency: string;
+  reminderLeadDays: number;
+  onboarded: boolean;
+  tier: 'local' | 'sync';
+}
+
+export const accountApi = {
+  get() {
+    return request<ApiAccount>('/account');
+  },
+  update(data: Partial<ApiAccount>) {
+    return request<ApiAccount>('/account', {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+  completeOnboarding(data: { name?: string; email?: string; currency?: string }) {
+    return request<ApiAccount>('/account/complete-onboarding', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  reset() {
+    return request<ApiAccount>('/account/reset', {
+      method: 'POST',
+    });
+  },
+  /**
+   * Request a plan change. The backend endpoint is a stub today (returns
+   * 501 until billing ships) — see docs/BACKEND_ROADMAP.md.
+   */
+  upgrade(tier: 'local' | 'sync') {
+    return request<ApiAccount>('/account/upgrade', {
+      method: 'POST',
+      body: JSON.stringify({ tier }),
+    });
+  },
+};
+
+// ── Health ────────────────────────────────────────────────────────────
+
+export const healthApi = {
+  check() {
+    return request<{ status: string; timestamp: string }>('/health');
+  },
+};
+
+// ── Auth ──────────────────────────────────────────────────────────────
+// Auth routes are handled directly by Supabase on the frontend (signInWithOtp,
+// verifyOtp via the supabaseClient). The backend's /api/auth/* endpoints
+// are public (no requireAuth) and exist only for server-side session
+// management if needed in the future.

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { useSpring, useTransform } from 'framer-motion';
 import { clsx } from 'clsx';
 
 interface AnimatedCounterProps {
@@ -14,22 +14,6 @@ interface AnimatedCounterProps {
   /** Duration in ms */
   duration?: number;
   className?: string;
-}
-
-function Digit({ value, prefix }: { value: string; prefix?: string }) {
-  return (
-    <span className="inline-block overflow-hidden">
-      {prefix && <span>{prefix}</span>}
-      <motion.span
-        initial={{ y: '100%' }}
-        animate={{ y: 0 }}
-        transition={{ type: 'spring', damping: 20, stiffness: 200 }}
-        className="inline-block"
-      >
-        {value}
-      </motion.span>
-    </span>
-  );
 }
 
 export function AnimatedCounter({

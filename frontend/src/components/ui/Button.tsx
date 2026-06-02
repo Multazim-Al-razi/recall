@@ -1,17 +1,22 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { clsx } from 'clsx';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   variant?: Variant;
   size?: Size;
   icon?: ReactNode;
   iconRight?: ReactNode;
   loading?: boolean;
   fullWidth?: boolean;
+  className?: string;
+  children?: ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const VARIANT_CLASSES: Record<Variant, string> = {
@@ -43,7 +48,8 @@ export function Button({
   className,
   children,
   disabled,
-  ...props
+  onClick,
+  type,
 }: ButtonProps) {
   return (
     <motion.button
@@ -57,7 +63,8 @@ export function Button({
         className,
       )}
       disabled={disabled || loading}
-      {...props}
+      onClick={onClick}
+      type={type}
     >
       {loading ? (
         <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

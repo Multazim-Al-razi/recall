@@ -11,6 +11,7 @@ import { BlogPostPage } from '@/pages/BlogPost';
 import { FaqPage } from '@/pages/Faq';
 import { PricingPage } from '@/pages/Pricing';
 import { OnboardingPage } from '@/pages/Onboarding';
+import { LoginPage } from '@/pages/Login';
 import { DashboardView } from '@/pages/dashboard/DashboardView';
 import { SubscriptionsView } from '@/pages/dashboard/SubscriptionsView';
 import { AnalyticsView } from '@/pages/dashboard/AnalyticsView';
@@ -33,8 +34,9 @@ function AnimatedRoutes() {
           <Route path="/faq" element={<FaqPage />} />
         </Route>
 
-        {/* Auth route — no nav */}
+        {/* Auth routes — no nav */}
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* Dashboard routes — layout shell */}
         <Route element={<DashboardLayout />}>
@@ -61,8 +63,9 @@ function Chrome() {
   useLenis();
   const location = useLocation();
   const isOnboarding = location.pathname === '/onboarding';
+  const isLogin = location.pathname === '/login';
   const isDashboard = location.pathname.startsWith('/dashboard');
-  const showNav = !isOnboarding && !isDashboard;
+  const showNav = !isOnboarding && !isLogin && !isDashboard;
 
   return (
     <>

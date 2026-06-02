@@ -1,15 +1,13 @@
-import type { ReactNode, HTMLAttributes } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { clsx } from 'clsx';
 
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
+interface CardProps {
   children: ReactNode;
-  /** Subtle hover lift effect */
   hoverable?: boolean;
-  /** Adds a dashed border style (used for trial cards, empty states) */
   dashed?: boolean;
-  /** Padding size */
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  className?: string;
 }
 
 const PADDING_CLASSES: Record<NonNullable<CardProps['padding']>, string> = {
@@ -25,7 +23,6 @@ export function Card({
   dashed = false,
   padding = 'md',
   className,
-  ...props
 }: CardProps) {
   return (
     <motion.div
@@ -40,7 +37,6 @@ export function Card({
         hoverable && 'cursor-pointer transition-shadow hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]',
         className,
       )}
-      {...props}
     >
       {children}
     </motion.div>

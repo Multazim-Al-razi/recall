@@ -10,6 +10,10 @@ const PRODUCT_LINKS = [
 const RESOURCE_LINKS = [
   { label: "Blog", to: "/blog" },
   { label: "FAQ", to: "/about#faq" },
+  { label: "Terms of Service", to: "/terms" },
+  { label: "Privacy Policy", to: "/privacy" },
+  { label: "Refund Policy", to: "/refunds" },
+  { label: "Cookie Policy", to: "/cookies" },
 ];
 
 const START_LINKS = [

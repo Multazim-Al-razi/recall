@@ -33,6 +33,18 @@ const BlogPostPage = lazy(() =>
 const PricingPage = lazy(() =>
   import("@/pages/Pricing").then((m) => ({ default: m.PricingPage })),
 );
+const TermsPage = lazy(() =>
+  import("@/pages/Terms").then((m) => ({ default: m.TermsPage })),
+);
+const PrivacyPage = lazy(() =>
+  import("@/pages/Privacy").then((m) => ({ default: m.PrivacyPage })),
+);
+const RefundsPage = lazy(() =>
+  import("@/pages/Refunds").then((m) => ({ default: m.RefundsPage })),
+);
+const CookiesPage = lazy(() =>
+  import("@/pages/Cookies").then((m) => ({ default: m.CookiesPage })),
+);
 const OnboardingPage = lazy(() =>
   import("@/pages/Onboarding").then((m) => ({ default: m.OnboardingPage })),
 );
@@ -82,6 +94,10 @@ function AnimatedRoutes() {
             <Route path="/pricing" element={<PricingPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/refunds" element={<RefundsPage />} />
+            <Route path="/cookies" element={<CookiesPage />} />
           </Route>
 
           {/* Auth routes — no nav */}

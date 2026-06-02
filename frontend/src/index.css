@@ -1,0 +1,381 @@
+@import "tailwindcss";
+
+@theme {
+    /* ── Warm paper foundation ─────────────────────────────────────────
+     A calm, editorial base. Off-white paper, warm near-black ink — never
+     pure #000/#fff, which is what makes screens feel cheap. */
+    --color-canvas: #f4efe7; /* warm paper */
+    --color-surface: #fffefb; /* raised card — warm white */
+    --color-surface-2: #faf5ec; /* recessed / secondary surface for layering */
+    --color-ink: #201c18; /* warm near-black */
+    --color-ink-soft: #5b534b; /* secondary text — readable, not gray mush */
+    --color-muted: #9a9088; /* tertiary / captions */
+    --color-hairline: rgba(32, 28, 24, 0.05);
+    --color-line: rgba(32, 28, 24, 0.1);
+
+    /* Primary — a warm sienna-coral. Distinct from the stock Airbnb red,
+     reads as confident rather than alarming. Reserved for action + urgency. */
+    --color-rausch: #d64f33;
+    --color-rausch-hover: #c0442a;
+    --color-rausch-glow: rgba(214, 79, 51, 0.14);
+
+    /* Secondary — deep pine/teal. Carries "trust, saved money, healthy".
+     Gives the product a second voice so it's no longer mono-accent. */
+    --color-teal: #16786a;
+    --color-teal-hover: #0f6357;
+    --color-teal-soft: rgba(22, 120, 106, 0.1);
+
+    /* Tertiary — honeyed gold for "soon / heads-up" warmth. */
+    --color-gold: #bf882c;
+
+    --color-success: #2f9d56;
+    --color-warning: #bf882c;
+    --color-dark: #211c18;
+
+    /* Data-viz palette — a disciplined warm trio (sienna · pine · honey) plus
+     tonal shades of the same three hues. No rainbow: the whole chart system
+     reads as one designed family on warm paper. */
+    --color-chart-1: #d64f33; /* rausch */
+    --color-chart-2: #16786a; /* teal */
+    --color-chart-3: #e0a23c; /* gold */
+    --color-chart-4: #a83a23; /* deep sienna */
+    --color-chart-5: #1f9c88; /* light pine */
+    --color-chart-6: #c5872b; /* deep honey */
+    --color-chart-7: #e8896d; /* soft sienna */
+    --color-chart-8: #b3a597; /* warm taupe (neutral) */
+
+    --font-sans:
+        "Inter", -apple-system, system-ui, Roboto, "Helvetica Neue", sans-serif;
+    --font-display: "Fraunces", Georgia, serif;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 28px;
+    --radius-pill: 9999px;
+
+    /* Urgency scale — formalized from the moodboard */
+    --color-urgency-now: #d64f33; /* <= 2 days / act now */
+    --color-urgency-soon: #bf882c; /* <= 7 days */
+    --color-urgency-ok: #16786a; /* healthy */
+
+    /* Layered elevation — soft, warm shadows tinted with the ink hue
+       (not generic gray drops). Layered ambient + key light. */
+    --shadow-xs: 0 1px 2px rgba(40, 30, 20, 0.05);
+    --shadow-sm:
+        0 1px 2px rgba(40, 30, 20, 0.04), 0 4px 12px rgba(40, 30, 20, 0.05);
+    --shadow-md:
+        0 2px 6px rgba(40, 30, 20, 0.05), 0 10px 28px rgba(40, 30, 20, 0.08);
+    --shadow-lg:
+        0 4px 12px rgba(40, 30, 20, 0.06), 0 22px 56px rgba(40, 30, 20, 0.12);
+    --shadow-glow: 0 12px 40px rgba(214, 79, 51, 0.22);
+
+    /* Animation easing */
+    --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Dashboard layout — fixed dimensions */
+    --sidebar-width: 260px;
+    --sidebar-collapsed-width: 72px;
+    --header-height: 64px;
+
+    /* Dashboard layout — colors (light; dark mode added later via overrides) */
+    --color-sidebar-bg: #fffefb; /* same as --color-surface */
+    --color-sidebar-text: #201c18; /* same as --color-ink */
+    --color-sidebar-hover: rgba(32, 28, 24, 0.05);
+    --color-sidebar-active: rgba(214, 79, 51, 0.09);
+    --color-sidebar-border: rgba(32, 28, 24, 0.07);
+    --color-header-bg: rgba(255, 254, 251, 0.85);
+    --color-tab-bg: #f4efe7; /* same as --color-canvas */
+    --color-tab-active: #fffefb;
+}
+
+/* Dark mode overrides (#12) — warm charcoal, not flat neutral black */
+.dark {
+    --color-canvas: #17140f; /* warm near-black */
+    --color-surface: #221d17; /* raised card */
+    --color-surface-2: #2b2419; /* recessed / secondary */
+    --color-ink: #f3ede3; /* warm paper-white text */
+    --color-ink-soft: #b9b0a3;
+    --color-muted: #8c8377;
+    --color-hairline: rgba(255, 248, 235, 0.06);
+    --color-line: rgba(255, 248, 235, 0.12);
+    --color-rausch: #ed6b4f;
+    --color-rausch-hover: #f37e64;
+    --color-rausch-glow: rgba(237, 107, 79, 0.18);
+    --color-teal: #3fb39f;
+    --color-teal-hover: #54c4b0;
+    --color-teal-soft: rgba(63, 179, 159, 0.14);
+    --color-gold: #e0a23c;
+    --color-success: #46c46f;
+    --color-warning: #e0a23c;
+    --color-dark: #f3ede3;
+
+    --color-chart-1: #ed6b4f;
+    --color-chart-2: #3fb39f;
+    --color-chart-3: #e0a23c;
+    --color-chart-4: #c9543a;
+    --color-chart-5: #54c4b0;
+    --color-chart-6: #d39a45;
+    --color-chart-7: #f29077;
+    --color-chart-8: #b3a48f;
+
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4), 0 22px 56px rgba(0, 0, 0, 0.6);
+
+    --color-sidebar-bg: #1b1712;
+    --color-sidebar-text: #e6ddd0;
+    --color-sidebar-hover: rgba(255, 248, 235, 0.06);
+    --color-sidebar-active: rgba(237, 107, 79, 0.14);
+    --color-sidebar-border: rgba(255, 248, 235, 0.08);
+    --color-header-bg: rgba(27, 23, 18, 0.85);
+}
+
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        background-color: var(--color-canvas);
+        color: var(--color-ink);
+        overflow-x: hidden;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    button {
+        border: none;
+        background: none;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    /* Focus-visible: only show focus ring for keyboard navigation */
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    [tabindex]:focus-visible {
+        outline: 2px solid var(--color-rausch);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+    }
+
+    /* Reduced motion: disable animations for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+
+    ::selection {
+        background: var(--color-rausch-glow);
+        color: var(--color-rausch);
+    }
+
+    /* Custom scrollbar — quiet, on-brand */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+    }
+    *::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background: rgba(128, 128, 128, 0.28);
+        border-radius: 9999px;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+        background: rgba(128, 128, 128, 0.45);
+        background-clip: padding-box;
+    }
+}
+
+@layer components {
+    /* ── Premium surface card ─────────────────────────────────────
+     A warm, layered card with a hairline ring, a faint top-edge highlight
+     that catches "light", and a soft lift on hover. */
+    .card-premium {
+        position: relative;
+        background: var(--color-surface);
+        border-radius: var(--radius-xl);
+        box-shadow:
+            0 0 0 1px var(--color-hairline),
+            var(--shadow-sm);
+        transition:
+            transform 0.45s var(--ease-out-soft),
+            box-shadow 0.45s var(--ease-out-soft);
+    }
+    /* top-edge highlight — a single flat hairline that reads as "crafted" */
+    .card-premium::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 1px;
+        border-radius: inherit;
+        background: rgba(255, 255, 255, 0.6);
+        opacity: 0.7;
+        pointer-events: none;
+    }
+    .card-premium:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 0 0 1px var(--color-hairline),
+            var(--shadow-lg);
+    }
+
+    /* Recessed / inset surface — for secondary panels, list rows, wells. */
+    .card-inset {
+        background: var(--color-surface-2);
+        border-radius: var(--radius-lg);
+        box-shadow: inset 0 0 0 1px var(--color-hairline);
+    }
+
+    /* ── Glass panel (nav, floating chrome) ────────────────────── */
+    .glass {
+        background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+        backdrop-filter: blur(24px) saturate(1.6);
+        -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    }
+
+    /* ── Editorial accent text — flat, premium, no gradient ─────────── */
+    .text-gradient-rausch {
+        color: var(--color-rausch);
+    }
+
+    /* The teal voice, for trust/savings headlines — flat */
+    .text-gradient-teal {
+        color: var(--color-teal);
+    }
+
+    /* ── Sheen (inert) — gradient sweeps removed for a flat premium feel ── */
+    .sheen {
+        position: relative;
+        overflow: hidden;
+    }
+}
+
+@layer utilities {
+    /* Aurora wash — neutralized. Gradient washes removed; surfaces stay on
+       clean warm paper. Kept as an inert hook so existing markup is harmless. */
+    .bg-aurora {
+        background: transparent;
+    }
+
+    /* Subtle dotted texture for empty / hero panels */
+    .bg-dotgrid {
+        background-image: radial-gradient(
+            circle,
+            var(--color-hairline) 1px,
+            transparent 1px
+        );
+        background-size: 22px 22px;
+    }
+
+    /* Fine film grain — layered over dark/feature panels to kill the flat,
+       "CSS gradient" look and add tactile, premium depth. */
+    .bg-grain {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* Edge-faded horizontal marquee track for the logo strip */
+    .marquee-mask {
+        -webkit-mask-image: linear-gradient(
+            90deg,
+            transparent,
+            #000 12%,
+            #000 88%,
+            transparent
+        );
+        mask-image: linear-gradient(
+            90deg,
+            transparent,
+            #000 12%,
+            #000 88%,
+            transparent
+        );
+    }
+
+    .animate-marquee {
+        animation: marquee 38s linear infinite;
+    }
+    .animate-marquee:hover {
+        animation-play-state: paused;
+    }
+
+    .animate-pulse-ring {
+        animation: pulse-ring 2.2s var(--ease-out-soft) infinite;
+    }
+
+    .animate-shimmer {
+        background-size: 200% 100%;
+        animation: shimmer 1.6s linear infinite;
+    }
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        box-shadow: 0 0 0 0 var(--color-rausch-glow);
+    }
+    70% {
+        box-shadow: 0 0 0 10px transparent;
+    }
+    100% {
+        box-shadow: 0 0 0 0 transparent;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}

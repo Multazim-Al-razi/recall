@@ -1,0 +1,66 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies & build output
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Agent / tooling scaffolding (not part of the app)
+CLAUDE.md
+.kilo/
+.kiro/
+docs/superpowers/
+frontend/src/assets/illustrations/.skills/
+frontend/src/assets/illustrations/.3d-animation/
+frontend/src/assets/illustrations/AGENTS.md
+frontend/src/assets/illustrations/scripts/
+.git_disabled/
+node_modules/
+.kilo/
+.superpowers/
+.playwright-mcp/
+test-results/
+
+# AI agent worktrees and settings
+.claude/
+.qwen/
+
+# Backend runtime data
+backend/data/
+
+# Backend roadmap (internal planning doc)
+docs/BACKEND_ROADMAP.md
+
+# TypeScript build artifacts
+*.tsbuildinfo
+frontend/tsc-out.txt

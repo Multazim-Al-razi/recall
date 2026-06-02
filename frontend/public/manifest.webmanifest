@@ -1,0 +1,19 @@
+{
+  "name": "Recall — Subscription Tracker",
+  "short_name": "Recall",
+  "description": "Track every subscription, never forget to cancel, and see your true monthly burn. Local-first and always free.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5f0eb",
+  "theme_color": "#d4443a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}

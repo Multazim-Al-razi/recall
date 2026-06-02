@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Copy, Check, ArrowRight } from "lucide-react";
+import { Copy, Check } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 

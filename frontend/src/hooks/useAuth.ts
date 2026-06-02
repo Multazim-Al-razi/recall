@@ -61,16 +61,6 @@ export function useAuth(): AuthState & {
     return { error: error?.message ?? null };
   }, []);
 
-  const verifyOtp = useCallback(async (email: string, token: string) => {
-    if (!supabase) return { error: 'Supabase is not configured' };
-    const { error } = await supabase.auth.verifyOtp({
-      email,
-      token,
-      type: 'email',
-    });
-    return { error: error?.message ?? null };
-  }, []);
-
   const signOut = useCallback(async () => {
     if (!supabase) return;
     await supabase.auth.signOut();

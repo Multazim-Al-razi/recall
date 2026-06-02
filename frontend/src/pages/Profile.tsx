@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { Check, RotateCcw, Bell, Heart } from "lucide-react";
+import { Check, RotateCcw, Heart } from "lucide-react";
 import { useAccountActions } from "@/hooks/useApiSync";
 import { Illustration } from "@/components/ui/Illustration";
 import { MaskDivider } from "@/components/layout/MaskDivider";

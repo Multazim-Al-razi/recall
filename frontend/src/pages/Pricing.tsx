@@ -121,16 +121,27 @@ export function PricingPage() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  to={plan.cta.to}
-                  className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-semibold transition-all ${
-                    plan.featured
-                      ? "bg-rausch text-white hover:bg-rausch/90"
-                      : "border border-ink/12 text-ink hover:border-rausch/40 hover:text-rausch"
-                  }`}
-                >
-                  {plan.cta.label}
-                </Link>
+                {plan.available ? (
+                  <Link
+                    to={plan.cta.to}
+                    className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-semibold transition-all ${
+                      plan.featured
+                        ? "bg-rausch text-white hover:bg-rausch/90"
+                        : "border border-ink/12 text-ink hover:border-rausch/40 hover:text-rausch"
+                    }`}
+                  >
+                    {plan.cta.label}
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    aria-disabled="true"
+                    className="mt-6 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border border-ink/10 bg-ink/4 px-5 py-3 text-[14px] font-semibold text-muted"
+                  >
+                    Coming soon
+                  </button>
+                )}
               </div>
             ))}
           </div>

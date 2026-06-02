@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { LayoutDashboard, Settings, LogOut, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAccountStore } from '@/stores/account';
+import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar';
 
 /**
@@ -17,6 +18,7 @@ export function AccountNav() {
   const profile = useAccountStore((s) => s.profile);
   const resetAccount = useAccountStore((s) => s.resetAccount);
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,8 +44,9 @@ export function AccountNav() {
     navigate(path);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     setOpen(false);
+    await signOut();
     resetAccount();
     navigate('/');
   };

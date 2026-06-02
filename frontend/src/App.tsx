@@ -15,6 +15,7 @@ import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { MarketingLayout } from "@/layouts/MarketingLayout";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { AuthGuard } from "@/components/auth/AuthGuard";
 
 // Route-level code splitting (#17)
 const HomePage = lazy(() =>
@@ -34,6 +35,9 @@ const PricingPage = lazy(() =>
 );
 const OnboardingPage = lazy(() =>
   import("@/pages/Onboarding").then((m) => ({ default: m.OnboardingPage })),
+);
+const LoginPage = lazy(() =>
+  import("@/pages/Login").then((m) => ({ default: m.LoginPage })),
 );
 const DashboardView = lazy(() =>
   import("@/pages/dashboard/DashboardView").then((m) => ({
@@ -82,10 +86,16 @@ function AnimatedRoutes() {
 
           {/* Auth routes — no nav */}
           <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/signin" element={<OnboardingPage />} />
+          <Route path="/signin" element={<LoginPage />} />
 
-          {/* Dashboard routes — layout shell */}
-          <Route element={<DashboardLayout />}>
+          {/* Dashboard routes — layout shell, protected when cloud mode */}
+          <Route
+            element={
+              <AuthGuard>
+                <DashboardLayout />
+              </AuthGuard>
+            }
+          >
             <Route path="/dashboard" element={<DashboardView />} />
             <Route
               path="/dashboard/subscriptions"
@@ -128,9 +138,10 @@ function Chrome() {
   useApiSync();
   useTheme();
   const location = useLocation();
-  const isOnboarding = location.pathname === "/onboarding";
+  const isAuthPage =
+    location.pathname === "/onboarding" || location.pathname === "/signin";
   const isDashboard = location.pathname.startsWith("/dashboard");
-  const showNav = !isOnboarding && !isDashboard;
+  const showNav = !isAuthPage && !isDashboard;
 
   // Keyboard shortcuts (#13)
   useEffect(() => {

@@ -20,6 +20,7 @@ import {
   getExpiringTrials,
 } from "@/stores/subscription";
 import { Avatar } from "@/components/ui/Avatar";
+import { useAuth } from "@/hooks/useAuth";
 
 const THEME_OPTIONS = [
   { value: "system", label: "System", icon: Monitor },
@@ -33,6 +34,7 @@ export function UserMenu() {
   const resetAccount = useAccountStore((s) => s.resetAccount);
   const subscriptions = useSubscriptionStore((s) => s.subscriptions);
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -59,8 +61,9 @@ export function UserMenu() {
     };
   }, [open]);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     setOpen(false);
+    await signOut();
     resetAccount();
     navigate("/");
   };

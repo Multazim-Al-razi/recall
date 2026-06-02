@@ -134,6 +134,10 @@ export const accountApi = {
    * Request a plan change. The backend endpoint is a stub today (returns
    * 501 until billing ships). Calling it from the client makes the
    * eventual integration testable in one place.
+   *
+   * Note: not currently called from the UI — the Sync plan is gated off
+   * by `FLAGS.syncPlan = false`. The Cloud card on /pricing renders a
+   * disabled "Coming soon" button while this flag is off.
    */
   upgrade(tier: 'local' | 'sync') {
     return request<ApiAccount>('/account/upgrade', {

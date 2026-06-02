@@ -1,4 +1,5 @@
 import { Bell, HardDrive, type LucideIcon } from 'lucide-react';
+import { FLAGS } from './featureFlags';
 
 /**
  * Pricing — the single source of truth for Recall's plans.
@@ -33,6 +34,13 @@ export interface Plan {
   cta: { label: string; to: string };
   /** Availability note shown under the price. */
   availability: string;
+  /**
+   * Whether the plan can be purchased right now. When false the Pricing
+   * page renders a disabled "Coming soon" state instead of a CTA — the
+   * plan still appears for marketing/SEO but no checkout is offered.
+   * Driven by `FLAGS.syncPlan` so flipping the flag re-enables purchase.
+   */
+  available: boolean;
 }
 
 export const PLANS: Plan[] = [
@@ -54,6 +62,7 @@ export const PLANS: Plan[] = [
     featured: false,
     cta: { label: 'Start free', to: '/onboarding' },
     availability: 'Available now',
+    available: true,
   },
   {
     id: 'cloud',
@@ -72,7 +81,10 @@ export const PLANS: Plan[] = [
     ],
     featured: true,
     cta: { label: 'Start free, add Cloud later', to: '/onboarding' },
-    availability: 'Optional · cancel anytime',
+    availability: FLAGS.syncPlan
+      ? 'Optional · cancel anytime'
+      : 'In development — sign up to be notified',
+    available: FLAGS.syncPlan,
   },
 ];
 

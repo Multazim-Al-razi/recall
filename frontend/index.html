@@ -21,8 +21,8 @@
         />
         <!-- F-5: baseline Content-Security-Policy. Locks the app to its own
              origin, allows Google Fonts + the brand-icon CDN as image sources,
-             and forbids framing / framing of others. The Vite dev server is
-             allowed under connect-src for HMR. -->
+             and forbids framing / framing of others. The Vite dev server and
+             local CLI companion are allowed under connect-src, along with Supabase. -->
         <meta
             http-equiv="Content-Security-Policy"
             content="default-src 'self';
@@ -30,7 +30,7 @@
                      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
                      font-src 'self' https://fonts.gstatic.com;
                      img-src 'self' data: blob: https://cdn.simpleicons.org;
-                     connect-src 'self' http://localhost:3001 ws://localhost:5173;
+                     connect-src 'self' https://*.supabase.co wss://*.supabase.co http://localhost:21121 http://localhost:3001 ws://localhost:5173;
                      frame-ancestors 'none';
                      base-uri 'self';
                      form-action 'self';"

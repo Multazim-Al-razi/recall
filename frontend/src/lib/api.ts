@@ -132,8 +132,8 @@ export const accountApi = {
   },
   /**
    * Request a plan change. The backend endpoint is a stub today (returns
-   * 501 until billing ships) — see docs/BACKEND_ROADMAP.md. Calling it
-   * from the client makes the eventual integration testable in one place.
+   * 501 until billing ships). Calling it from the client makes the
+   * eventual integration testable in one place.
    */
   upgrade(tier: 'local' | 'sync') {
     return request<ApiAccount>('/account/upgrade', {

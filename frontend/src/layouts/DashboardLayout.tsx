@@ -19,7 +19,6 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
  * in the header.
  */
 export function DashboardLayout() {
-  const onboarded = useAccountStore((s) => s.onboarded);
   const conflict = useConnectionStore((s) => s.conflict);
   const lastSyncError = useConnectionStore((s) => s.lastSyncError);
   const status = useConnectionStore((s) => s.status);

@@ -17,16 +17,13 @@ const PORT = parseInt(process.env.PORT || "3001", 10);
 const NODE_ENV = process.env.NODE_ENV || "development";
 
 /**
- * Refuse to boot in production until the gaps in docs/BACKEND_ROADMAP.md are
- * closed. This is a deliberate, low-cost guardrail: it does NOT add
- * authentication or persistence — it only makes the *operator* acknowledge
- * that the dev-only backend is dev-only. Set ALLOW_DEV_BACKEND=1 to override
- * (e.g. in a private staging environment that is known-isolated).
+ * Refuse to boot in production. The dev-only backend has no auth and writes
+ * to a local JSON file; the operator must explicitly opt in with
+ * ALLOW_DEV_BACKEND=1 (e.g. for a known-isolated staging environment).
  */
 if (NODE_ENV === "production" && process.env.ALLOW_DEV_BACKEND !== "1") {
   console.error(
     "[recall-api] Refusing to start: the Express backend is dev-only.\n" +
-      "  See backend/README.md and docs/BACKEND_ROADMAP.md for the production gap list.\n" +
       "  Set ALLOW_DEV_BACKEND=1 to start anyway (not recommended for public traffic).",
   );
   process.exit(1);

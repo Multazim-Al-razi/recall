@@ -2,11 +2,8 @@ import { differenceInDays } from 'date-fns';
 import type { Subscription } from '@/types/subscription';
 
 /**
- * Shared urgency language (formalized from docs/MOODBOARD.md §4).
- *
- *   now   — act today (<= 2 days / trial converting)   → Rausch
- *   soon  — coming up  (<= 7 days)                      → warning amber
- *   ok    — healthy    (> 7 days)                       → success green
+ * Shared urgency language — the single source of truth for renewal
+ * countdown copy across the dashboard, timeline, and reminders.
  */
 export type Urgency = 'now' | 'soon' | 'ok';
 

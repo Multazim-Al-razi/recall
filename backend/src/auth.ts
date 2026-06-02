@@ -52,8 +52,7 @@ export interface AuthedUser {
  *   in lowdb mode, set ALLOW_NO_AUTH=1 — this bypasses requireAuth
  *   entirely for local development.
  *
- * Applied to every `/api/*` route other than `/api/auth/*` and
- * `/api/health` — see docs/BACKEND_ROADMAP.md §2.
+ * Applied to every `/api/*` route other than `/api/auth/*` and `/api/health`.
  */
 export async function requireAuth(
   req: Request,

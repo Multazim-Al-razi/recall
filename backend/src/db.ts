@@ -82,7 +82,7 @@ const defaultData: Schema = {
 // ── DbAdapter interface ───────────────────────────────────────────────
 // Route handlers call adapter methods instead of raw db.data access.
 // Switching between LowDbAdapter and SupabaseAdapter is controlled by
-// DB_BACKEND env var — see docs/BACKEND_ROADMAP.md §1.
+// the DB_BACKEND env var.
 
 export interface DbAdapter {
   // Accounts

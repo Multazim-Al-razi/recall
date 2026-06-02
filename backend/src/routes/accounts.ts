@@ -71,7 +71,9 @@ router.post("/reset", writeLimiter, async (req: Request, res: Response) => {
 /**
  * POST /api/account/upgrade
  *
- * Stub for the Stripe webhook — see docs/BACKEND_ROADMAP.md.
+ * Stub for the Stripe webhook. The Sync plan is on the way; until billing
+ * and reminder delivery ship, this endpoint validates the payload shape
+ * and returns 501 so the client can detect "not yet implemented".
  */
 router.post("/upgrade", async (req: Request, res: Response) => {
   const requested = (req.body ?? {}).tier;
@@ -82,7 +84,7 @@ router.post("/upgrade", async (req: Request, res: Response) => {
   res.status(501).json({
     error: "Plan upgrade not implemented yet",
     detail:
-      "The Sync plan is on the way. The /api/account/upgrade endpoint is a stub — see docs/BACKEND_ROADMAP.md.",
+      "The Sync plan is on the way. The /api/account/upgrade endpoint is a stub.",
   });
 });
 

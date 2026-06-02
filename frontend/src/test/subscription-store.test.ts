@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest'
-import { format, addDays, subMonths, addMonths, startOfMonth } from 'date-fns'
+import { format, addDays } from 'date-fns'
 import {
   toMonthlyAmount,
   getMonthlySpend,

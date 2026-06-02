@@ -79,7 +79,7 @@ export async function syncWithBackend(): Promise<boolean> {
       // conflict and let the user decide. The connection store carries the
       // `conflict` flag; `DashboardLayout` renders the banner.
       if (localIsNonEmpty && !profilesLookLikeSameAccount(localProfile, apiAccount)) {
-        conn.setSyncConflict({ local: localProfile, remote: apiAccount });
+        conn.setSyncConflict({ local: localProfile, remote: apiAccount, detectedAt: new Date().toISOString() });
         conn.markSynced();
         return true;
       }

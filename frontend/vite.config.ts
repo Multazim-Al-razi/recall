@@ -10,6 +10,13 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Explicit build output so monorepo + Vercel both know where the bundle lives.
+  // `outDir` is relative to this file (frontend/), so the final path is
+  // `frontend/dist` — paired with `outputDirectory` in vercel.json.
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
   server: {
     allowedHosts: ['host.docker.internal'],
     proxy: {

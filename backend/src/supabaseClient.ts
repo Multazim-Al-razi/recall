@@ -5,8 +5,6 @@ import { createClient, SupabaseClient } from "@supabase/supabase-js";
  * the env vars are not required and the clients are never created. In
  * Supabase mode, they initialize on first access so the server only
  * crashes if the env vars are missing when Supabase is actually needed.
- *
- * See docs/BACKEND_ROADMAP.md §1–2 for the client module contract.
  */
 
 let adminClient: SupabaseClient | null = null;

@@ -1,5 +1,4 @@
 import { Bell, HardDrive, type LucideIcon } from 'lucide-react';
-import { FLAGS } from '@/lib/featureFlags';
 
 /**
  * Pricing — the single source of truth for Recall's plans.

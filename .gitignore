@@ -35,31 +35,29 @@ dist-ssr
 /blob-report/
 /playwright/.cache/
 
-# Agent / tooling scaffolding (not part of the app)
-CLAUDE.md
+# AI agent tooling + worktrees
+.claude/
+.qwen/
 .kilo/
 .kiro/
-docs/superpowers/
+.superpowers/
+.playwright-mcp/
+.git_disabled/
+
+# Illustration skill packs (downloaded vendor references, not part of the app)
 frontend/src/assets/illustrations/.skills/
 frontend/src/assets/illustrations/.3d-animation/
 frontend/src/assets/illustrations/AGENTS.md
+frontend/src/assets/illustrations/README.md
 frontend/src/assets/illustrations/scripts/
-.git_disabled/
-node_modules/
-.kilo/
-.superpowers/
-.playwright-mcp/
-test-results/
 
-# AI agent worktrees and settings
-.claude/
-.qwen/
+# Internal planning / design docs (not for the public repo)
+CLAUDE.md
+docs/
+backend/README.md
 
 # Backend runtime data
 backend/data/
-
-# Backend roadmap (internal planning doc)
-docs/BACKEND_ROADMAP.md
 
 # TypeScript build artifacts
 *.tsbuildinfo

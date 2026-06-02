@@ -1,16 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import type { Request, Response } from 'express';
 
-/**
- * The /api/account/upgrade endpoint is a stub until billing ships — see
- * docs/BACKEND_ROADMAP.md. These tests pin the contract so a future change
- * that accidentally flips the stub to a real mutation gets caught before
- * it ships.
- */
-
 // Mirror of the route handler in backend/src/routes/accounts.ts. Kept in
 // sync manually so the test can run without booting a real server or
-// adding supertest as a dependency.
+// adding supertest as a dependency. These tests pin the contract so a
+// future change to the upgrade endpoint fails loudly.
 function upgradeHandler(req: Request, res: Response): void {
   const requested = (req.body ?? {}).tier;
   if (requested !== 'sync' && requested !== 'local') {
@@ -20,7 +14,7 @@ function upgradeHandler(req: Request, res: Response): void {
   res.status(501).json({
     error: 'Plan upgrade not implemented yet',
     detail:
-      'The Sync plan is on the way. The /api/account/upgrade endpoint is a stub — see docs/BACKEND_ROADMAP.md.',
+      'The Sync plan is on the way. The /api/account/upgrade endpoint is a stub.',
   });
 }
 

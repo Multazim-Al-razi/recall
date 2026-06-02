@@ -1,27 +1,23 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
 import { Logo } from '@/components/ui/Logo';
 import { Illustration } from '@/components/ui/Illustration';
-import { ArrowRight, Mail, KeyRound } from 'lucide-react';
+import { ArrowRight, Mail, Check } from 'lucide-react';
 
 const inputClass =
   'mt-1.5 w-full rounded-md border border-ink/10 bg-canvas px-4 py-3 text-[15px] focus:border-rausch focus:outline-none';
 
-type Step = 'email' | 'otp' | 'done';
+type Step = 'email' | 'sent';
 
 export function LoginPage() {
-  const navigate = useNavigate();
-  const { signInWithOtp, verifyOtp } = useAuth();
+  const { signInWithOtp } = useAuth();
 
   const [step, setStep] = useState<Step>('email');
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
-  const [verifying, setVerifying] = useState(false);
 
-  const handleSendOtp = async () => {
+  const handleSendMagicLink = async () => {
     setError(null);
     setSending(true);
     const { error: err } = await signInWithOtp(email.trim());
@@ -30,21 +26,7 @@ export function LoginPage() {
       setError(err);
       return;
     }
-    setStep('otp');
-  };
-
-  const handleVerifyOtp = async () => {
-    setError(null);
-    setVerifying(true);
-    const { error: err } = await verifyOtp(email.trim(), otp.trim());
-    setVerifying(false);
-    if (err) {
-      setError(err);
-      return;
-    }
-    setStep('done');
-    // Small delay so the user sees the success state, then redirect.
-    setTimeout(() => navigate('/dashboard'), 600);
+    setStep('sent');
   };
 
   return (
@@ -55,7 +37,7 @@ export function LoginPage() {
           <Logo className="h-6 w-auto text-rausch" />
           <Illustration name="welcome" decorative={false} className="w-full object-contain" />
           <p className="text-[13px] text-ink/50">
-            No passwords. We send a one-time code to your email.
+            No passwords. We send a magic link to your email.
           </p>
         </div>
 
@@ -74,8 +56,8 @@ export function LoginPage() {
               <div className="mt-6">
                 <label className="block">
                   <span className="text-[13px] font-medium text-ink/70">Email address</span>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-3 top-[calc(50%+6px)] text-ink/30" />
+                  <div className="relative mt-1.5">
+                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/30" />
                     <input
                       className={`${inputClass} pl-10`}
                       type="email"
@@ -83,7 +65,7 @@ export function LoginPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@example.com"
                       autoFocus
-                      onKeyDown={(e) => e.key === 'Enter' && handleSendOtp()}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSendMagicLink()}
                     />
                   </div>
                 </label>
@@ -92,7 +74,7 @@ export function LoginPage() {
                 <p className="mt-2 text-[13px] text-rausch">{error}</p>
               )}
               <button
-                onClick={handleSendOtp}
+                onClick={handleSendMagicLink}
                 disabled={sending || !email.trim()}
                 className="mt-7 inline-flex items-center gap-2 rounded-full bg-rausch px-7 py-3.5 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
               >
@@ -104,60 +86,27 @@ export function LoginPage() {
             </div>
           )}
 
-          {step === 'otp' && (
+          {step === 'sent' && (
             <div>
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-50">
+                <Check size={32} className="text-green-600" />
+              </div>
               <h2 className="text-[28px] font-light tracking-[-1px]">
                 Check your <strong className="font-bold">inbox</strong>
               </h2>
               <p className="mt-2 text-[14px] text-muted">
-                We sent a 6-digit code to <strong className="text-ink">{email}</strong>.
-                Enter it below to sign in.
+                We sent a magic link to <strong className="text-ink">{email}</strong>.
+                Click the link in the email to sign in.
               </p>
-              <div className="mt-6">
-                <label className="block">
-                  <span className="text-[13px] font-medium text-ink/70">One-time code</span>
-                  <div className="relative">
-                    <KeyRound size={16} className="absolute left-3 top-[calc(50%+6px)] text-ink/30" />
-                    <input
-                      className={`${inputClass} pl-10`}
-                      type="text"
-                      value={otp}
-                      onChange={(e) => setOtp(e.target.value)}
-                      placeholder="000000"
-                      autoFocus
-                      maxLength={6}
-                      onKeyDown={(e) => e.key === 'Enter' && handleVerifyOtp()}
-                    />
-                  </div>
-                </label>
-              </div>
-              {error && (
-                <p className="mt-2 text-[13px] text-rausch">{error}</p>
-              )}
-              <button
-                onClick={handleVerifyOtp}
-                disabled={verifying || otp.trim().length < 6}
-                className="mt-7 inline-flex items-center gap-2 rounded-full bg-rausch px-7 py-3.5 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0"
-              >
-                {verifying ? 'Verifying…' : 'Sign in'} <ArrowRight size={18} />
-              </button>
+              <p className="mt-4 text-[13px] text-muted">
+                The link expires in 1 hour. Check your spam folder if you don't see it.
+              </p>
               <button
                 onClick={() => { setStep('email'); setError(null); }}
-                className="ml-3 text-[13px] font-medium text-muted hover:text-ink"
+                className="mt-7 text-[13px] font-medium text-muted hover:text-ink"
               >
                 Use a different email
               </button>
-            </div>
-          )}
-
-          {step === 'done' && (
-            <div className="text-center">
-              <h2 className="text-[28px] font-light tracking-[-1px]">
-                You're <strong className="font-bold">in</strong> ✓
-              </h2>
-              <p className="mt-2 text-[14px] text-muted">
-                Redirecting to your dashboard…
-              </p>
             </div>
           )}
         </div>

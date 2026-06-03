@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { Plus, TrendingUp } from "lucide-react";
+import { Plus, TrendingUp, BarChart3 } from "lucide-react";
 import { useAccountStore } from "@/stores/account";
 import { PaymentMethodCard } from "@/components/dashboard/PaymentMethodCard";
 import { FlowTiles } from "@/components/dashboard/FlowTiles";
@@ -69,6 +69,14 @@ export function DashboardPage() {
               className="flex h-11 w-11 items-center justify-center rounded-full bg-surface text-ink shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-xs)] transition-all hover:-translate-y-0.5 hover:text-rausch hover:shadow-[var(--shadow-sm)]"
             >
               <TrendingUp size={18} />
+            </Link>
+            <Link
+              to="/dashboard/stats"
+              aria-label="Product KPIs"
+              title="Product KPIs"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-surface text-ink shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-xs)] transition-all hover:-translate-y-0.5 hover:text-rausch hover:shadow-[var(--shadow-sm)]"
+            >
+              <BarChart3 size={18} />
             </Link>
           </div>
 

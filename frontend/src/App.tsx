@@ -71,6 +71,11 @@ const SettingsView = lazy(() =>
     default: m.SettingsView,
   })),
 );
+const StatsView = lazy(() =>
+  import("@/pages/dashboard/StatsView").then((m) => ({
+    default: m.StatsView,
+  })),
+);
 
 function PageLoader() {
   return (
@@ -120,6 +125,7 @@ function AnimatedRoutes() {
             />
             <Route path="/dashboard/analytics" element={<AnalyticsView />} />
             <Route path="/dashboard/settings" element={<SettingsView />} />
+            <Route path="/dashboard/stats" element={<StatsView />} />
           </Route>
 
           {/* Legacy flat-route redirects */}

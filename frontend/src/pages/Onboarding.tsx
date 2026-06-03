@@ -490,7 +490,7 @@ export function OnboardingPage() {
                     </button>
                     <button
                       type="button"
-                      onClick={finishLocal}
+                      onClick={() => finishLocal()}
                       className="text-[13px] font-medium text-muted hover:text-ink"
                     >
                       Skip for now

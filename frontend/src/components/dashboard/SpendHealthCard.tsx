@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -13,11 +13,18 @@ const FACES = [
 /**
  * Light feedback card mirroring the reference's "How is your business going?"
  * rating. Asks how the user feels about their subscription spend and routes the
- * answer toward analytics — a soft, dismissible nudge.
+ * answer toward analytics — a soft, dismissible nudge. Auto-dismisses shortly
+ * after the user picks so the card doesn't linger across visits.
  */
 export function SpendHealthCard() {
   const [picked, setPicked] = useState<string | null>(null);
   const [dismissed, setDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!picked) return;
+    const id = window.setTimeout(() => setDismissed(true), 1200);
+    return () => window.clearTimeout(id);
+  }, [picked]);
 
   if (dismissed) return null;
 

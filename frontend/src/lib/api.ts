@@ -22,7 +22,7 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const apiBase = await getApiBase();
   // Ensure path starts with /api if apiBase is empty (cloud mode relative path)
   const fullPath = apiBase ? `${apiBase}/api${path}` : `/api${path}`;
-  
+
   const res = await fetch(fullPath, {
     headers: { 'Content-Type': 'application/json' },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT),
@@ -116,6 +116,31 @@ export const accountApi = {
     return request<ApiAccount>('/account/reset', {
       method: 'POST',
     });
+  },
+};
+
+// ── Stats ──────────────────────────────────────────────────────────────
+
+export interface ApiStats {
+  mode: 'lowdb' | 'supabase';
+  note?: string;
+  totalUsers: number;
+  activeSubscriptions: number;
+  totalSubscriptions?: number;
+  totalMonthlyBurn: number;
+  avgMonthlyBurnPerUser?: number;
+  yearlyProjection: number;
+  categoryBurn: Record<string, number>;
+  renewalsNext7d: number;
+  renewalsNext30d: number;
+  activeFreeTrials: number;
+  onboarded?: boolean;
+  timestamp: string;
+}
+
+export const statsApi = {
+  get() {
+    return request<ApiStats>('/stats');
   },
 };
 

@@ -15,9 +15,9 @@ export function Footer() {
           About
         </Link>
         <Link to="/donate" className="transition-colors hover:text-rausch">
-          Donate
+          Support
         </Link>
-        <span>v1.1.0</span>
+        <span>v1.0.1</span>
       </div>
     </footer>
   );

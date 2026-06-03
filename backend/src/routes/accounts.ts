@@ -1,28 +1,26 @@
 import { Router, type Request, type Response } from "express";
-import { getAdapter, createDefaultAccount } from "../db.js";
-import { validateAccountPatch } from "../validate.js";
-import { writeLimiter } from "../rateLimiters.js";
-import type { AuthedUser } from "../auth.js";
+import { getDb, createDefaultAccount } from "../db.js";
+import { validateAccountPatch, sanitizeString } from "../validate.js";
 
 const router = Router();
 
-/**
- * Resolve the effective account ID for the current request.
- * In Supabase mode: the authenticated user's UUID from the JWT.
- * In lowdb mode: the legacy "default" string.
- */
-function getAccountId(req: Request): string {
-  const user = req.user as AuthedUser | undefined;
-  return user?.id ?? "default";
+/** Get the single default account, creating + persisting it if missing. */
+async function ensureAccount() {
+  const db = await getDb();
+  let account = db.data.accounts.find((a) => a.id === "default");
+  if (!account) {
+    account = createDefaultAccount();
+    db.data.accounts.push(account);
+    await db.write();
+  }
+  return { db, account };
 }
 
 /**
  * GET /api/account
  */
-router.get("/", async (req: Request, res: Response) => {
-  const adapter = getAdapter();
-  const accountId = getAccountId(req);
-  const account = await adapter.ensureAccount(accountId);
+router.get("/", async (_req: Request, res: Response) => {
+  const { account } = await ensureAccount();
   res.json(account);
 });
 
@@ -30,62 +28,44 @@ router.get("/", async (req: Request, res: Response) => {
  * PATCH /api/account
  */
 router.patch("/", async (req: Request, res: Response) => {
-  const adapter = getAdapter();
-  const accountId = getAccountId(req);
-  await adapter.ensureAccount(accountId);
+  const { db, account } = await ensureAccount();
   const patch = validateAccountPatch(req.body);
-  const updated = await adapter.updateAccount(accountId, patch);
-  res.json(updated);
+  Object.assign(account, patch);
+  account.updatedAt = new Date().toISOString();
+  await db.write();
+  res.json(account);
 });
 
 /**
  * POST /api/account/complete-onboarding
  */
-router.post(
-  "/complete-onboarding",
-  writeLimiter,
-  async (req: Request, res: Response) => {
-    const adapter = getAdapter();
-    const accountId = getAccountId(req);
-    await adapter.ensureAccount(accountId);
-    const { name, email, currency } = req.body ?? {};
-    const patch = validateAccountPatch({ name, email, currency });
-    const updated = await adapter.updateAccount(accountId, {
-      ...patch,
-      onboarded: true,
-    });
-    res.json(updated);
-  },
-);
+router.post("/complete-onboarding", async (req: Request, res: Response) => {
+  const { db, account } = await ensureAccount();
+  const { name, email, currency } = req.body ?? {};
 
-/**
- * POST /api/account/reset
- */
-router.post("/reset", writeLimiter, async (req: Request, res: Response) => {
-  const adapter = getAdapter();
-  const accountId = getAccountId(req);
-  const account = await adapter.resetAccount(accountId);
+  account.onboarded = true;
+  if (name !== undefined) account.name = sanitizeString(name, 80);
+  if (email !== undefined) account.email = sanitizeString(email, 254);
+  if (currency !== undefined)
+    account.currency = sanitizeString(currency, 8).toUpperCase() || "USD";
+  account.updatedAt = new Date().toISOString();
+  await db.write();
   res.json(account);
 });
 
 /**
- * POST /api/account/upgrade
- *
- * Stub for the Stripe webhook. The Sync plan is on the way; until billing
- * and reminder delivery ship, this endpoint validates the payload shape
- * and returns 501 so the client can detect "not yet implemented".
+ * POST /api/account/reset
  */
-router.post("/upgrade", async (req: Request, res: Response) => {
-  const requested = (req.body ?? {}).tier;
-  if (requested !== "sync" && requested !== "local") {
-    res.status(400).json({ error: "tier must be 'local' or 'sync'" });
-    return;
-  }
-  res.status(501).json({
-    error: "Plan upgrade not implemented yet",
-    detail:
-      "The Sync plan is on the way. The /api/account/upgrade endpoint is a stub.",
+router.post("/reset", async (_req: Request, res: Response) => {
+  const { db, account } = await ensureAccount();
+  const fresh = createDefaultAccount();
+  Object.assign(account, fresh, {
+    id: account.id,
+    createdAt: account.createdAt,
   });
+  account.updatedAt = new Date().toISOString();
+  await db.write();
+  res.json(account);
 });
 
 export default router;

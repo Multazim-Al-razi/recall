@@ -12,7 +12,7 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      'Found two streaming services I was paying for twice. Recall paid for itself in the first week — except it is free.',
+      'Found two streaming services I was paying for twice. Recall paid for itself in the first week, except it is free.',
     name: 'Maya Chen',
     role: 'Designer',
     initials: 'MC',

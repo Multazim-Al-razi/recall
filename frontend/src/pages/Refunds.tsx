@@ -46,12 +46,16 @@ export function RefundsPage() {
             Contact
           </h2>
           <p>
-            Questions about this policy? Reach us at{" "}
+            Recall is an open-source project maintained by the community, not a
+            company offering a service. For questions about this policy, open
+            an issue or discussion on{" "}
             <a
-              href="mailto:hello@recall.app"
+              href="https://github.com/Multazim-Al-razi/recall"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-rausch hover:underline"
             >
-              hello@recall.app
+              GitHub
             </a>
             .
           </p>

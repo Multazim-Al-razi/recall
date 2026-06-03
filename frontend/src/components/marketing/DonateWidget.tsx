@@ -1,6 +1,5 @@
+import { Link } from 'react-router';
 import { Illustration } from '@/components/ui/Illustration';
-
-const DONATE_URL = 'https://buymeacoffee.com/recall';
 
 export function DonateWidget() {
   return (
@@ -12,14 +11,12 @@ export function DonateWidget() {
       />
       <p className="mt-4 text-[14px] leading-[1.6] text-muted">
         If Recall has saved you money or hassle,{' '}
-        <a
-          href={DONATE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/donate"
           className="text-rausch underline decoration-rausch/30 underline-offset-2 transition-colors hover:text-rausch-hover"
         >
-          consider buying us a coffee
-        </a>
+          consider sending a tip
+        </Link>
         . It keeps this project free for everyone.
       </p>
     </div>

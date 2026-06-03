@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { COPY } from '../frontend/src/lib/copyContract';
+import { COPY } from './fixtures/copy';
 import { completeOnboarding } from './helpers/onboarding';
 
 test.describe('Dashboard layout & navigation', () => {
@@ -36,9 +36,9 @@ test.describe('Dashboard layout & navigation', () => {
     await expect(page).toHaveURL('/dashboard/settings');
   });
 
-  test('upgrade page is accessible', async ({ page }) => {
+  test('upgrade page redirects to pricing', async ({ page }) => {
     await page.goto('/dashboard/upgrade');
-    await expect(page).toHaveURL('/dashboard/upgrade');
+    await expect(page).toHaveURL('/pricing');
   });
 
   test('header shows the dashboard title', async ({ page }) => {

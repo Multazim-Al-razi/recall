@@ -17,7 +17,7 @@ export function UndoToast({ message, visible, onUndo, onDismiss }: Props) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="fixed bottom-6 left-1/2 z-[200] flex -translate-x-1/2 items-center gap-3 rounded-full bg-dark px-5 py-3 text-[13px] font-medium text-[#f5f0eb] shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
+          className="fixed bottom-6 left-1/2 z-[200] flex -translate-x-1/2 items-center gap-3 rounded-full bg-ink px-5 py-3 text-[13px] font-medium text-canvas shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
           role="status"
           aria-live="polite"
         >
@@ -31,7 +31,7 @@ export function UndoToast({ message, visible, onUndo, onDismiss }: Props) {
           </button>
           <button
             onClick={onDismiss}
-            className="ml-1 text-[#888] transition-colors hover:text-[#f5f0eb]"
+            className="ml-1 text-muted transition-colors hover:text-canvas"
             aria-label="Dismiss"
           >
             <X size={15} />

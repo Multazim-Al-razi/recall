@@ -2,47 +2,35 @@
  * Recall Backend API Client
  *
  * Provides typed functions for every backend endpoint.
- * Falls back gracefully when the backend is unavailable
- * (local-first mode continues to work via Zustand stores).
+ * Dynamically routes to the local CLI companion if available,
+ * otherwise falls back to the cloud backend.
  */
+import { getActiveApiBaseUrl } from './environment';
 
-// Use relative path so Vite proxy forwards to backend in dev.
-// In production, set VITE_API_URL to the deployed backend URL.
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+let cachedApiBase: string | null = null;
+
+async function getApiBase(): Promise<string> {
+  if (cachedApiBase !== null) return cachedApiBase;
+  cachedApiBase = await getActiveApiBaseUrl();
+  return cachedApiBase;
+}
 
 /** Default per-request timeout (ms) so a dead backend never hangs the UI. */
 const REQUEST_TIMEOUT = 5000;
 
-/**
- * Normalize a non-2xx response into a friendly `Error` (5.1). The backend
- * returns `{ error: string }` JSON for 4xx; everything else is coerced to
- * a generic message so we never surface raw HTML or stack text to the UI.
- */
-async function readErrorBody(res: Response): Promise<string> {
-  const contentType = res.headers.get('content-type') ?? '';
-  if (contentType.includes('application/json')) {
-    try {
-      const data = (await res.clone().json()) as { error?: unknown };
-      if (typeof data?.error === 'string' && data.error.trim()) {
-        return data.error;
-      }
-    } catch {
-      // fall through
-    }
-  }
-  // Avoid leaking HTML / non-JSON bodies.
-  return `Request failed (${res.status})`;
-}
-
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
+  const apiBase = await getApiBase();
+  // Ensure path starts with /api if apiBase is empty (cloud mode relative path)
+  const fullPath = apiBase ? `${apiBase}/api${path}` : `/api${path}`;
+  
+  const res = await fetch(fullPath, {
     headers: { 'Content-Type': 'application/json' },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT),
     ...options,
   });
   if (!res.ok) {
-    const message = await readErrorBody(res);
-    throw new Error(message);
+    const error = await res.json().catch(() => ({ error: res.statusText }));
+    throw new Error(error.error || `API error: ${res.status}`);
   }
   return res.json();
 }
@@ -106,7 +94,6 @@ export interface ApiAccount {
   currency: string;
   reminderLeadDays: number;
   onboarded: boolean;
-  tier: 'local' | 'sync';
 }
 
 export const accountApi = {
@@ -128,21 +115,6 @@ export const accountApi = {
   reset() {
     return request<ApiAccount>('/account/reset', {
       method: 'POST',
-    });
-  },
-  /**
-   * Request a plan change. The backend endpoint is a stub today (returns
-   * 501 until billing ships). Calling it from the client makes the
-   * eventual integration testable in one place.
-   *
-   * Note: not currently called from the UI — the Sync plan is gated off
-   * by `FLAGS.syncPlan = false`. The Cloud card on /pricing renders a
-   * disabled "Coming soon" button while this flag is off.
-   */
-  upgrade(tier: 'local' | 'sync') {
-    return request<ApiAccount>('/account/upgrade', {
-      method: 'POST',
-      body: JSON.stringify({ tier }),
     });
   },
 };

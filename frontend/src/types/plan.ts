@@ -1,7 +1,33 @@
 /**
- * Plan types live alongside the pricing data in `@/lib/pricing`.
- * This file is a re-export shim kept for backwards compatibility with any
- * import path that still uses `@/types/plan`. New code should import from
- * `@/lib/pricing` (the data) and `@/lib/entitlements` (the runtime check).
+ * Recall is completely free — every user gets full access to all features
+ * with no subscription limits. The plan config is kept as a lightweight
+ * constant so dashboard widgets that still reference it continue to work.
  */
-export type { Plan, CompareCell, CompareRow } from '@/lib/pricing';
+
+export type PlanTier = 'community';
+
+export interface PlanConfig {
+  tier: PlanTier;
+  name: string;
+  tagline: string;
+  accent: string;
+  /** No limits — always Infinity. */
+  subscriptionLimit: number;
+}
+
+/** The single plan every user gets. */
+export const PLAN_ORDER: PlanTier[] = ['community'];
+
+export const PLAN_CONFIG: Record<PlanTier, PlanConfig> = {
+  community: {
+    tier: 'community',
+    name: 'Local',
+    tagline: 'Free on the web, all features in your browser.',
+    accent: '#66bb6a',
+    subscriptionLimit: Infinity,
+  },
+};
+
+export function planRank(_tier: PlanTier): number {
+  return 0;
+}

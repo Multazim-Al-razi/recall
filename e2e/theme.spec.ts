@@ -49,15 +49,21 @@ test.describe('Theme switching', () => {
     }
   });
 
-  test('localStorage.theme is preserved across reloads (when shipped)', async ({ page }) => {
+  test('localStorage account store preserves theme across reloads (when shipped)', async ({ page }) => {
     await page.goto('/');
-    // Write the theme key directly (the hook is not yet wired in some
-    // versions — we just check the contract).
+    // The theme lives inside the zustand-persisted account store.
+    // Write a dark-theme account record and verify it survives a reload.
     await page.evaluate(() => {
-      localStorage.setItem('recall-theme', 'dark');
+      const existing = JSON.parse(localStorage.getItem('recall-account') ?? '{}');
+      const state = existing.state ?? {};
+      state.profile = { ...(state.profile ?? {}), theme: 'dark' };
+      localStorage.setItem('recall-account', JSON.stringify({ ...existing, state }));
     });
     await page.reload();
-    const stored = await page.evaluate(() => localStorage.getItem('recall-theme'));
+    const stored = await page.evaluate(() => {
+      const raw = JSON.parse(localStorage.getItem('recall-account') ?? '{}');
+      return raw?.state?.profile?.theme;
+    });
     expect(stored).toBe('dark');
   });
 });

@@ -132,6 +132,9 @@
     --color-sidebar-active: rgba(237, 107, 79, 0.14);
     --color-sidebar-border: rgba(255, 248, 235, 0.08);
     --color-header-bg: rgba(27, 23, 18, 0.85);
+    --color-tab-bg: #221d17;
+    --color-tab-active: #2b2419;
+    --shadow-glow: 0 12px 40px rgba(237, 107, 79, 0.22);
 }
 
 @layer base {

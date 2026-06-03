@@ -1,11 +1,25 @@
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { MaskDivider } from '@/components/layout/MaskDivider';
 import { POSTS } from '@/lib/blog';
 
+const PAGE_SIZE = 5;
+
 export function BlogPage() {
+  const [page, setPage] = useState(1);
+
+  const sorted = useMemo(
+    () => [...POSTS].sort((a, b) => (a.date > b.date ? -1 : 1)),
+    [],
+  );
+
+  const totalPages = Math.ceil(sorted.length / PAGE_SIZE);
+  const start = (page - 1) * PAGE_SIZE;
+  const pagePosts = sorted.slice(start, start + PAGE_SIZE);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -17,7 +31,7 @@ export function BlogPage() {
         {/* Hero */}
         <section className="pt-12 pb-10 text-center md:pt-16">
           <h1 className="font-display text-[34px] font-light leading-[1.1] tracking-[-2px] sm:text-[42px]">
-            The Recall <strong className="font-bold">Blog</strong>
+            The Recall Blog
           </h1>
           <p className="mx-auto mt-4 max-w-[460px] text-[16px] leading-[1.65] text-muted">
             Tips, guides, and insights on managing subscriptions, cutting waste,
@@ -26,8 +40,8 @@ export function BlogPage() {
         </section>
 
         {/* Post list */}
-        <section className="flex flex-col gap-4 pb-16">
-          {POSTS.map((post, i) => (
+        <section className="flex flex-col gap-4 pb-6">
+          {pagePosts.map((post, i) => (
             <motion.article
               key={post.slug}
               initial={{ opacity: 0, y: 16 }}
@@ -49,7 +63,7 @@ export function BlogPage() {
                 </p>
                 <div className="mt-4 flex items-center gap-2.5 text-[12px] text-muted">
                   <span>{format(parseISO(post.date), 'MMM d, yyyy')}</span>
-                  <span className="text-ink/20">·</span>
+                  <span className="text-ink/20">&middot;</span>
                   <span>{post.readTime}</span>
                 </div>
                 <div className="mt-4 flex items-center gap-1.5 text-[13px] font-semibold text-rausch transition-all group-hover:gap-2.5">
@@ -59,10 +73,63 @@ export function BlogPage() {
             </motion.article>
           ))}
         </section>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <nav
+            aria-label="Blog pagination"
+            className="flex items-center justify-center gap-3 pb-16"
+          >
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-muted transition-colors hover:border-rausch/30 hover:text-ink disabled:opacity-30 disabled:hover:border-hairline"
+              aria-label="Previous page"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setPage(n)}
+                  aria-current={n === page ? 'page' : undefined}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-medium transition-colors ${
+                    n === page
+                      ? 'bg-rausch text-white'
+                      : 'text-muted hover:bg-ink/5 hover:text-ink'
+                  }`}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-hairline text-muted transition-colors hover:border-rausch/30 hover:text-ink disabled:opacity-30 disabled:hover:border-hairline"
+              aria-label="Next page"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </nav>
+        )}
       </div>
 
       <MaskDivider />
-      <section className="pb-24 pt-8 text-center text-[13px] text-muted" />
+      <section className="mx-auto max-w-[800px] px-5 pt-6 pb-16 text-center sm:px-8 md:px-12">
+        <p className="text-[15px] leading-[1.7] text-muted">
+          Ready to take control?{" "}
+          <Link
+            to="/onboarding"
+            className="text-[15px] text-muted underline decoration-ink/20 underline-offset-4 transition-colors hover:text-rausch"
+          >
+            Get started for free
+          </Link>
+        </p>
+      </section>
     </motion.div>
   );
 }

@@ -93,8 +93,7 @@ export function CookiesPage() {
             Recall also uses your browser's local storage to persist your
             subscription data on the free Local plan and your preferences
             (theme, currency) on all plans. Local storage is similar to cookies
-            but is not transmitted with every HTTP request — it is only
-            accessible by JavaScript running on our domain. This data never
+            but is only sent when you browse, never with every request. This data never
             leaves your device.
           </p>
         </section>
@@ -156,12 +155,16 @@ export function CookiesPage() {
             Contact
           </h2>
           <p>
-            Questions about our use of cookies? Reach us at{" "}
+            Recall is an open-source project maintained by the community, not a
+            company offering a service. For questions about our use of cookies,
+            open an issue or discussion on{" "}
             <a
-              href="mailto:hello@recall.app"
+              href="https://github.com/Multazim-Al-razi/recall"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-rausch hover:underline"
             >
-              hello@recall.app
+              GitHub
             </a>
             .
           </p>

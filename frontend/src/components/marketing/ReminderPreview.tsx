@@ -28,7 +28,7 @@ export function ReminderPreview() {
         {/* Illustration centrepiece — fills the body */}
         <div className="flex flex-1 items-center justify-center py-2">
           <Illustration
-            name="notification"
+            name="reminderPreview"
             className="h-full max-h-45 w-full object-contain"
           />
         </div>

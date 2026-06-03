@@ -1,15 +1,33 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
-import { Bell, Heart } from "lucide-react";
+import { Bell, LifeBuoy, Sun, Moon } from "lucide-react";
 import { SyncBadge } from "@/components/ui/SyncBadge";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { NavMenu } from "@/components/layout/NavMenu";
 import { Logo } from "@/components/ui/Logo";
+import { useAccountStore } from "@/stores/account";
 import {
   useSubscriptionStore,
   getUpcomingRenewals,
   getExpiringTrials,
 } from "@/stores/subscription";
+
+function ThemeToggle() {
+  const theme = useAccountStore((s) => s.profile.theme);
+  const setTheme = useAccountStore((s) => s.setTheme);
+
+  const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
+
+  return (
+    <button
+      onClick={() => setTheme(next)}
+      aria-label={`Switch theme (current: ${theme}, next: ${next})`}
+      className="flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-[var(--color-sidebar-hover)] hover:text-ink"
+    >
+      {theme === 'dark' ? <Moon size={19} /> : <Sun size={19} />}
+    </button>
+  );
+}
 
 export function Header() {
   const subscriptions = useSubscriptionStore((s) => s.subscriptions);
@@ -54,9 +72,12 @@ export function Header() {
           aria-label="Support Recall"
           className="hidden h-9 items-center gap-1.5 rounded-full border border-ink/8 px-3 text-[12px] font-medium text-muted transition-colors hover:border-rausch/30 hover:text-rausch sm:inline-flex"
         >
-          <Heart size={14} />
-          Donate
+          <LifeBuoy size={14} />
+          Support
         </Link>
+
+        {/* Theme toggle */}
+        <ThemeToggle />
 
         {/* Notifications — count reflects real urgent items */}
         <Link

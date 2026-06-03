@@ -1,25 +1,18 @@
 import { Link } from "react-router";
+import { LifeBuoy } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 
-const PRODUCT_LINKS = [
-  { label: "Home", to: "/" },
-  { label: "Pricing", to: "/pricing" },
-  { label: "About", to: "/about" },
-];
-
 const RESOURCE_LINKS = [
+  { label: "About", to: "/about" },
   { label: "Blog", to: "/blog" },
   { label: "FAQ", to: "/about#faq" },
-  { label: "Support us", to: "/donate" },
+];
+
+const POLICY_LINKS = [
   { label: "Terms of Service", to: "/terms" },
   { label: "Privacy Policy", to: "/privacy" },
   { label: "Refund Policy", to: "/refunds" },
   { label: "Cookie Policy", to: "/cookies" },
-];
-
-const START_LINKS = [
-  { label: "Get started", to: "/onboarding" },
-  { label: "Dashboard", to: "/dashboard" },
 ];
 
 export function MarketingFooter() {
@@ -30,30 +23,12 @@ export function MarketingFooter() {
           <div className="max-w-[300px]">
             <Logo className="text-[22px]" />
             <p className="mt-3 text-[14px] leading-[1.6] text-muted">
-              The calm way to own your subscriptions. Track every charge, see
-              your true monthly burn, and never get billed by surprise.
+              Track every recurring charge, see your true monthly burn,
+              and never get billed by surprise.
             </p>
           </div>
 
-          <div className="flex gap-16 sm:gap-24">
-            <div>
-              <h4 className="text-[12px] font-bold uppercase tracking-[1.5px] text-ink/40">
-                Product
-              </h4>
-              <ul className="mt-4 space-y-2.5">
-                {PRODUCT_LINKS.map((l) => (
-                  <li key={l.label}>
-                    <Link
-                      to={l.to}
-                      className="text-[14px] text-muted transition-colors hover:text-rausch"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+          <div className="flex flex-wrap gap-12 sm:gap-16 md:gap-20">
             <div>
               <h4 className="text-[12px] font-bold uppercase tracking-[1.5px] text-ink/40">
                 Resources
@@ -74,10 +49,10 @@ export function MarketingFooter() {
 
             <div>
               <h4 className="text-[12px] font-bold uppercase tracking-[1.5px] text-ink/40">
-                Get started
+                Policies
               </h4>
               <ul className="mt-4 space-y-2.5">
-                {START_LINKS.map((l) => (
+                {POLICY_LINKS.map((l) => (
                   <li key={l.label}>
                     <Link
                       to={l.to}
@@ -89,16 +64,26 @@ export function MarketingFooter() {
                 ))}
               </ul>
             </div>
+
+            <div className="min-w-[200px]">
+              <h4 className="text-[12px] font-bold uppercase tracking-[1.5px] text-ink/40">
+                Support Recall
+              </h4>
+              <p className="mt-4 max-w-[240px] text-[14px] leading-[1.6] text-muted">
+                Recall is free and donation-supported. If it saved you money, a
+                tip keeps the project alive and ad-free.
+              </p>
+              <Link
+                to="/donate"
+                className="mt-4 inline-flex items-center gap-2 rounded-full border border-rausch/30 bg-rausch/8 px-4 py-2 text-[13px] font-semibold text-rausch transition-all hover:-translate-y-0.5 hover:bg-rausch/12"
+              >
+                <LifeBuoy size={14} />
+                Support Recall
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-between gap-3 border-t border-hairline py-6 text-[13px] text-muted sm:flex-row">
-          <span>
-            &copy; {new Date().getFullYear()} Recall. Your data stays on your
-            device.
-          </span>
-          <span>Made for people who hate surprise charges.</span>
-        </div>
       </div>
     </footer>
   );

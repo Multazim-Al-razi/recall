@@ -20,8 +20,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev -w frontend',
-    url: 'http://localhost:5173',
+    command: process.env.CI ? 'npm run build && npm run preview' : 'npm run dev -w frontend',
+    url: 'http://localhost:21120',
     reuseExistingServer: !process.env.CI,
     timeout: 30_000,
   },

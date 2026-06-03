@@ -1,29 +1,21 @@
-import { Bell, HardDrive, type LucideIcon } from 'lucide-react';
-import { FLAGS } from './featureFlags';
-
 /**
  * Pricing — the single source of truth for Recall's plans.
  *
- * The product pivot: Recall is free and local-first on the web (and free
- * forever on mobile). The only thing that carries a real, recurring cost is
- * delivering reminders to a closed browser tab — that needs a server running
- * around the clock. The optional Cloud plan ($1.99/mo) pays for exactly that,
- * and nothing more. No ads, no data selling, on any plan.
- *
- * The Pricing page, the About summary, and the dashboard plan cards all read
- * from here so the story never drifts across surfaces.
+ * Recall is free during early access. The local web app is free forever.
+ * Cloud (reminders across devices) is also free during early access.
+ * We measure download metrics to evaluate the product, but we never sell
+ * personal data or share it with data brokers on any plan.
  */
 
 export interface Plan {
   /** Stable key for selection / analytics. */
-  id: 'free' | 'cloud';
+  id: 'local' | 'sync';
   name: string;
   price: string;
   cadence: string;
-  icon: LucideIcon;
   /** One-line promise. */
   tagline: string;
-  /** Longer, verbose description for the Pricing page. */
+  /** Longer description for the Pricing page. */
   description: string;
   features: string[];
   /** The visual hero of the grid — the plan we point people toward. */
@@ -32,59 +24,44 @@ export interface Plan {
   badge?: string;
   /** CTA label + destination. */
   cta: { label: string; to: string };
-  /** Availability note shown under the price. */
-  availability: string;
-  /**
-   * Whether the plan can be purchased right now. When false the Pricing
-   * page renders a disabled "Coming soon" state instead of a CTA — the
-   * plan still appears for marketing/SEO but no checkout is offered.
-   * Driven by `FLAGS.syncPlan` so flipping the flag re-enables purchase.
-   */
-  available: boolean;
 }
 
 export const PLANS: Plan[] = [
   {
-    id: 'free',
-    name: 'Free',
+    id: 'local',
+    name: 'Local',
     price: 'Free',
     cadence: '',
-    icon: HardDrive,
-    tagline: 'Everything runs in your browser.',
+    tagline: 'Runs in your browser. Nothing to install.',
     description:
-      'The full Recall experience with nothing held back. Track every subscription, see your true monthly burn, read your category breakdown, and catch renewals before they bill — all stored on your own device. No account, no sign-up, no upload. This is Recall as it was meant to be used.',
+      'The full Recall experience with nothing held back. Track every subscription, see your true monthly burn, read your category breakdown, and catch renewals before they bill, all stored on your own device. No account, no sign-up, no upload. This is Recall as it was meant to be used.',
     features: [
-      'All tracking & insights',
+      'All tracking, charts & insights',
       'Unlimited subscriptions',
-      'Renewal & trial alerts',
-      'Calendar export',
+      'In-app renewal & trial alerts',
+      'Calendar (.ics) export for reminders',
+      'No account, no sign-up',
+      'Your data never leaves the device',
     ],
     featured: false,
-    cta: { label: 'Start free', to: '/onboarding' },
-    availability: 'Available now',
-    available: true,
+    cta: { label: 'Get started', to: '/onboarding' },
   },
   {
-    id: 'cloud',
+    id: 'sync',
     name: 'Cloud',
-    price: '$1.99',
-    cadence: '/mo',
-    icon: Bell,
+    price: 'Free',
+    cadence: '',
     tagline: 'Reminders that reach you, even with the tab closed.',
     description:
-      'Everything in Free, plus the one thing a closed browser tab genuinely cannot do: wake itself up to remind you. Cloud runs a server around the clock so renewal alerts arrive by email and push wherever you are, and your subscriptions stay mirrored across every device. The $1.99/mo covers that real cost — and nothing more.',
+      'Everything in Local, plus the one thing a closed browser tab cannot do: wake itself up to remind you. Cloud runs a server around the clock so renewal alerts arrive by email and push wherever you are, and your subscriptions stay mirrored across every device.',
     features: [
-      'Everything in Free',
-      'Email & push reminders',
+      'Everything in Local',
+      'Email & push renewal reminders',
       'Multi-device sync',
-      'Cancel anytime',
+      'Reminders even when the tab is closed',
     ],
     featured: true,
-    cta: { label: 'Start free, add Cloud later', to: '/onboarding' },
-    availability: FLAGS.syncPlan
-      ? 'Optional · cancel anytime'
-      : 'In development — sign up to be notified',
-    available: FLAGS.syncPlan,
+    cta: { label: 'Sign up', to: '/onboarding' },
   },
 ];
 
@@ -93,39 +70,39 @@ export type CompareCell = boolean | string;
 
 export interface CompareRow {
   feature: string;
-  free: CompareCell;
-  cloud: CompareCell;
+  local: CompareCell;
+  sync: CompareCell;
 }
 
 export const COMPARISON: CompareRow[] = [
-  { feature: 'Unlimited subscriptions', free: true, cloud: true },
-  { feature: 'Spending analytics & insights', free: true, cloud: true },
-  { feature: 'In-app renewal & trial alerts', free: true, cloud: true },
-  { feature: 'Calendar (.ics) export', free: true, cloud: true },
-  { feature: 'No account / sign-up', free: true, cloud: false },
-  { feature: 'Email & push reminders', free: false, cloud: true },
-  { feature: 'Reminders with the tab closed', free: false, cloud: true },
-  { feature: 'Multi-device sync', free: false, cloud: true },
-  { feature: 'Works fully offline', free: true, cloud: false },
-  { feature: 'Price', free: 'Free', cloud: '$1.99/mo' },
+  { feature: 'Unlimited subscriptions', local: true, sync: true },
+  { feature: 'Spending analytics & insights', local: true, sync: true },
+  { feature: 'In-app renewal & trial alerts', local: true, sync: true },
+  { feature: 'Calendar (.ics) export', local: true, sync: true },
+  { feature: 'No account / sign-up', local: true, sync: false },
+  { feature: 'Email & push reminders', local: false, sync: true },
+  { feature: 'Reminders with the tab closed', local: false, sync: true },
+  { feature: 'Multi-device sync', local: false, sync: true },
+  { feature: 'Works fully offline', local: true, sync: false },
+  { feature: 'Price', local: 'Free', sync: 'Free' },
 ];
 
 /** Pricing-specific questions. The broader FAQ lives on the About page. */
 export const PRICING_FAQ: { q: string; a: string }[] = [
   {
-    q: 'Why does the Cloud plan cost money if Recall is free?',
-    a: "A browser tab that's closed can't wake itself up to remind you — that needs a server running around the clock, which has a real cost. The $1.99/mo Cloud plan pays for exactly that: reliable reminder delivery and multi-device sync. We charge a small honest amount rather than show ads or sell data. Free web use stays free, forever.",
+    q: 'Is everything really free?',
+    a: 'Yes — during early access, Local web use is free forever, Cloud is also free. When server costs make a fee, it will be small, honest, and transparent, and there are no hidden tiers.',
   },
   {
-    q: 'Is the Free plan limited or a trial?',
-    a: 'Neither. Free is the complete app — unlimited subscriptions, every chart, every insight — free for as long as you use it. Cloud only adds cloud-delivered reminders and cross-device mirroring on top.',
+    q: 'Is the free Local plan limited or a trial?',
+    a: 'Neither. Local is the complete app with unlimited subscriptions, every chart, and every insight, free for as long as you use it. Cloud only adds cross-device reminders on top.',
   },
   {
     q: 'Do you sell my data on any plan?',
-    a: 'Never. Your subscription data is yours. On Free it never leaves your browser; on Cloud it is stored only so reminders can reach you. We have no ads and no data-broker relationships on any plan.',
+    a: 'Never. Your subscription data is yours. On Local it never leaves your browser; on Sync it is stored only so reminders can reach you. We measure download metrics to evaluate the product, but we never sell personal data or share with data brokers on any plan.',
   },
   {
-    q: 'Can I cancel Cloud whenever I want?',
-    a: "Yes. Cloud is month-to-month with no lock-in. Cancel anytime and you drop straight back to the Free plan with all your data intact.",
+    q: 'Can I switch between Local and Cloud?',
+    a: 'Yes. You can start with Local and add Cloud later, or switch back to Local at any time. Your data stays on your device either way.',
   },
 ];

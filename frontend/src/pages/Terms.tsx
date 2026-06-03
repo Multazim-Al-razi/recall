@@ -119,12 +119,12 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            8. Intellectual Property
+            7. Intellectual Property
           </h2>
           <p>
             The Service, including its design, code, branding, and content, is
             owned by Recall and protected by applicable intellectual property
-            laws. Recall is open source under the MIT license — you may view,
+            laws. Recall is open source under the MIT license, so you may view,
             fork, and contribute to the code on GitHub. The MIT license governs
             code usage; these Terms govern use of the hosted Service.
           </p>
@@ -132,7 +132,7 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            9. Service Availability
+            8. Service Availability
           </h2>
           <p>
             We strive to keep Recall running reliably, but we do not guarantee
@@ -145,7 +145,7 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            10. Limitation of Liability
+            9. Limitation of Liability
           </h2>
           <p>
             To the maximum extent permitted by law, Recall and its operators
@@ -166,7 +166,7 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            11. Termination
+            10. Termination
           </h2>
           <p>
             You may stop using Recall at any time. Simply close your browser —
@@ -179,7 +179,7 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            12. Changes to These Terms
+            11. Changes to These Terms
           </h2>
           <p>
             We may revise these terms at any time. If we make material changes,
@@ -191,15 +191,19 @@ export function TermsPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            13. Contact
+            12. Contact
           </h2>
           <p>
-            Questions about these terms? Reach us at{" "}
+            Recall is an open-source project maintained by the community, not a
+            company offering a service. For questions or suggestions, open an
+            issue or discussion on{" "}
             <a
-              href="mailto:hello@recall.app"
+              href="https://github.com/Multazim-Al-razi/recall"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-rausch hover:underline"
             >
-              hello@recall.app
+              GitHub
             </a>
             .
           </p>

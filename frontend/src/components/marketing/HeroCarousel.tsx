@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
@@ -42,14 +43,14 @@ function calculateGap(width: number) {
  */
 export function HeroCarousel({ className }: { className?: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [stageWidth, setStageWidth] = useState(360);
+  const [stageWidth, setStageWidth] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const stageRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
 
   const count = SLIDES.length;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function handleResize() {
       if (stageRef.current) {
         setStageWidth(stageRef.current.offsetWidth);
@@ -80,7 +81,8 @@ export function HeroCarousel({ className }: { className?: string }) {
       const isActive = index === activeIndex;
       const isLeft = (activeIndex - 1 + count) % count === index;
       const isRight = (activeIndex + 1) % count === index;
-      const transition = "all 0.8s cubic-bezier(.4,2,.3,1)";
+      const transition =
+        "transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)";
 
       if (reduceMotion) {
         return {
@@ -88,6 +90,16 @@ export function HeroCarousel({ className }: { className?: string }) {
           opacity: isActive ? 1 : 0,
           pointerEvents: isActive ? "auto" : "none",
           transition: "opacity 0.5s ease",
+        };
+      }
+
+      // Wait for measurement before positioning any slide.
+      if (stageWidth === null) {
+        return {
+          zIndex: 1,
+          opacity: 0,
+          pointerEvents: "none",
+          transition: "none",
         };
       }
 

@@ -51,8 +51,8 @@ export function PrivacyPage() {
             3. Data Stored Locally
           </h2>
           <p>
-            All your subscription data — names, costs, billing dates, categories,
-            and notes — is stored in your browser's local storage. This data:
+            All your subscription data, including names, costs, billing dates,
+            categories, and notes, is stored in your browser's local storage. This data:
           </p>
           <ul className="mt-2 list-disc pl-5 space-y-1.5">
             <li>Never leaves your device</li>
@@ -77,7 +77,7 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            6. Analytics and Cookies
+            5. Analytics and Cookies
           </h2>
           <p>
             Recall does not use Google Analytics, Mixpanel, or any third-party
@@ -85,15 +85,16 @@ export function PrivacyPage() {
           </p>
           <p className="mt-3">
             We may use essential cookies required for authentication (GitHub
-            OAuth session tokens) and preference storage (theme, currency).
-            These are strictly necessary for the Service to function and are
-            not used for tracking.
+            OAuth session tokens) and preference storage (theme, currency),
+            and we may collect basic download and usage metrics to evaluate the
+            product's success during early access. This data is never sold or
+            shared with third parties.
           </p>
         </section>
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            7. Data Sharing
+            6. Data Sharing
           </h2>
           <p>
             We do not sell, trade, or share your personal data with any third
@@ -122,7 +123,7 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            8. Data Retention
+            7. Data Retention
           </h2>
           <p>
             Your data stays in your browser until you clear it. We have no
@@ -134,7 +135,7 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            9. Your Rights
+            8. Your Rights
           </h2>
           <p>
             Depending on your jurisdiction (GDPR, CCPA, etc.), you may have the
@@ -149,13 +150,16 @@ export function PrivacyPage() {
           </ul>
           <p className="mt-3">
             Since Recall stores data entirely on your device, you have full
-            control — simply export or clear your browser data. To exercise any
-            of these rights for your GitHub authentication data, email{" "}
+            control — simply export or clear your browser data from Settings.
+            GitHub authentication data is managed through your own GitHub
+            account; you can revoke Recall's access at any time from{" "}
             <a
-              href="mailto:hello@recall.app"
+              href="https://github.com/settings/applications"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-rausch hover:underline"
             >
-              hello@recall.app
+              GitHub's authorized applications page
             </a>
             .
           </p>
@@ -163,7 +167,7 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            10. Children's Privacy
+            9. Children's Privacy
           </h2>
           <p>
             Recall is not intended for children under 13 years of age. We do
@@ -173,7 +177,7 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            11. Changes to This Policy
+            10. Changes to This Policy
           </h2>
           <p>
             We may update this Privacy Policy from time to time. If we make
@@ -185,16 +189,19 @@ export function PrivacyPage() {
 
         <section>
           <h2 className="mb-3 text-[20px] font-semibold text-ink">
-            12. Contact
+            11. Contact
           </h2>
           <p>
-            For questions about this policy or to exercise your data rights,
-            contact us at{" "}
+            Recall is an open-source project maintained by the community, not a
+            company offering a service. For questions about this policy, open
+            an issue or discussion on{" "}
             <a
-              href="mailto:hello@recall.app"
+              href="https://github.com/Multazim-Al-razi/recall"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-rausch hover:underline"
             >
-              hello@recall.app
+              GitHub
             </a>
             .
           </p>

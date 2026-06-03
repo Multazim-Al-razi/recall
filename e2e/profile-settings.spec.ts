@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { COPY } from '../frontend/src/lib/copyContract';
+import { COPY } from './fixtures/copy';
 import { completeOnboarding } from './helpers/onboarding';
 import { seedAccountWithSubs } from './fixtures/seed';
 

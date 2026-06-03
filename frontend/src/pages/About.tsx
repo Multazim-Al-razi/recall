@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router";
+import { useLocation, Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { clsx } from "clsx";
@@ -7,6 +7,7 @@ import { CREDITS } from "@/lib/credits";
 import { Illustration } from "@/components/ui/Illustration";
 import { Logo } from "@/components/ui/Logo";
 import { MaskDivider } from "@/components/layout/MaskDivider";
+import { DonateWidget } from "@/components/marketing/DonateWidget";
 
 /** Left-rail index — every entry maps to a section id below. */
 const SECTIONS = [
@@ -26,7 +27,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Is my data sent to a server?",
-    a: "No — everything is stored in your browser and never leaves your device. Your data is never sold. The upcoming mobile app is also fully local with no account required.",
+    a: "On the Local plan, everything is stored in your browser and never leaves your device. On Cloud, your data is stored so reminders can reach you across devices — but is never sold.",
   },
   {
     q: "How much does Recall cost?",
@@ -112,7 +113,6 @@ function useScrollSpy(ids: readonly string[]) {
 
 export function AboutPage() {
   const { hash } = useLocation();
-  const [creditsOpen, setCreditsOpen] = useState(false);
   const active = useScrollSpy(SECTIONS.map((s) => s.id));
   const didScroll = useRef(false);
 
@@ -143,16 +143,15 @@ export function AboutPage() {
     >
       {/* Hero */}
       <div className="mx-auto max-w-[1100px] px-5 sm:px-8 md:px-12">
-        <section className="flex flex-col items-center gap-8 pt-[110px] pb-12 text-center md:flex-row md:gap-12 md:pt-[130px] md:text-left">
+         <section className="flex flex-col items-center gap-8 pt-12 pb-12 text-center md:flex-row md:gap-12 md:pt-16 md:text-left">
           <div className="flex-1">
             <h1 className="font-display text-[34px] font-light leading-[1.1] tracking-[-2px] sm:text-[44px]">
-              The calm way to{" "}
-              <strong className="font-bold">own your subscriptions</strong>.
+              Take control of your subscriptions.
             </h1>
             <p className="mx-auto mt-4 max-w-[480px] text-[16px] leading-[1.65] text-muted md:mx-0 md:text-[17px]">
               Subscriptions are easy to start and easy to forget. Recall keeps
               them all in one place, does the math on your true monthly spend,
-              and reminds you before each renewal — so you only pay for what you
+              and reminds you before each renewal so you only pay for what you
               actually use.
             </p>
           </div>
@@ -203,7 +202,7 @@ export function AboutPage() {
               </h2>
               <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
                 Recall is a subscription tracker that lives where your money
-                decisions actually happen — quietly, in the background, without
+                decisions actually happen, quietly in the background, without
                 asking for your bank login or your trust up front. You add the
                 services you pay for, and Recall turns that scattered list into
                 one honest monthly number, a clear renewal calendar, and a
@@ -234,7 +233,7 @@ export function AboutPage() {
               <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
                 The average person carries roughly a dozen recurring charges and
                 underestimates their true monthly spend by nearly half. The gap
-                is not carelessness — it is that nobody gives you a single, calm
+                is not carelessness, it is that nobody gives you a single, clear
                 place to see the whole picture. Bank statements bury the signal
                 in noise. Spreadsheets go stale the week after you build them.
               </p>
@@ -244,7 +243,7 @@ export function AboutPage() {
                   className="h-[110px] w-[130px] shrink-0 object-contain"
                 />
                 <p className="text-[14px] leading-[1.7] text-muted">
-                  Recall closes that gap with no bank logins and no spreadsheets
+                  Recall closes that gap with no bank logins and no spreadsheet
                   — just a clear, honest view of what you are paying and when,
                   so the next surprise charge never arrives.
                 </p>
@@ -270,7 +269,7 @@ export function AboutPage() {
                     Recall watches every billing date and nudges you before a
                     charge lands, so free trials never convert behind your back
                     and annual plans never ambush you. You get a clear window to
-                    cancel, keep, or switch — on your terms, not the vendor's.
+                    cancel, keep, or switch on your terms, not the vendor's.
                   </p>
                 </div>
                 <div className="border-l-2 border-teal/30 pl-5">
@@ -291,7 +290,7 @@ export function AboutPage() {
                   <p className="mt-1.5 text-[14.5px] leading-[1.7] text-muted">
                     Recall surfaces overlapping services and forgotten trials,
                     then shows you exactly what you would save by consolidating
-                    — not to guilt you, but to make every charge an intentional
+                    — a gentle nudge to make every charge an intentional
                     choice.
                   </p>
                 </div>
@@ -317,10 +316,10 @@ export function AboutPage() {
                   name="aboutAutonomy"
                   className="h-[140px] w-full max-w-[180px] shrink-0 object-contain"
                 />
-                <ul className="flex-1 space-y-2.5 text-[14px] leading-[1.6] text-ink-soft">
+                <ul className="flex-1 list-disc space-y-2.5 pl-5 text-[14px] leading-[1.6] text-ink-soft">
                   <li>No account or sign-up to start using the web app.</li>
                   <li>Your data stays on your device by default.</li>
-                  <li>No ads, no trackers, no data sold — on any plan.</li>
+                  <li>No ads, we measure download metrics to evaluate the product, no data sold on any plan.</li>
                   <li>Export to a file anytime; you are never locked in.</li>
                 </ul>
               </div>
@@ -328,7 +327,7 @@ export function AboutPage() {
                 The honest trade-off: local data does not automatically follow
                 you across devices. You can export your data from Settings and
                 re-import it on any device. The upcoming mobile app will offer
-                optional cloud sync for cross-device use.
+                optional Cloud for cross-device use.
               </p>
             </section>
 
@@ -340,17 +339,18 @@ export function AboutPage() {
               <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
                 We were tired of two things: surprise charges, and the kind of
                 “free” apps that quietly make you the product. Recall is our
-                answer to both. It is calm where most money tools are anxious,
+                answer to both. It is straightforward where most money tools are anxious,
                 honest where most are vague, and respectful of your attention
                 where most fight for it.
               </p>
               <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
                 That shapes every decision. We use one warm accent instead of
                 alarming red. We show real numbers derived from your own data
-                rather than invented history. We charge a small, honest fee for
-                the one feature that genuinely costs us money instead of selling
-                ads or data. The goal is a tool you can trust precisely because
-                its incentives point at you, not past you.
+                rather than invented history. Cloud is currently free
+                during early access; when server costs make a fee necessary,
+                it will be small, honest, and transparent — never ads or data.
+                The goal is a tool you can trust precisely because its
+                incentives point at you, not past you.
               </p>
             </section>
 
@@ -360,11 +360,7 @@ export function AboutPage() {
               <h2 className="font-display text-[26px] font-light tracking-[-0.5px] md:text-[30px]">
                 Frequently asked questions
               </h2>
-              <p className="mt-3 text-[14.5px] leading-[1.7] text-muted">
-                Everything you need to know about how Recall handles your data,
-                your money, and your reminders.
-              </p>
-              <div className="mt-5 rounded-xl bg-surface px-6 pb-2 shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-sm)] sm:px-8">
+              <div className="mt-5">
                 {FAQ_ITEMS.map((item) => (
                   <FaqItem key={item.q} q={item.q} a={item.a} />
                 ))}
@@ -378,67 +374,58 @@ export function AboutPage() {
               </h2>
               <p className="mt-3 text-[14.5px] leading-[1.7] text-muted">
                 Recall is built on the work of generous open-source and design
-                communities. We credit every one of them here.
+                communities.
               </p>
-              <button
-                onClick={() => setCreditsOpen((v) => !v)}
-                aria-expanded={creditsOpen}
-                className="mt-4 flex items-center gap-2 text-[13px] font-medium text-rausch transition-colors hover:text-rausch-hover"
-              >
-                {creditsOpen ? "Hide" : "Show"} the full list
-                <ChevronDown
-                  size={15}
-                  className={`transition-transform ${creditsOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-              <AnimatePresence>
-                {creditsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
+              <ul className="mt-4 space-y-3">
+                {CREDITS.filter((c) => c.attributionRequired).map((c) => (
+                  <li
+                    key={c.name}
+                    className="rounded-lg bg-surface-2 p-4"
                   >
-                    <ul className="mt-4 space-y-3">
-                      {CREDITS.map((c) => (
-                        <li
-                          key={c.name}
-                          className="rounded-lg bg-surface-2 p-4"
-                        >
-                          <a
-                            href={c.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-[14px] font-semibold transition-colors hover:text-rausch"
-                          >
-                            {c.name}
-                            <span className="font-normal text-muted">
-                              {" "}
-                              · {c.author}
-                            </span>
-                          </a>
-                          <p className="mt-1 text-[12.5px] leading-[1.5] text-muted">
-                            {c.usage}
-                          </p>
-                          <span className="mt-1.5 inline-block text-[11px] font-medium uppercase tracking-[0.5px] text-ink/35">
-                            {c.licence}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <a
+                      href={c.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[14px] font-semibold transition-colors hover:text-rausch"
+                    >
+                      {c.name}
+                      <span className="font-normal text-muted">
+                        {" "}
+                        · {c.author}
+                      </span>
+                    </a>
+                    {c.usage ? (
+                      <>
+                        <p className="mt-1 text-[12.5px] leading-[1.5] text-muted">
+                          {c.usage}
+                        </p>
+                        <span className="mt-1.5 inline-block text-[11px] font-medium uppercase tracking-[0.5px] text-ink/35">
+                          {c.licence}
+                        </span>
+                      </>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
             </section>
           </div>
         </div>
       </div>
 
       <MaskDivider />
-      <section className="pb-24 pt-8 text-center text-[13px] text-muted">
-        Recall — track every subscription, never forget to cancel. Free on the
-        web, free forever on mobile.
+      <section className="mx-auto max-w-[1100px] px-5 pt-8 text-center sm:px-8 md:px-12">
+        <p className="text-[15px] leading-[1.7] text-muted">
+          Ready to take control?{" "}
+          <Link
+            to="/onboarding"
+            className="text-[15px] text-muted underline decoration-ink/20 underline-offset-4 transition-colors hover:text-rausch"
+          >
+            Get started for free
+          </Link>
+        </p>
+      </section>
+      <section className="mx-auto max-w-[1100px] px-5 pb-24 pt-8 sm:px-8 md:px-12">
+        <DonateWidget />
       </section>
     </motion.div>
   );

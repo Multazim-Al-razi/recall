@@ -1,10 +1,12 @@
+import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
 
-// TODO: point these at the real repo. The star count is a static placeholder —
-// ask to wire the live GitHub API (api.github.com/repos/OWNER/REPO) if desired.
-export const GITHUB_HANDLE = 'recall-app';
-export const GITHUB_URL = 'https://github.com/recall-app/recall';
-export const GITHUB_STARS = '1.2k';
+export const GITHUB_HANDLE = 'Multazim-Al-razi';
+export const GITHUB_REPO = 'Multazim-Al-razi/recall';
+export const GITHUB_URL = 'https://github.com/Multazim-Al-razi/recall';
+
+/** Minimum stars required before the badge becomes visible. */
+const STAR_THRESHOLD = 100;
 
 /** Inline GitHub mark — lucide-react dropped brand icons, so we ship our own. */
 export function GithubMark({ size = 14, className }: { size?: number; className?: string }) {
@@ -23,6 +25,56 @@ export function GithubMark({ size = 14, className }: { size?: number; className?
   );
 }
 
+/**
+ * Formats a star count for display (e.g. 123 → "123", 1234 → "1.2k").
+ */
+function formatStars(n: number): string {
+  if (n >= 1000) {
+    const k = n / 1000;
+    return k >= 100 ? `${Math.round(k)}k` : `${k.toFixed(1).replace(/\.0$/, '')}k`;
+  }
+  return String(n);
+}
+
+interface UseGitHubStarsResult {
+  stars: number | null;
+  formatted: string | null;
+  visible: boolean;
+  loading: boolean;
+}
+
+/**
+ * Fetches stargazers_count from the GitHub API once per session,
+ * caches in sessionStorage, and hides the badge below the threshold.
+ */
+export function useGitHubStars(): UseGitHubStarsResult {
+  const [stars, setStars] = useState<number | null>(() => {
+    const cached = sessionStorage.getItem('recall:gh-stars');
+    return cached ? Number(cached) : null;
+  });
+  const [loading, setLoading] = useState(stars === null);
+
+  useEffect(() => {
+    if (stars !== null) return;
+
+    fetch(`https://api.github.com/repos/${GITHUB_REPO}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && typeof data.stargazers_count === 'number') {
+          setStars(data.stargazers_count);
+          sessionStorage.setItem('recall:gh-stars', String(data.stargazers_count));
+        }
+      })
+      .catch(() => setStars(null))
+      .finally(() => setLoading(false));
+  }, [stars]);
+
+  const visible = stars !== null && stars >= STAR_THRESHOLD;
+  const formatted = stars !== null ? formatStars(stars) : null;
+
+  return { stars, formatted, visible, loading };
+}
+
 interface Props {
   className?: string;
   /** Compact mode hides the handle text, showing only the star count. */
@@ -31,19 +83,23 @@ interface Props {
 
 /** GitHub repo link with a star count, styled for the marketing nav. */
 export function GithubStars({ className = '', compact = false }: Props) {
+  const { formatted, visible, loading } = useGitHubStars();
+
+  if (loading || !visible) return null;
+
   return (
     <a
       href={GITHUB_URL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={`${GITHUB_HANDLE} on GitHub — ${GITHUB_STARS} stars`}
+      aria-label={`${GITHUB_HANDLE} on GitHub — ${formatted} stars`}
       className={`inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-[13px] font-medium text-muted transition-colors hover:bg-ink/5 hover:text-ink ${className}`}
     >
       <GithubMark size={15} />
       {!compact && <span>{GITHUB_HANDLE}</span>}
       <span className="flex items-center gap-0.5 text-ink/55">
         <Star size={12} className="fill-current" />
-        {GITHUB_STARS}
+        {formatted}
       </span>
     </a>
   );

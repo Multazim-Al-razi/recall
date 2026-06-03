@@ -18,10 +18,11 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    port: 21120,
     allowedHosts: ['host.docker.internal'],
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:21121',
         changeOrigin: true,
       },
     },

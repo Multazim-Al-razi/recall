@@ -1,0 +1,47 @@
+{
+  "name": "recall-cli",
+  "version": "1.1.0",
+  "description": "Local companion CLI for Recall subscription tracker — background daemon, native OS notifications, system tray, and optional webapp launcher.",
+  "type": "module",
+  "bin": {
+    "recall": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "recall",
+    "subscription",
+    "tracker",
+    "cli",
+    "reminders"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@inquirer/checkbox": "^4.2.0",
+    "@inquirer/prompts": "^7.8.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "node-notifier": "^10.0.1",
+    "node-schedule": "^2.1.1",
+    "systray2": "^2.1.0"
+  },
+  "devDependencies": {
+    "2": "^3.0.0",
+    "@types/node": "^22.15.3",
+    "@types/node-notifier": "^8.0.5",
+    "@types/node-schedule": "^2.1.7",
+    "tsx": "^4.19.4",
+    "typescript": "~5.8.3"
+  }
+}

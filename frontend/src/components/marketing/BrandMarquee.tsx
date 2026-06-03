@@ -38,14 +38,13 @@ function LogoChip({ slug }: { slug: string }) {
   // untrusted source, we still won't render arbitrary CDN paths.
   if (!MARQUEE_ALLOWLIST.has(slug)) return null;
   return (
-    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-xs)] transition-transform hover:-translate-y-0.5 sm:h-14 sm:w-14">
+    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg opacity-50 transition-opacity duration-300 hover:opacity-100 sm:h-12 sm:w-12">
       <img
         src={`https://cdn.simpleicons.org/${slug}/${LOGO_TONE}`}
         alt={slug}
         loading="lazy"
         referrerPolicy="no-referrer"
-        style={{ width: 24, height: 24 }}
-        className="opacity-55 transition-opacity duration-300 hover:opacity-100"
+        style={{ width: 22, height: 22 }}
       />
     </div>
   );
@@ -53,12 +52,9 @@ function LogoChip({ slug }: { slug: string }) {
 
 export function BrandMarquee() {
   return (
-    <section className="border-y border-hairline bg-surface/40 py-10 sm:py-12">
-      <p className="mx-auto mb-7 max-w-[1100px] px-5 text-center text-[12px] font-semibold uppercase tracking-[2.5px] text-muted sm:px-8">
-        Tracks the subscriptions you already pay for
-      </p>
+    <section className="relative overflow-hidden">
       <div className="marquee-mask relative overflow-hidden">
-        <div className="animate-marquee flex w-max gap-3 sm:gap-4">
+        <div className="animate-marquee flex w-max gap-2 sm:gap-3">
           {[...BRANDS, ...BRANDS].map((slug, i) => (
             <LogoChip key={`${slug}-${i}`} slug={slug} />
           ))}

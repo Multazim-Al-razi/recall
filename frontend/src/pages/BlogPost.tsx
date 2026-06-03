@@ -11,7 +11,7 @@ export function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="mx-auto max-w-[700px] px-5 pt-[140px] text-center">
+      <div className="mx-auto max-w-[700px] px-5 pt-[140px] sm:px-8 md:px-12 text-center">
         <h1 className="font-display text-[28px] font-semibold">Post not found</h1>
         <Link to="/blog" className="mt-4 inline-block text-rausch">
           &larr; Back to blog
@@ -52,11 +52,11 @@ export function BlogPostPage() {
           </div>
         </section>
 
-        <div className="mx-auto mb-10 max-w-[400px]">
+        <div className="mx-auto mb-10 max-w-[400px] overflow-hidden rounded-2xl bg-surface p-6 ring-1 ring-ink/5 dark:ring-white/10">
           <Illustration
             name={post.illustration}
             decorative={false}
-            className="w-full object-contain"
+            className="w-full object-contain dark:mix-blend-multiply"
           />
         </div>
 

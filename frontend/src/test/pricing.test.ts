@@ -5,44 +5,44 @@ import {
   PRICING_FAQ,
   type CompareCell,
 } from "@/lib/pricing";
-import { FLAGS } from "@/lib/featureFlags";
 
 describe("PLANS", () => {
   it("defines exactly the two expected plans", () => {
-    expect(PLANS.map((p) => p.id)).toEqual(["free", "cloud"]);
+    expect(PLANS.map((p) => p.id)).toEqual(["local", "sync"]);
   });
 
-  it("does not feature any plan when the sync flag is off (the default)", () => {
-    expect(FLAGS.syncPlan).toBe(false);
+  it("has exactly one featured plan (the Sync upsell)", () => {
     const featured = PLANS.filter((p) => p.featured);
-    expect(featured).toHaveLength(0);
+    expect(featured).toHaveLength(1);
+    expect(featured[0].id).toBe("sync");
   });
 
-  it("prices the Cloud plan at $1.99/mo and keeps Free plan free", () => {
+  it("keeps both plans free", () => {
     const byId = Object.fromEntries(PLANS.map((p) => [p.id, p]));
-    expect(byId.free.price).toBe("Free");
-    expect(byId.cloud.price).toBe("$1.99");
-    expect(byId.cloud.cadence).toBe("/mo");
+    expect(byId.local.price).toBe("Free");
+    expect(byId.sync.price).toBe("Free");
   });
 
   it("gives every plan the fields the UI renders", () => {
     for (const plan of PLANS) {
       expect(plan.name).toBeTruthy();
       expect(plan.tagline).toBeTruthy();
-      expect(plan.description.length).toBeGreaterThan(20);
       expect(plan.features.length).toBeGreaterThan(0);
-      expect(plan.availability).toBeTruthy();
       expect(plan.cta.label).toBeTruthy();
       expect(plan.cta.to.startsWith("/")).toBe(true);
-      expect(plan.icon).toBeDefined();
     }
   });
 
-  it("only marks the featured plan with a badge", () => {
+  it("does not badge any plan", () => {
     for (const plan of PLANS) {
-      if (plan.featured) expect(plan.badge).toBeTruthy();
-      else expect(plan.badge).toBeUndefined();
+      expect(plan.badge).toBeUndefined();
     }
+  });
+
+  it("uses the expected CTAs", () => {
+    const byId = Object.fromEntries(PLANS.map((p) => [p.id, p]));
+    expect(byId.local.cta.label).toBe("Get started");
+    expect(byId.sync.cta.label).toBe("Sign up");
   });
 
   it("uses unique plan ids", () => {
@@ -59,30 +59,31 @@ describe("COMPARISON", () => {
   it("has a cell for both plans on every row", () => {
     for (const row of COMPARISON) {
       expect(row.feature).toBeTruthy();
-      expect(describesAll(row.free)).toBe(true);
-      expect(describesAll(row.cloud)).toBe(true);
+      expect(describesAll(row.local)).toBe(true);
+      expect(describesAll(row.sync)).toBe(true);
     }
   });
 
-  it("reflects the core value story: Free is free, Cloud adds cloud reminders", () => {
+  it("reflects the core value story: Local is free, Sync adds cloud reminders", () => {
     const priceRow = COMPARISON.find((r) => r.feature === "Price");
     expect(priceRow).toBeDefined();
-    expect(priceRow!.free).toBe("Free");
-    expect(priceRow!.cloud).toBe("$1.99/mo");
+    expect(priceRow!.local).toBe("Free");
+    expect(priceRow!.sync).toBe("Free (early access)");
 
     const pushRow = COMPARISON.find(
       (r) => r.feature === "Email & push reminders",
     );
     expect(pushRow).toBeDefined();
-    expect(pushRow!.free).toBe(false);
-    expect(pushRow!.cloud).toBe(true);
+    // Local cannot deliver push; Sync can.
+    expect(pushRow!.local).toBe(false);
+    expect(pushRow!.sync).toBe(true);
   });
 
-  it('keeps "no account" true for Free but not Cloud', () => {
+  it('keeps "no account" true for Local but not Sync', () => {
     const row = COMPARISON.find((r) => r.feature === "No account / sign-up");
     expect(row).toBeDefined();
-    expect(row!.free).toBe(true);
-    expect(row!.cloud).toBe(false);
+    expect(row!.local).toBe(true);
+    expect(row!.sync).toBe(false);
   });
 
   it("uses unique feature labels", () => {
@@ -100,9 +101,9 @@ describe("PRICING_FAQ", () => {
     }
   });
 
-  it("addresses why Cloud costs money", () => {
+  it("addresses why Sync costs money", () => {
     const hasWhyQuestion = PRICING_FAQ.some((item) =>
-      /why.*cloud.*cost/i.test(item.q),
+      /why.*sync.*cost/i.test(item.q),
     );
     expect(hasWhyQuestion).toBe(true);
   });

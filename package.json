@@ -1,10 +1,11 @@
 {
   "name": "recall",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "cli"
   ],
   "scripts": {
     "dev": "npm run dev -w frontend",
@@ -19,5 +20,8 @@
     "e2e": "npx playwright test",
     "e2e:ui": "npx playwright test --ui",
     "e2e:headed": "npx playwright test --headed"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2"
   }
 }

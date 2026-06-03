@@ -8,7 +8,6 @@ export interface SeedAccountOverrides {
   reminderLeadDays?: number;
   theme?: 'system' | 'light' | 'dark';
   onboarded?: boolean;
-  plan?: 'free' | 'plus' | 'pro' | 'max';
 }
 
 export interface SeedSubscriptionOverrides {
@@ -48,7 +47,6 @@ export async function seedAccount(page: Page, overrides: SeedAccountOverrides = 
           reminderLeadDays: overrides.reminderLeadDays ?? 3,
           ...(overrides.theme ? { theme: overrides.theme } : {}),
         },
-        plan: overrides.plan ?? 'free',
       },
       version: 0,
     };

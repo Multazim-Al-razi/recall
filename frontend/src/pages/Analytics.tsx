@@ -180,9 +180,9 @@ export function AnalyticsPage() {
           </div>
 
           {/* Recommendation */}
-          <div className="flex min-h-[180px] flex-col justify-between rounded-xl bg-dark p-6 text-[#f5f0eb] md:p-7 lg:col-span-3">
+          <div className="flex min-h-[180px] flex-col justify-between rounded-xl bg-ink p-6 text-canvas md:p-7 lg:col-span-3">
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-[2.5px] text-[#555]">
+              <div className="text-[10px] font-bold uppercase tracking-[2.5px] text-muted">
                 Recommendation
               </div>
               <div className="mt-3.5 text-xl font-light leading-relaxed tracking-tight">
@@ -192,7 +192,7 @@ export function AnalyticsPage() {
                     Consider consolidating to save <b className="font-semibold text-rausch">{sym}{savings.top.savings.toFixed(2)}/mo</b>.
                   </>
                 ) : (
-                  <>No overlapping subscriptions — your stack is lean.</>
+                  <>No overlapping subscriptions, your stack is lean.</>
                 )}
               </div>
             </div>

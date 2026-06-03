@@ -2,21 +2,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 
+/**
+ * Product-truth counter band. Every number is something Recall can prove
+ * about itself — no sample-data estimates of user savings or average spend.
+ */
 const STATS = [
-  {
-    value: 273,
-    prefix: "$",
-    suffix: "/mo",
-    label: "Average tracked spend",
-    decimals: 0,
-  },
-  {
-    value: 31,
-    prefix: "$",
-    suffix: "/mo",
-    label: "Typical savings found",
-    decimals: 0,
-  },
   {
     value: 0,
     prefix: "",
@@ -25,11 +15,25 @@ const STATS = [
     display: "Zero",
   },
   {
+    value: 0,
+    prefix: "",
+    suffix: "",
+    label: "Ads and trackers",
+    display: "Zero",
+  },
+  {
     value: 100,
     prefix: "",
     suffix: "%",
     label: "On your device",
     decimals: 0,
+  },
+  {
+    value: 0,
+    prefix: "",
+    suffix: "",
+    label: "Bank login required",
+    display: "None",
   },
 ] as const;
 

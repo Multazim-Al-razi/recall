@@ -1,29 +1,48 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Star } from "lucide-react";
+import { Menu, X, Sun, Moon, LifeBuoy } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import {
+  GithubStars,
   GithubMark,
   GITHUB_URL,
-  GITHUB_STARS,
-  GITHUB_HANDLE,
+  useGitHubStars,
 } from "@/components/layout/GithubStars";
 import { useAccountStore } from "@/stores/account";
 
-const DONATE_URL = 'https://buymeacoffee.com/recall';
+const DONATE_URL = '/donate';
 
 const NAV_ITEMS = [
   { path: "/", label: "Home" },
+  { path: "/pricing", label: "Pricing" },
   { path: "/about", label: "About" },
   { path: "/blog", label: "Blog" },
 ];
+
+function ThemeToggle() {
+  const theme = useAccountStore((s) => s.profile.theme);
+  const setTheme = useAccountStore((s) => s.setTheme);
+
+  const next = theme === 'light' ? 'dark' : theme === 'dark' ? 'system' : 'light';
+
+  return (
+    <button
+      onClick={() => setTheme(next)}
+      aria-label={`Switch theme (current: ${theme}, next: ${next})`}
+      className="flex h-9 w-9 items-center justify-center rounded-full text-muted transition-colors hover:bg-ink/5 hover:text-ink"
+    >
+      {theme === 'dark' ? <Moon size={17} /> : <Sun size={17} />}
+    </button>
+  );
+}
 
 export function FloatingNav() {
   const location = useLocation();
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const onboarded = useAccountStore((s) => s.onboarded);
+  const { formatted, visible } = useGitHubStars();
 
   const go = (path: string) => {
     navigate(path);
@@ -45,33 +64,22 @@ export function FloatingNav() {
         className="relative z-30 w-full"
       >
         <div className="mx-auto grid max-w-[1240px] grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-4 sm:px-8 md:px-12">
-          {/* Left — GitHub stars, plain (no container) */}
+          {/* Left — GitHub stars (visible only when ≥ 100), donate link */}
           <div className="hidden items-center gap-2 md:inline-flex">
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${GITHUB_HANDLE} on GitHub — ${GITHUB_STARS} stars`}
-              className="flex items-center gap-1.5 text-[13px] font-medium text-muted transition-colors hover:text-ink"
-            >
-              <GithubMark size={16} />
-              <span>{GITHUB_HANDLE}</span>
-              <span className="flex items-center gap-0.5 text-ink/55">
-                <Star size={12} className="fill-current" />
-                {GITHUB_STARS}
-              </span>
-            </a>
-            <span className="text-ink/20" aria-hidden="true">·</span>
-            <a
-              href={DONATE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Buy us a coffee on Buy Me a Coffee"
+            {visible && (
+              <>
+                <GithubStars />
+                <span className="text-ink/20" aria-hidden="true">·</span>
+              </>
+            )}
+            <Link
+              to={DONATE_URL}
+              aria-label="Support Recall"
               className="flex items-center gap-1 text-[13px] font-medium text-muted transition-colors hover:text-rausch"
             >
-              <span>☕</span>
-              <span>Donate</span>
-            </a>
+              <LifeBuoy size={14} />
+              <span>Support</span>
+            </Link>
           </div>
 
           {/* Mobile logo (left) */}
@@ -115,8 +123,9 @@ export function FloatingNav() {
             ))}
           </nav>
 
-          {/* Right — auth actions */}
+          {/* Right — theme toggle + auth actions */}
           <div className="hidden items-center gap-3 justify-self-end md:flex">
+            <ThemeToggle />
             {onboarded ? (
               <button
                 onClick={() => go("/dashboard")}
@@ -186,6 +195,13 @@ export function FloatingNav() {
                 </button>
               ))}
 
+              {/* Theme toggle */}
+              <div className="my-1 h-px bg-hairline" />
+              <div className="flex items-center justify-between px-4 py-3">
+                <span className="text-[15px] font-medium text-ink">Theme</span>
+                <ThemeToggle />
+              </div>
+
               {/* Account actions */}
               <div className="my-1 h-px bg-hairline" />
               {onboarded ? (
@@ -212,32 +228,32 @@ export function FloatingNav() {
                 </>
               )}
 
-              {/* GitHub */}
-              <div className="my-1 h-px bg-hairline" />
-              <a
-                href={GITHUB_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-[14px] px-4 py-3 text-[15px] font-medium text-ink transition-all hover:bg-ink/4"
-              >
-                <GithubMark size={17} />
-                <span className="flex-1">Star on GitHub</span>
-                <span className="flex items-center gap-1 text-[13px] text-muted">
-                  <Star size={13} className="fill-current" />
-                  {GITHUB_STARS}
-                </span>
-              </a>
+              {/* GitHub (visible only when ≥ 100 stars) */}
+              {visible && (
+                <>
+                  <div className="my-1 h-px bg-hairline" />
+                  <a
+                    href={GITHUB_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-[14px] px-4 py-3 text-[15px] font-medium text-ink transition-all hover:bg-ink/4"
+                  >
+                    <GithubMark size={17} />
+                    <span className="flex-1">Star on GitHub</span>
+                    <span className="text-[13px] text-muted">{formatted}</span>
+                  </a>
+                </>
+              )}
 
-              {/* Donate */}
-              <a
-                href={DONATE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* Support */}
+              <Link
+                to={DONATE_URL}
+                onClick={() => setMenuOpen(false)}
                 className="mx-4 mb-4 mt-2 flex items-center gap-2 rounded-[14px] bg-rausch/8 px-4 py-3 text-[15px] font-medium text-rausch transition-all hover:bg-rausch/12"
               >
-                <span className="text-lg">☕</span>
-                <span className="flex-1">Buy us a coffee</span>
-              </a>
+                <LifeBuoy size={18} />
+                <span className="flex-1">Support Recall</span>
+              </Link>
             </motion.div>
           </>
         )}

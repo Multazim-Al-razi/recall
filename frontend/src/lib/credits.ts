@@ -42,8 +42,7 @@ export const CREDITS: Credit[] = [
     url: 'https://storyset.com',
     licence: 'Free (attribution required)',
     attributionRequired: true,
-    usage:
-      'Character-rich illustrations on the About page (support, wallet, and autonomy scenes), recoloured to the Rausch sienna accent.',
+    usage: '',
   },
   {
     name: 'Lucide',

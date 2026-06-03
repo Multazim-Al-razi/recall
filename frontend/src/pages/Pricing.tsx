@@ -2,10 +2,6 @@ import { Link, useLocation } from "react-router";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  Check,
-  Minus,
-} from "lucide-react";
-import {
   PLANS,
   COMPARISON,
   type CompareCell,
@@ -13,16 +9,51 @@ import {
 import { Illustration } from "@/components/ui/Illustration";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 8.5l3 3 7-7" />
+    </svg>
+  );
+}
+
+function MinusIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+    >
+      <path d="M3.5 8h9" />
+    </svg>
+  );
+}
+
 function Cell({ value }: { value: CompareCell }) {
   if (value === true)
     return (
-      <Check size={16} className="mx-auto text-teal" aria-label="Included" />
+      <CheckIcon
+        className="mx-auto h-4 w-4 text-teal"
+        aria-label="Included"
+      />
     );
   if (value === false)
     return (
-      <Minus
-        size={15}
-        className="mx-auto text-ink/20"
+      <MinusIcon
+        className="mx-auto h-4 w-4 text-ink/20"
         aria-label="Not included"
       />
     );
@@ -53,20 +84,23 @@ export function PricingPage() {
     >
       {/* Hero */}
       <div className="mx-auto max-w-[1000px] px-5 sm:px-8 md:px-12">
-        <section className="flex flex-col items-center gap-8 pt-[120px] pb-12 text-center md:flex-row md:gap-12 md:pt-[140px] md:text-left">
+         <section className="flex flex-col items-center gap-8 pt-12 pb-12 text-center md:flex-row md:gap-12 md:pt-16 md:text-left">
           <div className="flex-1">
             <h1 className="font-display text-[38px] font-light leading-[1.05] tracking-[-2px] sm:text-[48px]">
-              Simple pricing,{" "}
-              <strong className="font-bold text-gradient-rausch">
-                no surprises.
-              </strong>
+              Free on your device.{" "}
+              <span className="text-gradient-rausch font-normal">
+                Cloud, free for now.
+              </span>
             </h1>
             <p className="mx-auto mt-5 max-w-[500px] text-[16px] leading-[1.65] text-muted md:mx-0 md:text-[17px]">
-              Free for everything on your device. Cloud adds reminders and sync across devices.
+              Recall on the web is free and lives in your browser. A closed
+              browser tab cannot wake itself up to remind you; that needs a
+              server. Cloud covers exactly that, and it is free during
+              early access.
             </p>
           </div>
           <Illustration
-            name="aboutAutonomy"
+            name="pricing"
             decorative={false}
             className="h-[200px] w-full max-w-[280px] object-contain md:h-[240px]"
           />
@@ -74,84 +108,123 @@ export function PricingPage() {
 
         {/* Plan cards */}
         <section id="plans" className="scroll-mt-24 pb-4">
-          <div className="flex flex-col md:flex-row items-stretch justify-center gap-6 max-w-[1000px] mx-auto">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {PLANS.map((plan) => (
               <div
                 key={plan.id}
                 id={plan.id}
-                className={`relative flex flex-col rounded-2xl p-8 scroll-mt-24 transition-all ${
+                className={`relative flex scroll-mt-24 flex-col rounded-xl border p-6 ${
                   plan.featured
-                    ? "md:scale-105 bg-rausch/10 border-2 border-rausch shadow-md flex-1"
-                    : "bg-surface border border-ink/8 flex-1"
+                    ? "border-rausch/40 bg-surface"
+                    : "border-ink/8 bg-surface/60"
                 }`}
               >
-                {plan.badge && (
-                  <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-rausch px-3 py-1 text-[11px] font-bold uppercase tracking-[1px] text-white">
-                    {plan.badge}
+                <div className="flex items-center gap-2 text-rausch">
+                  <span className="text-[13px] font-semibold text-ink">
+                    {plan.name}
                   </span>
-                )}
-                <h3 className="text-[16px] font-semibold text-ink">
-                  {plan.name}
-                </h3>
-                <div className="mt-3 flex items-end gap-1">
-                  <span className="font-display text-[40px] font-light leading-none tracking-[-1.5px] text-ink">
+                </div>
+                <div className="mt-4 flex items-end gap-1">
+                  <span className="font-display text-[34px] font-light leading-none tracking-[-1px]">
                     {plan.price}
                   </span>
                   {plan.cadence && (
-                    <span className="pb-1 text-[14px] text-muted">
+                    <span className="pb-1 text-[13px] text-muted">
                       {plan.cadence}
                     </span>
                   )}
                 </div>
-                <p className="mt-3 text-[13.5px] leading-[1.55] text-muted">
+                <p className="mt-3 text-[13px] leading-[1.55] text-muted">
                   {plan.tagline}
                 </p>
-                <div className={`my-6 h-px ${plan.featured ? "bg-rausch/20" : "bg-ink/6"}`} />
-                <ul className="flex flex-1 flex-col gap-3">
+                <ul className="mt-5 flex flex-1 flex-col gap-2.5">
                   {plan.features.map((f) => (
                     <li
                       key={f}
-                      className="flex items-start gap-2.5 text-[13.5px] leading-[1.4] text-ink/80"
+                      className="flex items-start gap-2 text-[13px] leading-[1.4] text-ink/80"
                     >
-                      <Check
-                        size={16}
-                        className="mt-0.5 shrink-0 text-rausch"
-                      />
+                      <CheckIcon className="mt-0.5 h-[15px] w-[15px] shrink-0 text-rausch" />
                       {f}
                     </li>
                   ))}
                 </ul>
-                {plan.available ? (
-                  <Link
-                    to={plan.cta.to}
-                    className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-semibold transition-all ${
-                      plan.featured
-                        ? "bg-rausch text-white hover:bg-rausch/90"
-                        : "border border-ink/12 text-ink hover:border-rausch/40 hover:text-rausch"
-                    }`}
-                  >
-                    {plan.cta.label}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    aria-disabled="true"
-                    className="mt-6 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-full border border-ink/10 bg-ink/4 px-5 py-3 text-[14px] font-semibold text-muted"
-                  >
-                    Coming soon
-                  </button>
-                )}
+                <Link
+                  to={plan.cta.to}
+                  className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-[14px] font-semibold transition-all hover:-translate-y-0.5 ${
+                    plan.featured
+                      ? "bg-rausch text-white"
+                      : "border border-ink/12 text-ink hover:border-rausch/40 hover:text-rausch"
+                  }`}
+                >
+                  {plan.cta.label}
+                </Link>
               </div>
             ))}
           </div>
         </section>
       </div>
 
-      <MaskDivider />
+      {/* Feature highlights */}
+      <div className="mx-auto mt-8 max-w-[1000px] px-5 sm:px-8 md:px-12">
+        <section
+          id="why"
+          className="scroll-mt-24 rounded-2xl bg-surface-2 p-8 sm:p-10"
+        >
+          <h2 className="max-w-[640px] font-display text-[26px] font-light leading-[1.2] tracking-[-0.5px] md:text-[32px]">
+            One app, everything you need to stay on top of your recurring spend.
+          </h2>
+          <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-center md:gap-10">
+            <Illustration
+              name="pricingSync"
+              decorative={false}
+              className="h-[180px] w-full max-w-[260px] shrink-0 object-contain md:h-[220px]"
+            />
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-[15px] font-semibold">
+                  Cross-device sync
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[1.6] text-muted">
+                  Your subscriptions, reminders, and spending data stay
+                  mirrored across every device you use. Add a subscription on
+                  your phone; it appears on your laptop instantly.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-[15px] font-semibold">
+                  Reminders that reach you
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[1.6] text-muted">
+                  Renewal alerts arrive by email and push notification even
+                  when the browser tab is closed. No more surprise charges on
+                  subscriptions you meant to cancel.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-[15px] font-semibold">
+                  Spending analytics
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[1.6] text-muted">
+                  See your true monthly burn at a glance, with category breakdowns,
+                  trend charts, and trial-vs-paid splits, so you can cut
+                  waste before it compounds.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-[15px] font-semibold">
+                  No ads, no tracking
+                </h3>
+                <p className="mt-2 text-[13.5px] leading-[1.6] text-muted">
+                  No ads, we measure download metrics to evaluate the product, no data sold to third parties on any plan.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
 
       {/* Comparison table */}
-      <div className="mx-auto max-w-[1000px] px-5 pb-16 sm:px-8 md:px-12">
+      <div className="mx-auto mt-16 max-w-[1000px] px-5 sm:px-8 md:px-12">
         <section id="compare" className="scroll-mt-24">
           <div className="mb-8 text-center">
             <div className="text-[11px] font-bold uppercase tracking-[2.5px] text-rausch">
@@ -169,7 +242,7 @@ export function PricingPage() {
                     Feature
                   </th>
                   <th className="px-3 py-4 text-center text-[13px] font-semibold sm:px-4">
-                    Free
+                    Local
                   </th>
                   <th className="bg-rausch/5 px-3 py-4 text-center text-[13px] font-semibold text-rausch sm:px-4">
                     Cloud
@@ -186,10 +259,10 @@ export function PricingPage() {
                       {row.feature}
                     </td>
                     <td className="px-3 py-3.5 text-center sm:px-4">
-                      <Cell value={row.free} />
+                      <Cell value={row.local} />
                     </td>
                     <td className="bg-rausch/5 px-3 py-3.5 text-center sm:px-4">
-                      <Cell value={row.cloud} />
+                      <Cell value={row.sync} />
                     </td>
                   </tr>
                 ))}
@@ -198,6 +271,28 @@ export function PricingPage() {
           </div>
         </section>
       </div>
+
+      <MaskDivider />
+
+      {/* Closing CTA */}
+      <section className="pb-24 pt-10 text-center">
+        <h2 className="font-display text-[30px] font-light tracking-[-1px] md:text-[40px]">
+          Start free.{" "}
+          <span className="text-gradient-rausch font-normal">
+            Add Cloud whenever you want reminders.
+          </span>
+        </h2>
+<p className="mx-auto mt-4 max-w-[440px] text-[15px] text-muted">
+              No card to begin, no account on Local. Add Cloud the day you want
+              a renewal nudge to reach you anywhere.
+            </p>
+        <Link
+          to="/onboarding"
+          className="sheen mt-8 inline-flex items-center gap-2 rounded-full bg-rausch px-9 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+        >
+          Start tracking free
+        </Link>
+      </section>
     </motion.div>
   );
 }

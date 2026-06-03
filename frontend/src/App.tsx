@@ -45,11 +45,11 @@ const CookiesPage = lazy(() =>
 const DonatePage = lazy(() =>
   import("@/pages/Donate").then((m) => ({ default: m.DonatePage })),
 );
+const PricingPage = lazy(() =>
+  import("@/pages/Pricing").then((m) => ({ default: m.PricingPage })),
+);
 const OnboardingPage = lazy(() =>
   import("@/pages/Onboarding").then((m) => ({ default: m.OnboardingPage })),
-);
-const LoginPage = lazy(() =>
-  import("@/pages/Login").then((m) => ({ default: m.LoginPage })),
 );
 const DashboardView = lazy(() =>
   import("@/pages/dashboard/DashboardView").then((m) => ({
@@ -91,7 +91,7 @@ function AnimatedRoutes() {
           <Route element={<MarketingLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/pricing" element={<Navigate to="/about" replace />} />
+            <Route path="/pricing" element={<PricingPage />} />
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/blog/:slug" element={<BlogPostPage />} />
             <Route path="/terms" element={<TermsPage />} />
@@ -103,7 +103,7 @@ function AnimatedRoutes() {
 
           {/* Auth routes — no nav */}
           <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/signin" element={<LoginPage />} />
+          <Route path="/signin" element={<OnboardingPage />} />
 
           {/* Dashboard routes — layout shell, protected when cloud mode */}
           <Route

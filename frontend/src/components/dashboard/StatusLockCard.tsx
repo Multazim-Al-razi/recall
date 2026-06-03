@@ -23,7 +23,7 @@ export function StatusLockCard() {
   const safe = atRisk === 0;
 
   return (
-    <div className="flex h-full min-h-[150px] w-full flex-col items-center justify-center gap-3 rounded-[20px] bg-dark p-4 text-[#f5f0eb] shadow-[var(--shadow-md)]">
+    <div className="flex h-full min-h-[150px] w-full flex-col items-center justify-center gap-3 rounded-[20px] bg-ink p-4 text-canvas shadow-[var(--shadow-md)]">
       <span
         className={`flex h-12 w-12 items-center justify-center rounded-full ${
           safe ? 'bg-success/20 text-success' : 'bg-rausch/20 text-rausch'
@@ -35,7 +35,7 @@ export function StatusLockCard() {
         <div className="text-[13px] font-semibold">
           {safe ? 'All protected' : `${atRisk} need${atRisk === 1 ? 's' : ''} action`}
         </div>
-        <div className="mt-0.5 text-[10px] uppercase tracking-[1.5px] text-[#9a8f86]">
+        <div className="mt-0.5 text-[10px] uppercase tracking-[1.5px] text-muted">
           Reminders on
         </div>
       </div>

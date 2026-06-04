@@ -72,13 +72,13 @@ export const usePaymentMethodStore = create<PaymentMethodState>()(
       name: 'recall-payment-methods',
       version: 1,
       storage: createJSONStorage(() => localStorage),
-      migrate: (persisted: any, version: number) => {
+      migrate: (persisted: Record<string, unknown>, version: number) => {
         if (version === 0) {
           // Add shade field to existing payment methods
-          const state = persisted as PaymentMethodState & { paymentMethods: any[] };
+          const state = persisted as unknown as PaymentMethodState & { paymentMethods: Record<string, unknown>[] };
           return {
             ...state,
-            paymentMethods: state.paymentMethods.map((pm: any) => ({
+            paymentMethods: state.paymentMethods.map((pm: Record<string, unknown>) => ({
               ...pm,
               shade: pm.shade ?? 'coral',
             })),

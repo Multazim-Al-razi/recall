@@ -8,6 +8,7 @@ import rateLimit from "express-rate-limit";
 import subscriptionRoutes from "./routes/subscriptions.js";
 import accountRoutes from "./routes/accounts.js";
 import statsRoutes from "./routes/stats.js";
+import paymentMethodRoutes from "./routes/paymentMethods.js";
 import { closeDb } from "./db.js";
 
 const app = express();
@@ -50,6 +51,7 @@ app.use("/api", apiLimiter);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/account", accountRoutes);
 app.use("/api/stats", statsRoutes);
+app.use("/api/payment-methods", paymentMethodRoutes);
 
 // Health check
 app.get("/api/health", (_req: Request, res: Response) => {

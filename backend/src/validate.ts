@@ -16,6 +16,7 @@ const CATEGORIES = [
 
 const BILLING_CYCLES = ['monthly', 'yearly', 'weekly', 'custom'] as const;
 const STATUSES = ['active', 'paused', 'cancelled'] as const;
+const CANCELLATION_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 
 /** Strip angle-bracket markup, trim, and cap length. */
 export function sanitizeString(value: unknown, maxLen = 500): string {
@@ -101,6 +102,9 @@ export function validateNewSubscription(
     providerIcon: b.providerIcon ? sanitizeString(b.providerIcon, 60) : undefined,
     notes: b.notes ? sanitizeString(b.notes, 1000) : undefined,
     status: oneOf(b.status, STATUSES, 'active'),
+    paymentMethodId: b.paymentMethodId ? sanitizeString(b.paymentMethodId, 60) : undefined,
+    cancellationDifficulty: b.cancellationDifficulty ? oneOf(b.cancellationDifficulty, CANCELLATION_DIFFICULTIES, 'easy') : undefined,
+    autoRenews: typeof b.autoRenews === 'boolean' ? b.autoRenews : true,
   };
 
   return { ok: errors.length === 0, errors, value };
@@ -154,6 +158,9 @@ export function validateSubscriptionPatch(
   if (b.providerIcon !== undefined) patch.providerIcon = sanitizeString(b.providerIcon, 60);
   if (b.notes !== undefined) patch.notes = sanitizeString(b.notes, 1000);
   if (b.status !== undefined) patch.status = oneOf(b.status, STATUSES, 'active');
+  if (b.paymentMethodId !== undefined) patch.paymentMethodId = sanitizeString(b.paymentMethodId, 60);
+  if (b.cancellationDifficulty !== undefined) patch.cancellationDifficulty = oneOf(b.cancellationDifficulty, CANCELLATION_DIFFICULTIES, 'easy');
+  if (b.autoRenews !== undefined && typeof b.autoRenews === 'boolean') patch.autoRenews = b.autoRenews;
 
   return { ok: errors.length === 0, errors, value: patch };
 }

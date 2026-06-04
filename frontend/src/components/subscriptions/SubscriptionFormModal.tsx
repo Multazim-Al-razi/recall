@@ -7,7 +7,10 @@ import {
   type Subscription,
   type Category,
   type BillingCycle,
+  type CancellationDifficulty,
 } from "@/types/subscription";
+import { usePaymentMethodStore } from "@/stores/paymentMethod";
+import { CARD_BRAND_LABELS } from "@/types/paymentMethod";
 import { findProviders, type Provider } from "@/lib/providers";
 import { ProviderIcon } from "@/components/ui/ProviderIcon";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -69,7 +72,14 @@ export function SubscriptionFormModal({
     subscription?.isFreeTrial ?? false,
   );
   const [notes, setNotes] = useState(subscription?.notes ?? "");
+  const [paymentMethodId, setPaymentMethodId] = useState(subscription?.paymentMethodId ?? "");
+  const [cancellationDifficulty, setCancellationDifficulty] = useState<CancellationDifficulty>(
+    subscription?.cancellationDifficulty ?? "easy",
+  );
+  const [autoRenews, setAutoRenews] = useState(subscription?.autoRenews ?? true);
   const [errors, setErrors] = useState<FormErrors>({});
+
+  const paymentMethods = usePaymentMethodStore((s) => s.paymentMethods);
 
   // 9.1: submit debouncing — disable the submit button while a save is in
   // flight (the underlying store action returns synchronously, but the
@@ -169,6 +179,9 @@ export function SubscriptionFormModal({
         trialEndDate: isFreeTrial ? nextRenewalDate : undefined,
         notes: notes.trim() || undefined,
         providerIcon: selectedProvider?.icon || subscription?.providerIcon,
+        paymentMethodId: paymentMethodId || undefined,
+        cancellationDifficulty,
+        autoRenews,
       };
       if (isEdit && subscription) {
         await updateSubscription(subscription.id, data);
@@ -460,6 +473,46 @@ export function SubscriptionFormModal({
               placeholder="Any notes about this subscription..."
               maxLength={500}
             />
+          </label>
+
+          {/* Payment method */}
+          <div className="flex gap-3">
+            <label className="block flex-1">
+              <span className={labelClass}>Payment method</span>
+              <select
+                className={inputClass}
+                value={paymentMethodId}
+                onChange={(e) => setPaymentMethodId(e.target.value)}
+              >
+                <option value="">— None —</option>
+                {paymentMethods.map((pm) => (
+                  <option key={pm.id} value={pm.id}>
+                    {CARD_BRAND_LABELS[pm.brand]} ···· {pm.last4} ({pm.label})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block flex-1">
+              <span className={labelClass}>Cancel difficulty</span>
+              <select
+                className={inputClass}
+                value={cancellationDifficulty}
+                onChange={(e) => setCancellationDifficulty(e.target.value as CancellationDifficulty)}
+              >
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </label>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={autoRenews}
+              onChange={(e) => setAutoRenews(e.target.checked)}
+            />
+            Auto-renews at end of cycle
           </label>
         </div>
 

@@ -28,6 +28,9 @@ function fromApiSub(api: ApiSubscription): Subscription {
     providerIcon: api.providerIcon,
     notes: api.notes,
     status: api.status as Subscription['status'],
+    paymentMethodId: api.paymentMethodId,
+    cancellationDifficulty: api.cancellationDifficulty as Subscription['cancellationDifficulty'],
+    autoRenews: api.autoRenews ?? true,
   };
 }
 

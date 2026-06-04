@@ -55,6 +55,9 @@ export interface ApiSubscription {
   providerIcon?: string;
   notes?: string;
   status: string;
+  paymentMethodId?: string;
+  cancellationDifficulty?: string;
+  autoRenews?: boolean;
 }
 
 export const subscriptionsApi = {
@@ -115,6 +118,41 @@ export const accountApi = {
   reset() {
     return request<ApiAccount>('/account/reset', {
       method: 'POST',
+    });
+  },
+};
+
+// ── Payment Methods ────────────────────────────────────────────────
+
+export interface ApiPaymentMethod {
+  id: string;
+  label: string;
+  brand: string;
+  last4: string;
+  color: string;
+  expiryMonth?: number;
+  expiryYear?: number;
+}
+
+export const paymentMethodsApi = {
+  list() {
+    return request<{ paymentMethods: ApiPaymentMethod[] }>('/payment-methods');
+  },
+  create(data: Partial<ApiPaymentMethod>) {
+    return request<ApiPaymentMethod>('/payment-methods', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  update(id: string, data: Partial<ApiPaymentMethod>) {
+    return request<ApiPaymentMethod>(`/payment-methods/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+  delete(id: string) {
+    return request<{ success: boolean }>(`/payment-methods/${id}`, {
+      method: 'DELETE',
     });
   },
 };

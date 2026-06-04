@@ -12,6 +12,8 @@ export type BillingCycle = "monthly" | "yearly" | "weekly" | "custom";
 
 export type SubscriptionStatus = "active" | "paused" | "cancelled";
 
+export type CancellationDifficulty = "easy" | "medium" | "hard";
+
 export interface Subscription {
   id: string;
   name: string;
@@ -29,6 +31,12 @@ export interface Subscription {
   providerIcon?: string;
   notes?: string;
   status: SubscriptionStatus;
+  /** ID of the PaymentMethod that pays for this subscription. */
+  paymentMethodId?: string;
+  /** How hard it is to cancel this subscription. */
+  cancellationDifficulty?: CancellationDifficulty;
+  /** Whether the subscription auto-renews at the end of each cycle. */
+  autoRenews?: boolean;
 }
 
 export const CATEGORY_CONFIG: Record<

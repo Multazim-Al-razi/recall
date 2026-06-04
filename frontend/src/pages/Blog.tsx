@@ -120,15 +120,21 @@ export function BlogPage() {
 
       <MaskDivider />
       <section className="mx-auto max-w-[800px] px-5 pt-6 pb-16 text-center sm:px-8 md:px-12">
-        <p className="text-[15px] leading-[1.7] text-muted">
-          Ready to take control?{" "}
+        <div className="rounded-xl bg-surface p-8 shadow-[0_0_0_1px_var(--color-hairline)]">
+          <p className="text-[16px] font-semibold text-ink">
+            Ready to take control?
+          </p>
+          <p className="mt-2 text-[14px] leading-[1.65] text-muted">
+            Start tracking your subscriptions in under a minute. No sign-up required.
+          </p>
           <Link
             to="/onboarding"
-            className="text-[15px] text-muted underline decoration-ink/20 underline-offset-4 transition-colors hover:text-rausch"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-rausch px-6 py-3 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
           >
-            Get started for free
+            Get started free
+            <ArrowRight size={16} />
           </Link>
-        </p>
+        </div>
       </section>
     </motion.div>
   );

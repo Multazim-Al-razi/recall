@@ -8,10 +8,9 @@ import { useAccountStore } from '@/stores/account';
 import { usePaymentMethodStore } from '@/stores/paymentMethod';
 import { formatMoney } from '@/lib/format';
 import { currencySymbol } from '@/lib/format';
-import { PaymentCardVisual } from '@/components/ui/PaymentCardVisual';
+import { PaymentCardVisual, getCardTheme, type CardIllustrationTheme } from '@/components/ui/PaymentCardVisual';
 import {
   CARD_BRAND_LABELS,
-  CARD_BRAND_GRADIENTS,
   type CardBrand,
   type PaymentMethod,
 } from '@/types/paymentMethod';
@@ -102,6 +101,7 @@ export function PaymentMethodCard() {
             burn={burnByCard[primaryCard.id] ?? 0}
             linkedCount={activeSubs.filter((s) => s.paymentMethodId === primaryCard.id).length}
             currencySymbol={sym}
+            illustrationTheme={getCardTheme(0)}
             useIllustrationBg={true}
             className="h-[170px] w-full max-w-[320px]"
           />
@@ -139,13 +139,14 @@ export function PaymentMethodCard() {
               className="overflow-hidden"
             >
               <div className="flex flex-col gap-2">
-                {paymentMethods.map((pm) => (
+                {paymentMethods.map((pm, idx) => (
                   <CardRow
                     key={pm.id}
                     card={pm}
                     burn={burnByCard[pm.id] ?? 0}
                     linkedCount={activeSubs.filter((s) => s.paymentMethodId === pm.id).length}
                     cur={cur}
+                    theme={getCardTheme(idx)}
                     onDelete={() => removePaymentMethod(pm.id)}
                   />
                 ))}
@@ -289,21 +290,29 @@ function CardRow({
   burn,
   linkedCount,
   cur,
+  theme,
   onDelete,
 }: {
   card: PaymentMethod;
   burn: number;
   linkedCount: number;
   cur: string;
+  theme: CardIllustrationTheme;
   onDelete: () => void;
 }) {
   return (
     <div className="flex items-center gap-3 rounded-lg bg-canvas px-3 py-2.5">
       <div
-        className="flex h-7 w-11 shrink-0 items-center justify-center rounded-md text-[9px] font-bold text-white"
-        style={{ background: CARD_BRAND_GRADIENTS[card.brand] }}
+        className="flex h-8 w-12 shrink-0 items-center justify-center rounded-md overflow-hidden"
       >
-        {CARD_BRAND_LABELS[card.brand].slice(0, 4)}
+        <PaymentCardVisual
+          card={card}
+          burn={0}
+          linkedCount={0}
+          illustrationTheme={theme}
+          useIllustrationBg={true}
+          className="h-[40px] w-[60px] !rounded-md"
+        />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">

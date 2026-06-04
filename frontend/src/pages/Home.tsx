@@ -108,14 +108,8 @@ export function HomePage() {
         <StatBand />
       </div>
 
-      {/* Organic Growth & Community Building Section — top of page */}
+      {/* 1. Feature trio — Clarity over your subscriptions */}
       <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
-        <OrganicGrowthHero />
-      </section>
-
-      {/* Feature trio — illustration-led, no cards, no icons */}
-      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
-        {/* NO LABEL HEADER - removed "Why Recall" */}
         <h2 className="mb-12 font-display text-[30px] font-light tracking-[-1px] text-center md:text-[38px]">
           Clarity over your subscriptions
         </h2>
@@ -142,9 +136,8 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* 2. How it works — image RIGHT */}
       <section className="mx-auto max-w-[1100px] px-5 pb-16 sm:px-8 md:px-12 md:pb-24">
-        {/* NO LABEL HEADER - removed "How it works" */}
         <h2 className="mb-10 font-display text-[30px] font-light tracking-[-1px] text-center md:text-[38px]">
           Set up in under a minute
         </h2>
@@ -166,7 +159,55 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Privacy & Trust Section */}
+      {/* 3. Money back in your pocket — image LEFT */}
+      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:[&>*:first-child]:order-2">
+          <div>
+            <h2 className="mb-6 font-display text-[32px] font-light tracking-[-1px] md:text-[40px]">
+              Money back in your <span className="text-gradient-rausch font-normal">pocket</span>
+            </h2>
+            <div className="space-y-4 text-[15px] text-muted">
+              <p>
+                Most people carry 4–6 subscriptions they barely use. Recall spots
+                overlapping services and forgotten trials, then shows you exactly
+                what to cut.
+              </p>
+              <p>
+                One honest number for your monthly burn, a yearly projection, and
+                category splits, so you stop guessing and start saving.
+              </p>
+              <p>
+                Every subscription you cut is money back in your pocket. Small
+                cancellations compound — a forgotten $9 trial here, a duplicated
+                music plan there — into real savings, every single month.
+              </p>
+            </div>
+            <div className="mt-8 flex items-center gap-3">
+              <Link
+                to="/onboarding"
+                className="inline-flex items-center gap-2 text-[14px] font-medium text-rausch underline-offset-4 hover:underline"
+              >
+                Start saving free
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Illustration
+              name="celebration"
+              decorative={false}
+              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
+            />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 4. Your data stays yours — image RIGHT */}
       <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
           <div>
@@ -214,55 +255,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Find quiet savings */}
-      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
-        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-          <div>
-            <h2 className="mb-6 font-display text-[32px] font-light tracking-[-1px] md:text-[40px]">
-              Money back in your <span className="text-gradient-rausch font-normal">pocket</span>
-            </h2>
-            <div className="space-y-4 text-[15px] text-muted">
-              <p>
-                Most people carry 4–6 subscriptions they barely use. Recall spots
-                overlapping services and forgotten trials, then shows you exactly
-                what to cut.
-              </p>
-              <p>
-                One honest number for your monthly burn, a yearly projection, and
-                category splits, so you stop guessing and start saving.
-              </p>
-              <p>
-                Every subscription you cut is money back in your pocket. Small
-                cancellations compound — a forgotten $9 trial here, a duplicated
-                music plan there — into real savings, every single month.
-              </p>
-            </div>
-            <div className="mt-8 flex items-center gap-3">
-              <Link
-                to="/onboarding"
-                className="inline-flex items-center gap-2 text-[14px] font-medium text-rausch underline-offset-4 hover:underline"
-              >
-                Start saving free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Illustration
-              name="celebration"
-              decorative={false}
-              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
-            />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 🔥 NEW: Open Source & Community Section */}
+      {/* 5. Built openly, together — image LEFT */}
       <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
         <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:[&>*:first-child]:order-2">
           <div>
@@ -297,7 +290,7 @@ export function HomePage() {
             </div>
           </div>
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
@@ -309,6 +302,11 @@ export function HomePage() {
             />
           </motion.div>
         </div>
+      </section>
+
+      {/* 6. Growing with the community — image RIGHT */}
+      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+        <OrganicGrowthHero />
       </section>
 
       {/* Integrations Marquee */}

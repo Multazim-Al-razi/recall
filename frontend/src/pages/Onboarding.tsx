@@ -113,7 +113,7 @@ export function OnboardingPage() {
                 disabled={authLoading}
                 className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-[15px] font-semibold text-canvas transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] disabled:opacity-50 disabled:hover:translate-y-0 sm:w-auto dark:bg-white dark:text-ink dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
               >
-                <GithubMark size={20} className="dark:invert-0 invert" />
+                <GithubMark size={20} className="shrink-0" />
                 {authLoading ? 'Redirecting…' : 'Continue with GitHub'}
               </button>
 
@@ -154,7 +154,7 @@ export function OnboardingPage() {
         {/* Illustration panel */}
         <div className="hidden flex-col justify-between bg-surface-2 p-9 md:flex">
           <Logo className="h-6 w-auto text-rausch" />
-          <Illustration name="consent" decorative={false} className="w-full object-contain" />
+          <Illustration name="welcome" decorative={false} className="w-full object-contain" />
           <div className="flex gap-1.5">
             {progressSteps.map((i) => (
               <span
@@ -180,7 +180,7 @@ export function OnboardingPage() {
                 exit={{ opacity: 0, x: -16 }}
                 transition={{ duration: 0.25 }}
               >
-                <Illustration name="consent" className="mb-5 h-[140px] w-full object-contain md:hidden" />
+                <Illustration name="welcome" className="mb-5 h-[140px] w-full object-contain md:hidden" />
                 <h1 className="font-display text-[28px] font-light tracking-[-1px]">
                   Ready to take back <strong className="font-bold">control?</strong>
                 </h1>

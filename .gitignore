@@ -37,8 +37,8 @@ dist-ssr
 
 # AI agent tooling + worktrees
 .claude/
+.commandcode/
 .qwen/
-.kilo/
 .kiro/
 .superpowers/
 .playwright-mcp/
@@ -52,6 +52,7 @@ frontend/src/assets/illustrations/README.md
 frontend/src/assets/illustrations/scripts/
 
 # Internal planning / design docs (not for the public repo)
+AGENTS.md
 CLAUDE.md
 docs/
 backend/README.md

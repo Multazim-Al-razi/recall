@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router';
 import { motion } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { POSTS } from '@/lib/blog';
 import { Illustration } from '@/components/ui/Illustration';
 
@@ -104,18 +104,19 @@ export function BlogPostPage() {
           </section>
         )}
 
-        <section className="mb-16 rounded-xl bg-ink px-8 py-10 text-center">
-          <h2 className="font-display text-[22px] font-light tracking-[-0.5px] text-white">
+        <section className="mb-16 rounded-xl bg-surface p-7 text-center">
+          <p className="text-[16px] font-semibold text-ink">
             Ready to take control?
-          </h2>
-          <p className="mx-auto mt-2 max-w-[360px] text-[14px] leading-[1.6] text-white/60">
+          </p>
+          <p className="mt-2 text-[14px] leading-[1.65] text-ink/80">
             Start tracking your subscriptions in under a minute. No sign-up required.
           </p>
           <Link
             to="/onboarding"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-rausch px-8 py-3.5 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-rausch px-6 py-3 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
           >
             Get started free
+            <ArrowRight size={16} />
           </Link>
         </section>
       </div>

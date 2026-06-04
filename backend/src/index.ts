@@ -9,6 +9,7 @@ import subscriptionRoutes from "./routes/subscriptions.js";
 import accountRoutes from "./routes/accounts.js";
 import statsRoutes from "./routes/stats.js";
 import paymentMethodRoutes from "./routes/paymentMethods.js";
+import { requireAuth } from "./auth.js";
 import { closeDb } from "./db.js";
 
 const app = express();
@@ -46,6 +47,14 @@ const apiLimiter = rateLimit({
   message: { error: "Too many requests, please try again later." },
 });
 app.use("/api", apiLimiter);
+
+// Auth middleware — applies to all /api/* routes except health.
+// In lowdb mode, requireAuth passes requests through without auth.
+// In Supabase mode, it validates the JWT and attaches req.user.
+app.use("/api", (req: Request, res: Response, next: NextFunction) => {
+  if (req.path === "/health") return next();
+  requireAuth(req, res, next);
+});
 
 // Routes
 app.use("/api/subscriptions", subscriptionRoutes);

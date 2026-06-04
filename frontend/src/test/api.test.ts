@@ -1,11 +1,28 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { subscriptionsApi, accountApi, healthApi } from '@/lib/api';
 
+vi.mock('@/lib/environment', () => ({
+  getActiveApiBaseUrl: vi.fn().mockResolvedValue(''),
+}));
+
 /**
  * The API client wraps fetch with a base path, JSON headers, a timeout, and
  * error unwrapping. These tests stub global.fetch to assert the wire contract
  * (paths, methods, bodies) and the error/edge behavior without a live backend.
+ *
+ * By mocking getActiveApiBaseUrl to return '' (cloud mode), the client uses
+ * relative paths like /api/subscriptions — no health ping, no localhost prefix.
  */
+
+function extractPath(url: string): string {
+  try {
+    const parsed = new URL(url);
+    return parsed.pathname + parsed.search;
+  } catch {
+    // Relative path (cloud mode) — return as-is
+    return url;
+  }
+}
 
 function jsonResponse(body: unknown, ok = true, status = 200): Response {
   return {
@@ -34,14 +51,14 @@ describe('subscriptionsApi.list', () => {
     const result = await subscriptionsApi.list();
     expect(result).toEqual({ subscriptions: [] });
     const [url] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/subscriptions');
+    expect(extractPath(url)).toBe('/api/subscriptions');
   });
 
   it('appends a status query when provided', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ subscriptions: [] }));
     await subscriptionsApi.list('active');
     const [url] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/subscriptions?status=active');
+    expect(extractPath(url)).toBe('/api/subscriptions?status=active');
   });
 });
 
@@ -53,7 +70,7 @@ describe('subscriptionsApi.create', () => {
     expect(result).toEqual(created);
 
     const [url, options] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/subscriptions');
+    expect(extractPath(url)).toBe('/api/subscriptions');
     expect(options.method).toBe('POST');
     expect(options.headers['Content-Type']).toBe('application/json');
     expect(JSON.parse(options.body)).toEqual({ name: 'Netflix', amount: 15.99 });
@@ -65,7 +82,7 @@ describe('subscriptionsApi.update / delete', () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'abc', name: 'New' }));
     await subscriptionsApi.update('abc', { name: 'New' });
     const [url, options] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/subscriptions/abc');
+    expect(extractPath(url)).toBe('/api/subscriptions/abc');
     expect(options.method).toBe('PATCH');
   });
 
@@ -74,7 +91,7 @@ describe('subscriptionsApi.update / delete', () => {
     const result = await subscriptionsApi.delete('abc');
     expect(result).toEqual({ success: true });
     const [url, options] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/subscriptions/abc');
+    expect(extractPath(url)).toBe('/api/subscriptions/abc');
     expect(options.method).toBe('DELETE');
   });
 });
@@ -83,14 +100,14 @@ describe('accountApi', () => {
   it('GETs /api/account', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'default' }));
     await accountApi.get();
-    expect(fetchMock.mock.calls[0][0]).toBe('/api/account');
+    expect(extractPath(fetchMock.mock.calls[0][0])).toBe('/api/account');
   });
 
   it('POSTs onboarding completion to the right path', async () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'default', onboarded: true }));
     await accountApi.completeOnboarding({ name: 'Ada' });
     const [url, options] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/account/complete-onboarding');
+    expect(extractPath(url)).toBe('/api/account/complete-onboarding');
     expect(options.method).toBe('POST');
     expect(JSON.parse(options.body)).toEqual({ name: 'Ada' });
   });
@@ -99,7 +116,7 @@ describe('accountApi', () => {
     fetchMock.mockResolvedValue(jsonResponse({ id: 'default', onboarded: false }));
     await accountApi.reset();
     const [url, options] = fetchMock.mock.calls[0];
-    expect(url).toBe('/api/account/reset');
+    expect(extractPath(url)).toBe('/api/account/reset');
     expect(options.method).toBe('POST');
   });
 });
@@ -109,7 +126,7 @@ describe('healthApi', () => {
     fetchMock.mockResolvedValue(jsonResponse({ status: 'ok', timestamp: 't' }));
     const result = await healthApi.check();
     expect(result.status).toBe('ok');
-    expect(fetchMock.mock.calls[0][0]).toBe('/api/health');
+    expect(extractPath(fetchMock.mock.calls[0][0])).toBe('/api/health');
   });
 });
 

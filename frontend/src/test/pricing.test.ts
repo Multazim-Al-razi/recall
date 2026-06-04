@@ -68,7 +68,7 @@ describe("COMPARISON", () => {
     const priceRow = COMPARISON.find((r) => r.feature === "Price");
     expect(priceRow).toBeDefined();
     expect(priceRow!.local).toBe("Free");
-    expect(priceRow!.sync).toBe("Free (early access)");
+    expect(priceRow!.sync).toBe("Free");
 
     const pushRow = COMPARISON.find(
       (r) => r.feature === "Email & push reminders",
@@ -101,11 +101,11 @@ describe("PRICING_FAQ", () => {
     }
   });
 
-  it("addresses why Sync costs money", () => {
-    const hasWhyQuestion = PRICING_FAQ.some((item) =>
-      /why.*sync.*cost/i.test(item.q),
+  it("addresses whether everything is free", () => {
+    const hasFreeQuestion = PRICING_FAQ.some((item) =>
+      /free/i.test(item.q),
     );
-    expect(hasWhyQuestion).toBe(true);
+    expect(hasFreeQuestion).toBe(true);
   });
 
   it("uses unique questions", () => {

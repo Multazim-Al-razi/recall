@@ -109,7 +109,7 @@ export function StatsView() {
       return { key, bytes, present: raw !== null };
     });
     return { rows, totalBytes };
-  }, [subscriptions, profile, onboarded]);
+  }, []);
 
   // Server category breakdown (use server stats if available)
   const serverCategoryEntries = serverStats

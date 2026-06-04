@@ -32,7 +32,6 @@ export class ErrorBoundary extends Component<Props, State> {
       const label = this.props.scope
         ? `[${this.props.scope}]`
         : "[ErrorBoundary]";
-      // eslint-disable-next-line no-console
       console.error(label, error, info.componentStack);
     }
   }

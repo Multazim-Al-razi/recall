@@ -3,12 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Sun, Moon, LifeBuoy } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
-import {
-  GithubStars,
-  GithubMark,
-  GITHUB_URL,
-  useGitHubStars,
-} from "@/components/layout/GithubStars";
+import { GithubStars, GithubMark } from "@/components/layout/GithubStars";
+import { GITHUB_URL, useGitHubStars } from "@/lib/github";
 import { useAccountStore } from "@/stores/account";
 
 const DONATE_URL = '/donate';

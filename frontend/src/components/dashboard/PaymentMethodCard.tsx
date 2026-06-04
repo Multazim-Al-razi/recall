@@ -8,7 +8,8 @@ import { useAccountStore } from '@/stores/account';
 import { usePaymentMethodStore } from '@/stores/paymentMethod';
 import { formatMoney } from '@/lib/format';
 import { currencySymbol } from '@/lib/format';
-import { PaymentCardVisual, getCardTheme, type CardIllustrationTheme } from '@/components/ui/PaymentCardVisual';
+import { PaymentCardVisual } from '@/components/ui/PaymentCardVisual';
+import { getCardTheme, type CardIllustrationTheme } from '@/lib/cardTheme';
 import {
   CARD_BRAND_LABELS,
   type CardBrand,

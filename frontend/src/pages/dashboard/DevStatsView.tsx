@@ -69,7 +69,7 @@ export function DevStatsView() {
       return { key, bytes, present: raw !== null };
     });
     return { rows, totalBytes };
-  }, [subscriptions, profile, onboarded]);
+  }, []);
 
   const active = getActiveSubscriptions(subscriptions);
   const cancelled = subscriptions.filter((s) => s.status === 'cancelled');

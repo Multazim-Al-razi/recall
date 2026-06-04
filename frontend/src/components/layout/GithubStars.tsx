@@ -1,12 +1,5 @@
-import { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
-
-export const GITHUB_HANDLE = 'Multazim-Al-razi';
-export const GITHUB_REPO = 'Multazim-Al-razi/recall';
-export const GITHUB_URL = 'https://github.com/Multazim-Al-razi/recall';
-
-/** Minimum stars required before the badge becomes visible. */
-const STAR_THRESHOLD = 100;
+import { GITHUB_HANDLE, GITHUB_URL, useGitHubStars } from '@/lib/github';
 
 /** Inline GitHub mark — lucide-react dropped brand icons, so we ship our own. */
 export function GithubMark({ size = 14, className }: { size?: number; className?: string }) {
@@ -25,63 +18,11 @@ export function GithubMark({ size = 14, className }: { size?: number; className?
   );
 }
 
-/**
- * Formats a star count for display (e.g. 123 → "123", 1234 → "1.2k").
- */
-function formatStars(n: number): string {
-  if (n >= 1000) {
-    const k = n / 1000;
-    return k >= 100 ? `${Math.round(k)}k` : `${k.toFixed(1).replace(/\.0$/, '')}k`;
-  }
-  return String(n);
-}
-
-interface UseGitHubStarsResult {
-  stars: number | null;
-  formatted: string | null;
-  visible: boolean;
-  loading: boolean;
-}
-
-/**
- * Fetches stargazers_count from the GitHub API once per session,
- * caches in sessionStorage, and hides the badge below the threshold.
- */
-export function useGitHubStars(): UseGitHubStarsResult {
-  const [stars, setStars] = useState<number | null>(() => {
-    const cached = sessionStorage.getItem('recall:gh-stars');
-    return cached ? Number(cached) : null;
-  });
-  const [loading, setLoading] = useState(stars === null);
-
-  useEffect(() => {
-    if (stars !== null) return;
-
-    fetch(`https://api.github.com/repos/${GITHUB_REPO}`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data && typeof data.stargazers_count === 'number') {
-          setStars(data.stargazers_count);
-          sessionStorage.setItem('recall:gh-stars', String(data.stargazers_count));
-        }
-      })
-      .catch(() => setStars(null))
-      .finally(() => setLoading(false));
-  }, [stars]);
-
-  const visible = stars !== null && stars >= STAR_THRESHOLD;
-  const formatted = stars !== null ? formatStars(stars) : null;
-
-  return { stars, formatted, visible, loading };
-}
-
 interface Props {
   className?: string;
-  /** Compact mode hides the handle text, showing only the star count. */
   compact?: boolean;
 }
 
-/** GitHub repo link with a star count, styled for the marketing nav. */
 export function GithubStars({ className = '', compact = false }: Props) {
   const { formatted, visible, loading } = useGitHubStars();
 

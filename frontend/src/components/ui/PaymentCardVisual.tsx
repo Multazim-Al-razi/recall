@@ -1,15 +1,11 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { CARD_BRAND_LABELS, CARD_BRAND_GRADIENTS, type CardBrand, type PaymentMethod } from '@/types/paymentMethod';
+import { type CardIllustrationTheme } from '@/lib/cardTheme';
 import cherryTreeBg from '@/assets/illustrations/storyset/cherry-tree-pana.svg';
 import bambooTreeBg from '@/assets/illustrations/storyset/bamboo-tree-pana.svg';
 import poppyFlowerBg from '@/assets/illustrations/storyset/poppy-flower-pana.svg';
 import springFlowerBg from '@/assets/illustrations/storyset/spring-flower-pana.svg';
-
-/** Card background illustration themes — cycled per card index. */
-export type CardIllustrationTheme = 'cherryTree' | 'bambooTree' | 'poppyFlower' | 'springFlower';
-
-const CARD_THEMES: CardIllustrationTheme[] = ['cherryTree', 'bambooTree', 'poppyFlower', 'springFlower'];
 
 const THEME_SVG: Record<CardIllustrationTheme, string> = {
   cherryTree: cherryTreeBg,
@@ -17,11 +13,6 @@ const THEME_SVG: Record<CardIllustrationTheme, string> = {
   poppyFlower: poppyFlowerBg,
   springFlower: springFlowerBg,
 };
-
-/** Resolve a theme from the card's index in the payment methods list. */
-export function getCardTheme(index: number): CardIllustrationTheme {
-  return CARD_THEMES[index % CARD_THEMES.length];
-}
 
 /** Inline brand logo SVGs — Visa, Mastercard, AMEX only. Others fall back to text. */
 function CardBrandLogo({ brand, className }: { brand: CardBrand; className?: string }) {

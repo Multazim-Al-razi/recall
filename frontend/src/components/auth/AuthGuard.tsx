@@ -10,7 +10,16 @@ export function AuthGuard({ children }: AuthGuardProps) {
   const { user, loading } = useAuth();
   const isCloudMode = supabase !== null;
 
+  // No Supabase configured — local-only mode, no auth needed
   if (!isCloudMode) {
+    return <>{children}</>;
+  }
+
+  // Cloud mode but user chose local-only access — skip auth
+  // This is stored in the account store's setupPath field.
+  // Check localStorage directly to avoid import cycle.
+  const setupPath = getLocalSetupPath();
+  if (setupPath === 'local' || setupPath === 'cli') {
     return <>{children}</>;
   }
 
@@ -27,4 +36,19 @@ export function AuthGuard({ children }: AuthGuardProps) {
   }
 
   return <>{children}</>;
+}
+
+/**
+ * Read the setupPath from localStorage without importing the account store.
+ * Avoids circular dependency between AuthGuard and the account store.
+ */
+function getLocalSetupPath(): string | null {
+  try {
+    const raw = localStorage.getItem('recall-account');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed?.state?.profile?.setupPath ?? null;
+  } catch {
+    return null;
+  }
 }

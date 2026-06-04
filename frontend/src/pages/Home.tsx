@@ -108,6 +108,11 @@ export function HomePage() {
         <StatBand />
       </div>
 
+      {/* Organic Growth & Community Building Section — top of page */}
+      <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+        <OrganicGrowthHero />
+      </section>
+
       {/* Feature trio — illustration-led, no cards, no icons */}
       <section className="mx-auto max-w-[1100px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
         {/* NO LABEL HEADER - removed "Why Recall" */}
@@ -150,7 +155,7 @@ export function HomePage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5 }}
-            className="relative hidden md:block"
+            className="relative"
           >
             <Illustration
               name="financeOverview"
@@ -304,11 +309,6 @@ export function HomePage() {
             />
           </motion.div>
         </div>
-      </section>
-
-      {/* Organic Growth & Community Building Section */}
-      <section className="mx-auto max-w-[1100px] px-5 pb-24 sm:px-8 md:px-12">
-        <OrganicGrowthHero />
       </section>
 
       {/* Integrations Marquee */}

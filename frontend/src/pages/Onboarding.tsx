@@ -111,9 +111,9 @@ export function OnboardingPage() {
               <button
                 onClick={handleGitHubSignup}
                 disabled={authLoading}
-                className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:hover:translate-y-0 sm:w-auto"
+                className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-[15px] font-semibold text-canvas transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] disabled:opacity-50 disabled:hover:translate-y-0 sm:w-auto dark:bg-white dark:text-ink dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
               >
-                <GithubMark size={20} />
+                <GithubMark size={20} className="dark:invert-0 invert" />
                 {authLoading ? 'Redirecting…' : 'Continue with GitHub'}
               </button>
 
@@ -123,12 +123,20 @@ export function OnboardingPage() {
                 <Link to="/privacy" className="text-rausch hover:underline">Privacy Policy</Link>.
               </p>
 
-              <p className="mt-4 text-[13px] text-muted">
-                Want local-only access?{' '}
-                <Link to="/onboarding" className="font-medium text-rausch hover:underline">
-                  Start without sign-up
+              <div className="mt-5 rounded-xl border border-hairline bg-surface-2/50 p-4">
+                <p className="text-[14px] font-medium text-ink">
+                  No account needed
+                </p>
+                <p className="text-[13px] text-muted">
+                  Use Recall entirely in your browser — data stays on this device, no sign-up required.
+                </p>
+                <Link
+                  to="/onboarding"
+                  className="mt-2 inline-flex items-center gap-1.5 text-[14px] font-semibold text-rausch hover:underline"
+                >
+                  Start locally <ArrowRight size={14} />
                 </Link>
-              </p>
+              </div>
             </motion.div>
           </div>
         </div>

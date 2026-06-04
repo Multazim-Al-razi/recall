@@ -8,7 +8,7 @@ import { useAccountStore } from '@/stores/account';
 import { usePaymentMethodStore } from '@/stores/paymentMethod';
 import { formatMoney, currencySymbol } from '@/lib/format';
 import { PaymentCardVisual } from '@/components/ui/PaymentCardVisual';
-import { getCardTheme, type CardShade } from '@/lib/cardTheme';
+import { getCardTheme } from '@/lib/cardTheme';
 import { CARD_BRAND_LABELS, type CardBrand } from '@/types/paymentMethod';
 
 const inputClass =
@@ -19,7 +19,7 @@ export function PaymentMethodCard() {
   const profile = useAccountStore((s) => s.profile);
   const paymentMethods = usePaymentMethodStore((s) => s.paymentMethods);
   const activeCardIndex = usePaymentMethodStore((s) => s.activeCardIndex);
-  const { addPaymentMethod, removePaymentMethod, setCardShade, setActiveCardIndex } = usePaymentMethodStore();
+  const { addPaymentMethod, removePaymentMethod, setActiveCardIndex } = usePaymentMethodStore();
   const cur = profile.currency;
   const sym = currencySymbol(cur);
 
@@ -86,9 +86,6 @@ export function PaymentMethodCard() {
     setFormBrand('visa');
   };
 
-  const handleShadeChange = useCallback((cardId: string, shade: CardShade) => {
-    setCardShade(cardId, shade);
-  }, [setCardShade]);
 
   // Carousel slide styles — mirrors HeroCarousel stacking effect
   const getSlideStyle = (index: number): React.CSSProperties => {
@@ -181,8 +178,7 @@ export function PaymentMethodCard() {
                       illustrationTheme={getCardTheme(idx)}
                       useIllustrationBg={true}
                       shade={pm.shade ?? 'coral'}
-                      showShadePicker={isActive}
-                      onShadeChange={(shade) => handleShadeChange(pm.id, shade)}
+                      showShadePicker={false}
                       className="h-[170px] w-full max-w-[320px]"
                     />
                   </div>

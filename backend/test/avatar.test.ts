@@ -85,7 +85,7 @@ describe('sanitizeAvatar — scheme allowlist (B-7)', () => {
   });
 
   it('accepts a payload exactly at the cap', () => {
-    const small = 'https://example.com/' + 'a'.repeat(AVATAR_MAX_LEN - 19);
+    const small = 'https://example.com/' + 'a'.repeat(AVATAR_MAX_LEN - 20);
     expect(small.length).toBe(AVATAR_MAX_LEN);
     expect(sanitizeAvatar(small)).toBe(small);
   });

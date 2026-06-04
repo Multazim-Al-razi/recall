@@ -6,12 +6,20 @@ import { useAccountActions } from "@/hooks/useApiSync";
 import { Illustration } from "@/components/ui/Illustration";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 import { initials } from "@/lib/format";
+import { usePaymentMethodStore } from "@/stores/paymentMethod";
+import { PaymentCardVisual } from "@/components/ui/PaymentCardVisual";
+import { getCardTheme, type CardShade } from "@/lib/cardTheme";
+import { currencySymbol } from "@/lib/format";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-ink/10 bg-canvas px-4 py-2.5 text-[15px] focus:border-rausch focus:outline-none";
 
 export function ProfilePage() {
   const { profile, updateProfile, resetAccount } = useAccountActions();
+  const paymentMethods = usePaymentMethodStore((s) => s.paymentMethods);
+  const setCardShade = usePaymentMethodStore((s) => s.setCardShade);
+  const cur = profile.currency;
+  const sym = currencySymbol(cur);
 
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
@@ -199,6 +207,34 @@ export function ProfilePage() {
             </div>
           </div>
         </div>
+
+        {/* Card appearance */}
+        {paymentMethods.length > 0 && (
+          <section className="pb-10">
+            <h2 className="text-[18px] font-semibold">Card appearance</h2>
+            <p className="mt-1 text-[13px] text-muted">
+              Choose a color accent for each payment card.
+            </p>
+            <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {paymentMethods.map((pm, idx) => (
+                <div key={pm.id} className="flex flex-col items-center gap-3 rounded-xl bg-surface p-5">
+                  <PaymentCardVisual
+                    card={pm}
+                    burn={0}
+                    linkedCount={0}
+                    currencySymbol={sym}
+                    illustrationTheme={getCardTheme(idx)}
+                    useIllustrationBg={true}
+                    shade={pm.shade ?? 'coral'}
+                    showShadePicker={true}
+                    onShadeChange={(shade: CardShade) => setCardShade(pm.id, shade)}
+                  />
+                  <p className="text-[12px] font-medium text-ink-soft">{pm.label}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
 
       <MaskDivider />

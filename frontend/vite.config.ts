@@ -17,6 +17,9 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
+  preview: {
+    port: 21120,
+  },
   server: {
     port: 21120,
     allowedHosts: ['host.docker.internal'],

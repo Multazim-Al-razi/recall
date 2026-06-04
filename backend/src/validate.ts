@@ -18,6 +18,59 @@ const BILLING_CYCLES = ['monthly', 'yearly', 'weekly', 'custom'] as const;
 const STATUSES = ['active', 'paused', 'cancelled'] as const;
 const CANCELLATION_DIFFICULTIES = ['easy', 'medium', 'hard'] as const;
 
+/** Maximum length for avatar URLs / data URIs. */
+export const AVATAR_MAX_LEN = 8_000;
+
+const ALLOWED_DATA_MIME_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
+
+/**
+ * Sanitize an avatar URL or data URI.
+ *
+ * Accepts: https URLs, data:image/(png|jpeg|webp);base64,... URIs,
+ * empty strings (to clear the avatar). Everything else is rejected
+ * (http, javascript:, file:, data:text/html, arbitrary strings, non-strings).
+ * Returns the cleaned value or undefined if invalid.
+ */
+export function sanitizeAvatar(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (trimmed === '') return '';
+
+  if (trimmed.length > AVATAR_MAX_LEN) return undefined;
+
+  // https URLs
+  if (trimmed.startsWith('https://')) return trimmed;
+
+  // data URIs — tight allowlist
+  if (trimmed.startsWith('data:')) {
+    const match = trimmed.match(/^data:(image\/(png|jpeg|webp));base64,[A-Za-z0-9+/]+=*$/);
+    if (!match) return undefined;
+    return trimmed;
+  }
+
+  // Everything else (http, javascript:, file:, arbitrary strings)
+  return undefined;
+}
+
+export interface AccountIdResult {
+  ok: boolean;
+  accountId: string | null;
+  error?: string;
+}
+
+/**
+ * Validate an accountId — only 'default' (or absent) is accepted.
+ * This prevents multi-tenant cross-talk until proper auth is in place.
+ */
+export function validateAccountId(value: unknown): AccountIdResult {
+  if (value === undefined || value === null) return { ok: true, accountId: null };
+  if (typeof value !== 'string') return { ok: false, accountId: null, error: 'accountId must be a string or absent; only "default" is allowed' };
+  const trimmed = value.trim();
+  if (trimmed === '') return { ok: true, accountId: null };
+  if (trimmed === 'default') return { ok: true, accountId: 'default' };
+  return { ok: false, accountId: null, error: 'accountId must be "default" or absent' };
+}
+
 /** Strip angle-bracket markup, trim, and cap length. */
 export function sanitizeString(value: unknown, maxLen = 500): string {
   if (typeof value !== 'string') return '';
@@ -174,7 +227,7 @@ export function validateAccountPatch(
 
   if (b.name !== undefined) patch.name = sanitizeString(b.name, 80);
   if (b.email !== undefined) patch.email = sanitizeString(b.email, 254);
-  if (b.avatar !== undefined) patch.avatar = sanitizeString(b.avatar, 200_000);
+  if (b.avatar !== undefined) patch.avatar = sanitizeAvatar(b.avatar);
   if (b.currency !== undefined) patch.currency = sanitizeString(b.currency, 8).toUpperCase() || 'USD';
   if (b.reminderLeadDays !== undefined && isFiniteNumber(b.reminderLeadDays)) {
     patch.reminderLeadDays = Math.min(Math.max(Math.round(b.reminderLeadDays), 0), 365);

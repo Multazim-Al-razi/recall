@@ -87,46 +87,30 @@ export function PaymentMethodCard() {
   };
 
 
-  // Carousel slide styles — mirrors HeroCarousel stacking effect
+  // Carousel stack — contained "deck" of cards. The active card sits front
+  // and center; inactive cards stack neatly behind it, slightly offset upward
+  // and scaled down. The 320×210 container clips any residual offset so cards
+  // never spill onto adjacent UI.
   const getSlideStyle = (index: number): React.CSSProperties => {
     const isActive = index === activeCardIndex;
-    const offset = index - activeCardIndex;
-    // Wrap around for circular navigation
-    const wrappedOffset = offset > Math.floor(count / 2)
-      ? offset - count
-      : offset < -Math.floor(count / 2)
-        ? offset + count
-        : offset;
-    const absOff = Math.abs(wrappedOffset);
-
-    if (absOff > 1) {
-      return {
-        zIndex: 0,
-        opacity: 0,
-        pointerEvents: 'none',
-        transform: 'scale(0.8)',
-        transition: 'transform 0.5s ease, opacity 0.5s ease',
-      };
-    }
-
-    const transition = 'transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.5s ease';
+    const transition =
+      'transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.45s ease';
 
     if (isActive) {
       return {
-        zIndex: 3,
+        zIndex: 30,
         opacity: 1,
         pointerEvents: 'auto',
-        transform: 'translateX(0) translateY(0) scale(1) rotateY(0deg)',
+        transform: 'translate3d(0, 0, 0) scale(1)',
         transition,
       };
     }
 
     return {
-      zIndex: 2,
-      opacity: 0.7,
-      pointerEvents: 'auto',
-      cursor: 'pointer',
-      transform: `translateX(${wrappedOffset * 100}px) translateY(-12px) scale(0.85) rotateY(${wrappedOffset * -8}deg)`,
+      zIndex: 10 - index,
+      opacity: 0.35,
+      pointerEvents: 'none',
+      transform: 'translate3d(0, -10px, 0) scale(0.92)',
       transition,
     };
   };
@@ -154,18 +138,16 @@ export function PaymentMethodCard() {
       <div className="card-premium flex flex-1 flex-col justify-between gap-4 p-5">
         {/* Card carousel or empty state */}
         {paymentMethods.length > 0 ? (
-          <div className="flex flex-col gap-3">
-            {/* Carousel container */}
-            <div
-              className="relative h-[210px] flex items-center justify-center"
-              style={{ perspective: '1000px' }}
-            >
+          <div className="flex flex-col items-center gap-3">
+            {/* Carousel container — fixed 320×210 viewport that clips any
+                 overflow so neighbour cards never spill onto adjacent UI. */}
+            <div className="relative mx-auto h-[210px] w-[320px] overflow-hidden">
               {paymentMethods.map((pm, idx) => {
                 const isActive = idx === activeCardIndex;
                 return (
                   <div
                     key={pm.id}
-                    className="absolute"
+                    className="absolute inset-0 flex items-center justify-center"
                     style={getSlideStyle(idx)}
                     aria-hidden={!isActive}
                     onClick={() => !isActive && setActiveCardIndex(idx)}
@@ -179,7 +161,6 @@ export function PaymentMethodCard() {
                       useIllustrationBg={true}
                       shade={pm.shade ?? 'coral'}
                       showShadePicker={false}
-                      className="h-[170px] w-full max-w-[320px]"
                     />
                   </div>
                 );

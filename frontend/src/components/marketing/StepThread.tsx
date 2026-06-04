@@ -25,7 +25,7 @@ export function StepThread({ steps }: Props) {
       {steps.map((s, i) => {
         const isLast = i === steps.length - 1;
         return (
-          <div key={s.num} className="flex gap-5">
+          <div key={s.num} className="flex gap-4 sm:gap-5">
             {/* Rail — bead + dotted connector, centred as one column */}
             <div className="flex flex-col items-center">
               <motion.div

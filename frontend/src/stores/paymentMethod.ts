@@ -3,27 +3,40 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { useShallow } from 'zustand/shallow';
 import type { PaymentMethod } from '@/types/paymentMethod';
 import { CARD_BRAND_COLORS } from '@/types/paymentMethod';
+import type { CardShade } from '@/lib/cardTheme';
 
 interface PaymentMethodState {
   paymentMethods: PaymentMethod[];
   addPaymentMethod: (pm: Omit<PaymentMethod, 'id'>) => string;
   updatePaymentMethod: (id: string, updates: Partial<PaymentMethod>) => void;
   removePaymentMethod: (id: string) => void;
+  setCardShade: (id: string, shade: CardShade) => void;
+  /** Currently active card index in the carousel. Persisted to localStorage. */
+  activeCardIndex: number;
+  setActiveCardIndex: (index: number) => void;
 }
 
 let nextId = 1;
+
+function migratePaymentMethods(pm: Omit<PaymentMethod, 'id'> & { shade?: string }): Omit<PaymentMethod, 'id'> {
+  return {
+    ...pm,
+    shade: pm.shade ?? 'coral',
+    color: pm.color || CARD_BRAND_COLORS[pm.brand],
+  };
+}
 
 export const usePaymentMethodStore = create<PaymentMethodState>()(
   persist(
     (set) => ({
       paymentMethods: [],
+      activeCardIndex: 0,
 
       addPaymentMethod: (pm: Omit<PaymentMethod, 'id'>) => {
         const id = `pm-${Date.now()}-${nextId++}`;
         const newPm: PaymentMethod = {
-          ...pm,
+          ...migratePaymentMethods(pm),
           id,
-          color: pm.color || CARD_BRAND_COLORS[pm.brand],
         };
         set((s) => ({ paymentMethods: [...s.paymentMethods, newPm] }));
         return id;
@@ -42,11 +55,38 @@ export const usePaymentMethodStore = create<PaymentMethodState>()(
           paymentMethods: s.paymentMethods.filter((pm) => pm.id !== id),
         }));
       },
+
+      setCardShade: (id: string, shade: CardShade) => {
+        set((s) => ({
+          paymentMethods: s.paymentMethods.map((pm) =>
+            pm.id === id ? { ...pm, shade } : pm,
+          ),
+        }));
+      },
+
+      setActiveCardIndex: (index: number) => {
+        set({ activeCardIndex: index });
+      },
     }),
     {
       name: 'recall-payment-methods',
-      version: 0,
+      version: 1,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persisted: any, version: number) => {
+        if (version === 0) {
+          // Add shade field to existing payment methods
+          const state = persisted as PaymentMethodState & { paymentMethods: any[] };
+          return {
+            ...state,
+            paymentMethods: state.paymentMethods.map((pm: any) => ({
+              ...pm,
+              shade: pm.shade ?? 'coral',
+            })),
+            activeCardIndex: 0,
+          };
+        }
+        return persisted;
+      },
     },
   ),
 );

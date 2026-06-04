@@ -125,7 +125,7 @@ export function HomePage() {
             >
               <Illustration
                 name={f.art}
-                className="mx-auto h-[170px] w-full object-contain"
+                className="mx-auto h-[140px] w-full max-w-[280px] object-contain sm:h-[170px] md:max-w-none"
               />
               <h3 className="mt-6 text-[17px] font-semibold">{f.title}</h3>
               <p className="mx-auto mt-2 max-w-[300px] text-[14px] leading-[1.65] text-muted">
@@ -148,12 +148,12 @@ export function HomePage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5 }}
-            className="relative"
+            className="relative flex justify-center"
           >
             <Illustration
               name="financeOverview"
               decorative={false}
-              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
+              className="h-[240px] w-full max-w-[320px] object-contain sm:h-[280px] sm:max-w-[340px] md:h-[320px] md:max-w-[360px]"
             />
           </motion.div>
         </div>
@@ -201,7 +201,7 @@ export function HomePage() {
             <Illustration
               name="celebration"
               decorative={false}
-              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
+              className="mx-auto h-[240px] w-full max-w-[280px] object-contain sm:h-[280px] sm:max-w-[320px] md:h-[320px] md:max-w-[360px]"
             />
           </motion.div>
         </div>
@@ -249,7 +249,7 @@ export function HomePage() {
             <Illustration
               name="privacy"
               decorative={false}
-              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
+              className="mx-auto h-[240px] w-full max-w-[280px] object-contain sm:h-[280px] sm:max-w-[320px] md:h-[320px] md:max-w-[360px]"
             />
           </motion.div>
         </div>
@@ -298,7 +298,7 @@ export function HomePage() {
             <Illustration
               name="openSourceCode"
               decorative={false}
-              className="mx-auto h-[320px] w-full max-w-[360px] object-contain"
+              className="mx-auto h-[240px] w-full max-w-[280px] object-contain sm:h-[280px] sm:max-w-[320px] md:h-[320px] md:max-w-[360px]"
             />
           </motion.div>
         </div>

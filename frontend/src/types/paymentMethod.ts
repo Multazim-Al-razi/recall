@@ -1,3 +1,5 @@
+import type { CardShade } from '@/lib/cardTheme';
+
 export type CardBrand = "visa" | "mastercard" | "amex" | "discover" | "debit" | "other";
 
 export interface PaymentMethod {
@@ -6,6 +8,8 @@ export interface PaymentMethod {
   brand: CardBrand;
   last4: string;
   color: string;
+  /** Color shade preset for the card illustration background. */
+  shade: CardShade;
   expiryMonth?: number;
   expiryYear?: number;
 }

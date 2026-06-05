@@ -47,10 +47,9 @@ export interface AuthedUser {
  *   4. Rejects unauthenticated requests with 401.
  *
  * Behavior when DB_BACKEND=lowdb (no Supabase env vars):
- *   The middleware still runs but JWT verification always returns null,
- *   so requests without auth get 401. To allow unauthenticated access
- *   in lowdb mode, set ALLOW_NO_AUTH=1 — this bypasses requireAuth
- *   entirely for local development.
+ *   Auth is skipped ONLY when ALLOW_DEV_BACKEND=1 is set explicitly.
+ *   Default: auth is enforced in all modes for production safety.
+ *   Set ALLOW_DEV_BACKEND=1 to bypass auth for local development.
  *
  * Applied to every `/api/*` route other than `/api/auth/*` and `/api/health`.
  */
@@ -59,10 +58,9 @@ export async function requireAuth(
   res: Response,
   next: NextFunction,
 ) {
-  // In lowdb mode, allow unauthenticated access so the local dev server
-  // works exactly as before (no Supabase env vars needed).
-  const DB_BACKEND = process.env.DB_BACKEND ?? "lowdb";
-  if (DB_BACKEND === "lowdb" && process.env.ALLOW_NO_AUTH !== "0") {
+  // Auth is bypassed ONLY when ALLOW_DEV_BACKEND=1 is explicitly set.
+  // This must be opt-in — production should never skip auth.
+  if (process.env.ALLOW_DEV_BACKEND === "1") {
     next();
     return;
   }

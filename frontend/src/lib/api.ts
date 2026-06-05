@@ -6,6 +6,7 @@
  * otherwise falls back to the cloud backend.
  */
 import { getActiveApiBaseUrl } from './environment';
+import { supabase } from './supabaseClient';
 
 let cachedApiBase: string | null = null;
 
@@ -23,8 +24,15 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   // Ensure path starts with /api if apiBase is empty (cloud mode relative path)
   const fullPath = apiBase ? `${apiBase}/api${path}` : `/api${path}`;
 
+  // Attach Supabase JWT as Authorization header when available.
+  const session = supabase ? await supabase.auth.getSession() : null;
+  const authHeader: Record<string, string> =
+    session?.data.session?.access_token
+      ? { Authorization: `Bearer ${session.data.session.access_token}` }
+      : {};
+
   const res = await fetch(fullPath, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeader },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT),
     ...options,
   });

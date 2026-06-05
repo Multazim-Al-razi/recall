@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import {
   Activity,
   CheckCircle2,
@@ -70,6 +70,12 @@ export function DevStatsView() {
     });
     return { rows, totalBytes };
   }, []);
+
+  // Gate: only accessible in dev builds. Production never exposes this route.
+  // Hook calls must come before any conditional returns (rules of hooks).
+  if (!import.meta.env.DEV) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const active = getActiveSubscriptions(subscriptions);
   const cancelled = subscriptions.filter((s) => s.status === 'cancelled');

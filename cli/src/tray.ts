@@ -1,5 +1,5 @@
 import { stopDaemon } from './daemon.js';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import os from 'os';
 
 let tray: any = null;
@@ -38,8 +38,11 @@ export async function initTray(): Promise<void> {
         tray.kill();
         process.exit(0);
       } else if (action.item.title === 'Open Dashboard') {
-        const openCommand = os.platform() === 'win32' ? 'start' : os.platform() === 'darwin' ? 'open' : 'xdg-open';
-        exec(`${openCommand} http://localhost:21120`);
+        const url = 'http://localhost:21120';
+        const platform = os.platform();
+        const cmd = platform === 'win32' ? 'cmd' : platform === 'darwin' ? 'open' : 'xdg-open';
+        const args = platform === 'win32' ? ['/c', 'start', '""', url] : [url];
+        spawn(cmd, args, { stdio: 'ignore', detached: true }).unref();
       }
     });
 

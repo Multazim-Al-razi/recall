@@ -243,10 +243,11 @@
         opacity: 0.5;
         pointer-events: none;
     }
-    /* In dark mode the top-edge highlight is already warm/visible, so keep it subtle */
+    /* In dark mode the warm-white hairline reads as a stray light strip
+       against the dark surface, so we drop it entirely. The card's own
+       hairline ring + shadow are enough to define the edge. */
     .dark .card-premium::before {
-        background: rgba(255, 248, 235, 0.12);
-        opacity: 0.6;
+        opacity: 0;
     }
     .card-premium:hover {
         transform: translateY(-3px);
@@ -267,6 +268,16 @@
         background: color-mix(in srgb, var(--color-surface) 72%, transparent);
         backdrop-filter: blur(24px) saturate(1.6);
         -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    }
+
+    /* ── Feature tile — always-dark surface for the dashboard's
+     premium dials (Status lock, Savings gauge, …). Uses literal
+     hex so the surface stays the same charcoal in both light
+     and dark mode, instead of flipping with --color-ink. */
+    .feature-tile {
+        background: #1a1714;
+        color: #f4efe7;
+        box-shadow: var(--shadow-md);
     }
 
     /* ── Editorial accent text — flat, premium, no gradient ─────────── */

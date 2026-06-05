@@ -5,11 +5,11 @@ import os from 'os';
 import schedule from 'node-schedule';
 import notifier from 'node-notifier';
 import { initTray, killTray } from './tray.js';
-import { loadConfig } from './config.js';
+import { loadConfig, getConfigDir } from './config.js';
 
 let daemonProcess: ChildProcess | null = null;
 let schedulerJob: schedule.Job | null = null;
-const PID_FILE = path.join(os.tmpdir(), 'recall-daemon.pid');
+const PID_FILE = path.join(getConfigDir(), 'daemon.pid');
 
 /**
  * Checks for upcoming subscriptions and triggers a native OS notification.

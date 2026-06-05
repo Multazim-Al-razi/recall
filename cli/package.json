@@ -37,7 +37,6 @@
     "systray2": "^2.1.0"
   },
   "devDependencies": {
-    "2": "^3.0.0",
     "@types/node": "^22.15.3",
     "@types/node-notifier": "^8.0.5",
     "@types/node-schedule": "^2.1.7",

@@ -23,7 +23,7 @@ export function SavingsGauge() {
   const dash = (pct / 100) * c;
 
   return (
-    <div className="flex h-full min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-[20px] bg-ink p-4 text-canvas shadow-[var(--shadow-md)]">
+    <div className="card-premium flex h-full min-h-[150px] w-full flex-col items-center justify-center overflow-hidden rounded-[20px] p-4">
       <div className="relative inline-flex w-full max-w-[132px] items-center justify-center">
         <svg viewBox={`0 0 ${size} ${size}`} className="h-auto w-full">
           <circle
@@ -31,7 +31,7 @@ export function SavingsGauge() {
             cy={size / 2}
             r={r}
             fill="none"
-            stroke="rgba(255,255,255,0.08)"
+            stroke="var(--color-line)"
             strokeWidth={stroke}
           />
           <circle
@@ -47,7 +47,7 @@ export function SavingsGauge() {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-display text-[26px] font-light leading-none tabular-nums">
+          <span className="font-display text-[26px] font-light leading-none tabular-nums text-ink">
             {pct}%
           </span>
           <span className="mt-1 text-[10px] font-semibold uppercase tracking-[1.5px] text-muted">

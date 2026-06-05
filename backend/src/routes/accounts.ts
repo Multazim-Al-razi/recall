@@ -1,6 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { getDb, createDefaultAccount } from "../db.js";
-import { validateAccountPatch, sanitizeString } from "../validate.js";
+import { validateAccountPatch, sanitizeString, sanitizeEmail } from "../validate.js";
+import { writeLimiter } from "../rateLimiters.js";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.get("/", async (_req: Request, res: Response) => {
 /**
  * PATCH /api/account
  */
-router.patch("/", async (req: Request, res: Response) => {
+router.patch("/", writeLimiter, async (req: Request, res: Response) => {
   const { db, account } = await ensureAccount();
   const patch = validateAccountPatch(req.body);
   Object.assign(account, patch);
@@ -39,13 +40,13 @@ router.patch("/", async (req: Request, res: Response) => {
 /**
  * POST /api/account/complete-onboarding
  */
-router.post("/complete-onboarding", async (req: Request, res: Response) => {
+router.post("/complete-onboarding", writeLimiter, async (req: Request, res: Response) => {
   const { db, account } = await ensureAccount();
   const { name, email, currency } = req.body ?? {};
 
   account.onboarded = true;
   if (name !== undefined) account.name = sanitizeString(name, 80);
-  if (email !== undefined) account.email = sanitizeString(email, 254);
+  if (email !== undefined) account.email = sanitizeEmail(email);
   if (currency !== undefined)
     account.currency = sanitizeString(currency, 8).toUpperCase() || "USD";
   account.updatedAt = new Date().toISOString();
@@ -56,7 +57,7 @@ router.post("/complete-onboarding", async (req: Request, res: Response) => {
 /**
  * POST /api/account/reset
  */
-router.post("/reset", async (_req: Request, res: Response) => {
+router.post("/reset", writeLimiter, async (_req: Request, res: Response) => {
   const { db, account } = await ensureAccount();
   const fresh = createDefaultAccount();
   Object.assign(account, fresh, {

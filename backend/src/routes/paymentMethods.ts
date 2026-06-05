@@ -95,10 +95,29 @@ router.patch("/:id", writeLimiter, async (req: Request, res: Response) => {
 
   if (b.label !== undefined) patch.label = sanitizeString(b.label, 60);
   if (b.brand !== undefined) patch.brand = CARD_BRANDS.includes(b.brand as CardBrand) ? b.brand : "other";
-  if (b.last4 !== undefined) patch.last4 = sanitizeString(b.last4, 4);
+  if (b.last4 !== undefined) {
+    const cleaned = sanitizeString(b.last4, 4);
+    if (!cleaned || cleaned.length !== 4 || !/^\d{4}$/.test(cleaned)) {
+      res.status(400).json({ error: "last4 must be exactly 4 digits" });
+      return;
+    }
+    patch.last4 = cleaned;
+  }
   if (b.color !== undefined) patch.color = sanitizeString(b.color, 30);
-  if (b.expiryMonth !== undefined) patch.expiryMonth = b.expiryMonth;
-  if (b.expiryYear !== undefined) patch.expiryYear = b.expiryYear;
+  if (b.expiryMonth !== undefined) {
+    if (typeof b.expiryMonth !== "number" || b.expiryMonth < 1 || b.expiryMonth > 12) {
+      res.status(400).json({ error: "expiryMonth must be between 1 and 12" });
+      return;
+    }
+    patch.expiryMonth = b.expiryMonth;
+  }
+  if (b.expiryYear !== undefined) {
+    if (typeof b.expiryYear !== "number" || b.expiryYear < 2020 || b.expiryYear > 2040) {
+      res.status(400).json({ error: "expiryYear must be between 2020 and 2040" });
+      return;
+    }
+    patch.expiryYear = b.expiryYear;
+  }
 
   const updated = await adapter.updatePaymentMethod(req.params.id, accountId, patch);
   res.json(updated);

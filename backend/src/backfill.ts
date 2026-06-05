@@ -5,7 +5,7 @@
  * Run with:  npx tsx backend/src/backfill.ts
  *
  * Required env vars:
- *   SUPABASE_URL           — e.g. https://fygfhceppqjvbpcvoimp.supabase.co
+ *   SUPABASE_URL           — e.g. https://your-project-id.supabase.co
  *   SUPABASE_SERVICE_ROLE_KEY — the service role key (bypasses RLS)
  *
  * This script is meant to be run once during migration. It:

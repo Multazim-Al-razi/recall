@@ -1,10 +1,13 @@
 import { useMemo, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Calendar } from 'lucide-react';
 import { useSubscriptionStore, getByCategory, getMonthlySpend } from '@/stores/subscription';
 import { useAccountStore } from '@/stores/account';
 import { currencySymbol } from '@/lib/format';
 import { CATEGORY_CONFIG } from '@/types/subscription';
 import type { Category } from '@/types/subscription';
+import { Dropdown } from '@/components/ui/Dropdown';
+
+type Period = 'monthly' | 'yearly';
 
 /**
  * Concentric bullseye + breakdown. The reference's "Annual profits" nested
@@ -18,13 +21,20 @@ export function CategoryRingsCard() {
   const cur = useAccountStore((s) => s.profile.currency);
   const sym = currencySymbol(cur);
   const [active, setActive] = useState<string | null>(null);
+  const [period, setPeriod] = useState<Period>('monthly');
 
-  const total = useMemo(() => getMonthlySpend(subscriptions), [subscriptions]);
+  // Aggregate by category, normalized to either monthly or yearly.
+  const total = useMemo(() => {
+    const monthly = getMonthlySpend(subscriptions);
+    return period === 'yearly' ? monthly * 12 : monthly;
+  }, [subscriptions, period]);
 
   const rings = useMemo(() => {
     const byCat = getByCategory(subscriptions);
+    const multiplier = period === 'yearly' ? 12 : 1;
     return Object.entries(byCat)
       .filter(([, v]) => v > 0)
+      .map(([cat, amount]) => [cat, amount * multiplier] as const)
       .sort(([, a], [, b]) => b - a)
       .slice(0, 4)
       .map(([cat, amount]) => ({
@@ -32,7 +42,7 @@ export function CategoryRingsCard() {
         amount,
         label: CATEGORY_CONFIG[cat as Category].label,
       }));
-  }, [subscriptions]);
+  }, [subscriptions, period]);
 
   const n = rings.length;
   // Single rausch hue, deepening toward the inner ring. The inner ring stays a
@@ -72,16 +82,35 @@ export function CategoryRingsCard() {
           <div className="mt-1.5 font-display text-[22px] font-light leading-none tabular-nums">
             {sym}
             {Math.round(total)}
-            <span className="ml-1.5 text-[12px] font-sans text-muted">/mo</span>
+            <span className="ml-1.5 text-[12px] font-sans text-muted">
+              /{period === 'yearly' ? 'yr' : 'mo'}
+            </span>
           </div>
         </div>
-        <button
-          type="button"
-          className="inline-flex items-center gap-1 rounded-full bg-canvas px-2.5 py-1 text-[11px] font-semibold text-ink-soft transition-colors hover:text-ink"
-        >
-          Monthly
-          <ChevronDown size={12} />
-        </button>
+        <Dropdown
+          align="right"
+          trigger={
+            <button
+              type="button"
+              aria-label="Change time period"
+              className="inline-flex items-center gap-1 rounded-full bg-canvas px-2.5 py-1 text-[11px] font-semibold text-ink-soft transition-colors hover:text-ink"
+            >
+              <Calendar size={11} />
+              {period === 'yearly' ? 'Yearly' : 'Monthly'}
+              <ChevronDown size={12} />
+            </button>
+          }
+          items={[
+            {
+              label: 'Monthly',
+              onClick: () => setPeriod('monthly'),
+            },
+            {
+              label: 'Yearly',
+              onClick: () => setPeriod('yearly'),
+            },
+          ]}
+        />
       </div>
 
       {/* Bullseye */}

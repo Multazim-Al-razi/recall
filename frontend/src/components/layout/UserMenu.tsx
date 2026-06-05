@@ -96,7 +96,7 @@ export function UserMenu() {
             exit={{ opacity: 0, y: 8, scale: 0.97 }}
             transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
             role="menu"
-            className="glass absolute right-0 top-full z-50 mt-2 w-[284px] overflow-hidden rounded-[20px] border border-ink/8 p-1.5 shadow-[0_16px_48px_rgba(0,0,0,0.16)]"
+            className="bg-surface absolute right-0 top-full z-50 mt-2 w-[284px] overflow-hidden rounded-[20px] border border-ink/8 p-1.5 shadow-[0_16px_48px_rgba(0,0,0,0.16)]"
           >
             {/* Identity header */}
             <div className="flex items-center gap-3 rounded-[14px] px-2.5 py-2.5">

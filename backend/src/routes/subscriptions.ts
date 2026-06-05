@@ -76,7 +76,7 @@ router.post("/", writeLimiter, async (req: Request, res: Response) => {
   const currentCount = await adapter.countSubscriptions(accountId);
   if (currentCount >= MAX_SUBSCRIPTIONS_PER_ACCOUNT) {
     res.status(409).json({
-      error: `Subscription limit (${MAX_SUBSCRIPTIONS_PER_ACCOUNT}) reached for account '${accountId}'`,
+      error: "Subscription limit reached",
     });
     return;
   }

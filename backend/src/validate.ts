@@ -77,6 +77,16 @@ export function sanitizeString(value: unknown, maxLen = 500): string {
   return value.replace(/<[^>]*>/g, '').trim().slice(0, maxLen);
 }
 
+/** Basic email format validation. Not exhaustive, but rejects obvious garbage. */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+export function sanitizeEmail(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  const trimmed = value.trim().slice(0, 254);
+  if (!trimmed) return '';
+  return EMAIL_RE.test(trimmed) ? trimmed : '';
+}
+
 function isFiniteNumber(value: unknown): value is number {
   return typeof value === 'number' && Number.isFinite(value);
 }
@@ -226,7 +236,7 @@ export function validateAccountPatch(
   const patch: Partial<AccountRecord> = {};
 
   if (b.name !== undefined) patch.name = sanitizeString(b.name, 80);
-  if (b.email !== undefined) patch.email = sanitizeString(b.email, 254);
+  if (b.email !== undefined) patch.email = sanitizeEmail(b.email);
   if (b.avatar !== undefined) patch.avatar = sanitizeAvatar(b.avatar);
   if (b.currency !== undefined) patch.currency = sanitizeString(b.currency, 8).toUpperCase() || 'USD';
   if (b.reminderLeadDays !== undefined && isFiniteNumber(b.reminderLeadDays)) {

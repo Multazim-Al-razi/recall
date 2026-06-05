@@ -10,6 +10,7 @@ import {
   Pause,
   Play,
   ArrowUpDown,
+  MoreHorizontal,
 } from "lucide-react";
 import { getActiveSubscriptions, toMonthlyAmount } from "@/stores/subscription";
 import { useSubscriptionActions } from "@/hooks/useApiSync";
@@ -27,6 +28,7 @@ import { MaskDivider } from "@/components/layout/MaskDivider";
 import { SubscriptionFormModal } from "@/components/subscriptions/SubscriptionFormModal";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { UndoToast } from "@/components/ui/UndoToast";
+import { Dropdown } from "@/components/ui/Dropdown";
 import { currencySymbol } from "@/lib/format";
 import { safeCsvCell } from "@/lib/security";
 
@@ -159,39 +161,83 @@ const SubscriptionRow = memo(function SubscriptionRow({
         <div className="mt-0.5 text-[11px] text-rausch">{cancelLabel}</div>
       </div>
       <div className="flex shrink-0 gap-1.5">
-        {/* Pause/Resume toggle (#6) */}
-        {sub.status !== "cancelled" && (
+        {/* Inline actions — desktop only. Mobile uses the kebab below. */}
+        <div className="hidden gap-1.5 sm:flex">
+          {sub.status !== "cancelled" && (
+            <button
+              onClick={() => onTogglePause(sub)}
+              aria-label={
+                sub.status === "paused"
+                  ? `Resume ${sub.name}`
+                  : `Pause ${sub.name}`
+              }
+              className="flex items-center gap-1 rounded-full border border-ink/10 px-3 py-1.5 text-[12px] font-medium text-muted transition-colors hover:text-ink"
+            >
+              {sub.status === "paused" ? <Play size={13} /> : <Pause size={13} />}
+              <span>
+                {sub.status === "paused" ? "Resume" : "Pause"}
+              </span>
+            </button>
+          )}
           <button
-            onClick={() => onTogglePause(sub)}
-            aria-label={
-              sub.status === "paused"
-                ? `Resume ${sub.name}`
-                : `Pause ${sub.name}`
-            }
+            onClick={() => onEdit(sub)}
+            aria-label={`Edit ${sub.name}`}
             className="flex items-center gap-1 rounded-full border border-ink/10 px-3 py-1.5 text-[12px] font-medium text-muted transition-colors hover:text-ink"
           >
-            {sub.status === "paused" ? <Play size={13} /> : <Pause size={13} />}
-            <span className="hidden sm:inline">
-              {sub.status === "paused" ? "Resume" : "Pause"}
-            </span>
+            <Pencil size={13} />
+            <span>Edit</span>
           </button>
-        )}
-        <button
-          onClick={() => onEdit(sub)}
-          aria-label={`Edit ${sub.name}`}
-          className="flex items-center gap-1 rounded-full border border-ink/10 px-3 py-1.5 text-[12px] font-medium text-muted transition-colors hover:text-ink"
-        >
-          <Pencil size={13} />
-          <span className="hidden sm:inline">Edit</span>
-        </button>
-        <button
-          onClick={() => onDelete(sub)}
-          aria-label={`Delete ${sub.name}`}
-          className="flex items-center gap-1 rounded-full border border-ink/10 px-3 py-1.5 text-[12px] font-medium text-muted transition-colors hover:text-rausch"
-        >
-          <Trash2 size={13} />
-          <span className="hidden sm:inline">Delete</span>
-        </button>
+          <button
+            onClick={() => onDelete(sub)}
+            aria-label={`Delete ${sub.name}`}
+            className="flex items-center gap-1 rounded-full border border-ink/10 px-3 py-1.5 text-[12px] font-medium text-muted transition-colors hover:text-rausch"
+          >
+            <Trash2 size={13} />
+            <span>Delete</span>
+          </button>
+        </div>
+        {/* Mobile kebab — placed on the right edge for one-thumb access. */}
+        <div className="flex sm:hidden">
+          <Dropdown
+            align="right"
+            trigger={
+              <button
+                type="button"
+                aria-label={`More actions for ${sub.name}`}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 text-muted transition-colors hover:text-ink"
+              >
+                <MoreHorizontal size={16} />
+              </button>
+            }
+            items={[
+              ...(sub.status !== "cancelled"
+                ? [
+                    {
+                      label: sub.status === "paused" ? "Resume" : "Pause",
+                      icon:
+                        sub.status === "paused" ? (
+                          <Play size={14} />
+                        ) : (
+                          <Pause size={14} />
+                        ),
+                      onClick: () => onTogglePause(sub),
+                    },
+                  ]
+                : []),
+              {
+                label: "Edit",
+                icon: <Pencil size={14} />,
+                onClick: () => onEdit(sub),
+              },
+              {
+                label: "Delete",
+                icon: <Trash2 size={14} />,
+                onClick: () => onDelete(sub),
+                danger: true,
+              },
+            ]}
+          />
+        </div>
       </div>
     </div>
   );

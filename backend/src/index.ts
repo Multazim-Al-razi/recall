@@ -5,9 +5,10 @@ import express, {
 } from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import helmet from "helmet";
 import subscriptionRoutes from "./routes/subscriptions.js";
 import accountRoutes from "./routes/accounts.js";
-import statsRoutes from "./routes/stats.js";
+import { statsRoutes } from "./routes/stats.js";
 import paymentMethodRoutes from "./routes/paymentMethods.js";
 import { requireAuth } from "./auth.js";
 import { closeDb } from "./db.js";
@@ -15,26 +16,30 @@ import { closeDb } from "./db.js";
 const app = express();
 const PORT = parseInt(process.env.PORT || "21121", 10);
 
-// CORS — allowlist from env in production, permissive in dev.
-// Set CORS_ORIGINS to a comma-separated list of allowed origins when deploying.
+// CORS — strict allowlist from env in production, localhost in dev.
 const corsOrigins = process.env.CORS_ORIGINS?.split(",")
   .map((o) => o.trim())
   .filter(Boolean);
+
+if (process.env.NODE_ENV === "production" && (!corsOrigins || corsOrigins.length === 0)) {
+  console.error("[Recall] CORS_ORIGINS must be set in production. Refusing to start with open CORS.");
+  process.exit(1);
+}
+
+const allowedOrigins = corsOrigins && corsOrigins.length > 0
+  ? corsOrigins
+  : ["http://localhost:21120", "http://localhost:21121"];
+
 app.use(
   cors({
-    origin: corsOrigins && corsOrigins.length > 0 ? corsOrigins : true,
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: false,
   }),
 );
 
-// Minimal security headers (no extra dependency).
-app.use((_req: Request, res: Response, next: NextFunction) => {
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("X-Frame-Options", "DENY");
-  res.setHeader("Referrer-Policy", "no-referrer");
-  res.setHeader("X-DNS-Prefetch-Control", "off");
-  next();
-});
+// Security headers via helmet (replaces manual headers below)
+app.use(helmet());
 
 app.use(express.json({ limit: "100kb" }));
 

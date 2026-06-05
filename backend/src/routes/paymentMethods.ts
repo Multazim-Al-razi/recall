@@ -84,7 +84,8 @@ router.patch("/:id", writeLimiter, async (req: Request, res: Response) => {
   const adapter = getAdapter();
   const accountId = getAccountId(req);
 
-  const existing = await adapter.getPaymentMethod(req.params.id, accountId);
+  const id = req.params.id as string;
+  const existing = await adapter.getPaymentMethod(id, accountId);
   if (!existing) {
     res.status(404).json({ error: "Payment method not found" });
     return;
@@ -119,7 +120,7 @@ router.patch("/:id", writeLimiter, async (req: Request, res: Response) => {
     patch.expiryYear = b.expiryYear;
   }
 
-  const updated = await adapter.updatePaymentMethod(req.params.id, accountId, patch);
+  const updated = await adapter.updatePaymentMethod(id, accountId, patch);
   res.json(updated);
 });
 
@@ -130,13 +131,14 @@ router.delete("/:id", writeLimiter, async (req: Request, res: Response) => {
   const adapter = getAdapter();
   const accountId = getAccountId(req);
 
-  const existing = await adapter.getPaymentMethod(req.params.id, accountId);
+  const id = req.params.id as string;
+  const existing = await adapter.getPaymentMethod(id, accountId);
   if (!existing) {
     res.status(404).json({ error: "Payment method not found" });
     return;
   }
 
-  await adapter.deletePaymentMethod(req.params.id, accountId);
+  await adapter.deletePaymentMethod(id, accountId);
   res.json({ success: true });
 });
 

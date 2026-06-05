@@ -51,8 +51,9 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
   const adapter = getAdapter();
   const accountId = getAccountId(req);
+  const id = req.params.id as string;
 
-  const sub = await adapter.getSubscription(req.params.id, accountId);
+  const sub = await adapter.getSubscription(id, accountId);
   if (!sub) {
     res.status(404).json({ error: "Subscription not found" });
     return;
@@ -106,14 +107,15 @@ router.patch("/:id", writeLimiter, async (req: Request, res: Response) => {
     return;
   }
 
-  const existing = await adapter.getSubscription(req.params.id, accountId);
+  const id = req.params.id as string;
+  const existing = await adapter.getSubscription(id, accountId);
   if (!existing) {
     res.status(404).json({ error: "Subscription not found" });
     return;
   }
 
   const updated = await adapter.updateSubscription(
-    req.params.id,
+    id,
     accountId,
     value,
   );
@@ -126,13 +128,14 @@ router.patch("/:id", writeLimiter, async (req: Request, res: Response) => {
 router.delete("/:id", writeLimiter, async (req: Request, res: Response) => {
   const adapter = getAdapter();
   const accountId = getAccountId(req);
-  const existing = await adapter.getSubscription(req.params.id, accountId);
+  const id = req.params.id as string;
+  const existing = await adapter.getSubscription(id, accountId);
   if (!existing) {
     res.status(404).json({ error: "Subscription not found" });
     return;
   }
 
-  await adapter.deleteSubscription(req.params.id, accountId);
+  await adapter.deleteSubscription(id, accountId);
   res.json({ success: true });
 });
 

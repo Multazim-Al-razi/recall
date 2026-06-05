@@ -111,7 +111,7 @@ export function OnboardingPage() {
               <button
                 onClick={handleGitHubSignup}
                 disabled={authLoading}
-                className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-[15px] font-semibold text-canvas transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] disabled:opacity-50 disabled:hover:translate-y-0 sm:w-auto dark:bg-white dark:text-ink dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+                className="mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-black px-7 py-4 text-[15px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] disabled:opacity-50 disabled:hover:translate-y-0 sm:w-auto"
               >
                 <GithubMark size={20} className="shrink-0" />
                 {authLoading ? 'Redirecting…' : 'Continue with GitHub'}

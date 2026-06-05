@@ -126,7 +126,7 @@ export function IntegrationsMarquee() {
         <div className="mt-10">
           <Link
             to="/onboarding"
-            className="inline-flex items-center gap-2 rounded-full bg-rausch px-8 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+            className="inline-flex items-center gap-2 rounded-full bg-rausch px-8 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
           >
             Get started for free
             <ArrowRight size={17} />

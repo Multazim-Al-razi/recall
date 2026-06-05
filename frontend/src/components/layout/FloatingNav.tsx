@@ -125,7 +125,7 @@ export function FloatingNav() {
             {onboarded ? (
               <button
                 onClick={() => go("/dashboard")}
-                className="rounded-full bg-rausch px-5 py-2 text-[13px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+                className="rounded-full bg-rausch px-5 py-2 text-[13px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
               >
                 Dashboard
               </button>
@@ -139,7 +139,7 @@ export function FloatingNav() {
                 </button>
                 <button
                   onClick={() => go("/onboarding")}
-                  className="rounded-full bg-rausch px-5 py-2 text-[13px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+                  className="rounded-full bg-rausch px-5 py-2 text-[13px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
                 >
                   Sign up
                 </button>

@@ -55,7 +55,7 @@ export function DashboardPage() {
               ref={addBtnRef}
               type="button"
               onClick={() => setFormOpen(true)}
-              className="sheen group inline-flex items-center gap-2 rounded-full bg-rausch py-2.5 pr-2.5 pl-5 text-[14px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+              className="sheen group inline-flex items-center gap-2 rounded-full bg-rausch py-2.5 pr-2.5 pl-5 text-[14px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
             >
               Add subscription
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:rotate-90">

@@ -113,7 +113,7 @@ export function BlogPostPage() {
           </p>
           <Link
             to="/onboarding"
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-rausch px-6 py-3 text-[14px] font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
+            className="mt-4 inline-flex items-center gap-2 rounded-full bg-rausch px-6 py-3 text-[14px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
           >
             Get started free
             <ArrowRight size={16} />

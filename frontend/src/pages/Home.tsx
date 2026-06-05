@@ -78,7 +78,7 @@ export function HomePage() {
             <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row md:justify-start">
               <Link
                 to="/onboarding"
-                className="sheen inline-flex w-full items-center justify-center gap-2 rounded-full bg-rausch px-8 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)] sm:w-auto"
+                className="sheen inline-flex w-full items-center justify-center gap-2 rounded-full bg-rausch px-8 py-4 text-[15px] font-semibold text-white shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)] sm:w-auto"
               >
                 Start tracking free
                 <ArrowRight size={18} />

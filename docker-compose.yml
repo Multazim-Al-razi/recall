@@ -1,0 +1,39 @@
+services:
+  # Frontend — static files served by Vite preview
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "21120:21120"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # Backend — Express API with lowdb persistence
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "21121:21121"
+    environment:
+      - NODE_ENV=production
+      - PORT=21121
+      - CORS_ORIGINS=http://localhost:21120
+    volumes:
+      - recall-data:/app/backend/data
+
+  # Optional: CLI companion for native OS notifications
+  # Uncomment to enable
+  # cli:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.cli
+  #   depends_on:
+  #     - backend
+
+volumes:
+  recall-data:

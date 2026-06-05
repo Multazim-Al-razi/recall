@@ -1,0 +1,14 @@
+node_modules
+frontend/node_modules
+backend/node_modules
+cli/node_modules
+.git
+.github
+.qwen
+.claude
+.superpowers
+.playwright-mcp
+docs
+e2e
+*.md
+!frontend/README.md

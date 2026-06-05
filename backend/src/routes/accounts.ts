@@ -2,15 +2,21 @@ import { Router, type Request, type Response } from "express";
 import { getDb, createDefaultAccount } from "../db.js";
 import { validateAccountPatch, sanitizeString, sanitizeEmail } from "../validate.js";
 import { writeLimiter } from "../rateLimiters.js";
+import type { AuthedUser } from "../auth.js";
 
 const router = Router();
 
-/** Get the single default account, creating + persisting it if missing. */
-async function ensureAccount() {
+function getAccountId(req: Request): string {
+  const user = req.user as AuthedUser | undefined;
+  return user?.id ?? "default";
+}
+
+/** Get or create an account for the requesting user. */
+async function ensureAccount(accountId: string) {
   const db = await getDb();
-  let account = db.data.accounts.find((a) => a.id === "default");
+  let account = db.data.accounts.find((a) => a.id === accountId);
   if (!account) {
-    account = createDefaultAccount();
+    account = createDefaultAccount(accountId);
     db.data.accounts.push(account);
     await db.write();
   }
@@ -20,8 +26,9 @@ async function ensureAccount() {
 /**
  * GET /api/account
  */
-router.get("/", async (_req: Request, res: Response) => {
-  const { account } = await ensureAccount();
+router.get("/", async (req: Request, res: Response) => {
+  const accountId = getAccountId(req);
+  const { account } = await ensureAccount(accountId);
   res.json(account);
 });
 
@@ -29,7 +36,8 @@ router.get("/", async (_req: Request, res: Response) => {
  * PATCH /api/account
  */
 router.patch("/", writeLimiter, async (req: Request, res: Response) => {
-  const { db, account } = await ensureAccount();
+  const accountId = getAccountId(req);
+  const { db, account } = await ensureAccount(accountId);
   const patch = validateAccountPatch(req.body);
   Object.assign(account, patch);
   account.updatedAt = new Date().toISOString();
@@ -41,7 +49,8 @@ router.patch("/", writeLimiter, async (req: Request, res: Response) => {
  * POST /api/account/complete-onboarding
  */
 router.post("/complete-onboarding", writeLimiter, async (req: Request, res: Response) => {
-  const { db, account } = await ensureAccount();
+  const accountId = getAccountId(req);
+  const { db, account } = await ensureAccount(accountId);
   const { name, email, currency } = req.body ?? {};
 
   account.onboarded = true;
@@ -57,11 +66,11 @@ router.post("/complete-onboarding", writeLimiter, async (req: Request, res: Resp
 /**
  * POST /api/account/reset
  */
-router.post("/reset", writeLimiter, async (_req: Request, res: Response) => {
-  const { db, account } = await ensureAccount();
-  const fresh = createDefaultAccount();
+router.post("/reset", writeLimiter, async (req: Request, res: Response) => {
+  const accountId = getAccountId(req);
+  const { db, account } = await ensureAccount(accountId);
+  const fresh = createDefaultAccount(accountId);
   Object.assign(account, fresh, {
-    id: account.id,
     createdAt: account.createdAt,
   });
   account.updatedAt = new Date().toISOString();

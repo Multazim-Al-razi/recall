@@ -1,6 +1,5 @@
 import { Navigate } from 'react-router';
 import { useAuth } from '@/hooks/useAuth';
-import { useAccountStore } from '@/stores/account';
 import { supabase } from '@/lib/supabaseClient';
 
 interface AuthGuardProps {
@@ -9,20 +8,18 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children }: AuthGuardProps) {
   const { user, loading } = useAuth();
-  const setupPath = useAccountStore((s) => s.profile.setupPath);
   const isCloudMode = supabase !== null;
 
-  // No Supabase configured — local-only mode, no auth needed
+  // No Supabase configured — genuine local-only mode, no auth needed.
+  // This is the only safe bypass: the user has no auth infrastructure
+  // available, so there's nothing to circumvent.
   if (!isCloudMode) {
     return <>{children}</>;
   }
 
-  // Supabase is configured, but user chose local/cli setup — no auth needed.
-  // Only cloud setupPath requires GitHub authentication.
-  if (setupPath === 'local' || setupPath === 'cli') {
-    return <>{children}</>;
-  }
-
+  // Supabase is configured — authentication is required regardless of
+  // client-side setupPath. localStorage can be manipulated via DevTools,
+  // so we never trust it for auth decisions when cloud auth is available.
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">

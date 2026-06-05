@@ -58,9 +58,13 @@ export async function requireAuth(
   res: Response,
   next: NextFunction,
 ) {
-  // Auth is bypassed ONLY when ALLOW_DEV_BACKEND=1 is explicitly set.
-  // This must be opt-in — production should never skip auth.
-  if (process.env.ALLOW_DEV_BACKEND === "1") {
+  // Auth is bypassed ONLY when ALLOW_DEV_BACKEND=1 is explicitly set
+  // AND we're NOT in production. This must be opt-in — production
+  // should never skip auth regardless of env vars.
+  if (
+    process.env.ALLOW_DEV_BACKEND === "1" &&
+    process.env.NODE_ENV !== "production"
+  ) {
     next();
     return;
   }

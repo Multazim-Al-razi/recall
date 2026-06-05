@@ -74,10 +74,10 @@ export interface Schema {
 }
 
 /** Single source of truth for a fresh default account. */
-export function createDefaultAccount(): AccountRecord {
+export function createDefaultAccount(id: string = "default"): AccountRecord {
   const now = new Date().toISOString();
   return {
-    id: "default",
+    id,
     name: "",
     email: "",
     currency: "USD",

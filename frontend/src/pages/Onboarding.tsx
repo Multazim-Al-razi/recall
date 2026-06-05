@@ -198,9 +198,9 @@ export function OnboardingPage() {
                     />
                     <span className="text-[14px] text-ink">
                       I agree to the{' '}
-                      <Link to="/terms" target="_blank" className="text-rausch hover:underline">Terms of Service</Link>
+                      <Link to="/terms" target="_blank" rel="noopener noreferrer" className="text-rausch hover:underline">Terms of Service</Link>
                       {' '}and{' '}
-                      <Link to="/privacy" target="_blank" className="text-rausch hover:underline">Privacy Policy</Link>
+                      <Link to="/privacy" target="_blank" rel="noopener noreferrer" className="text-rausch hover:underline">Privacy Policy</Link>
                     </span>
                   </label>
 

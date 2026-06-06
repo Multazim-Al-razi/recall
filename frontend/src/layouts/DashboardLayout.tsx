@@ -5,6 +5,7 @@ import { useConnectionStore } from '@/stores/connection';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { QuickCheckinModal } from '@/components/dashboard/QuickCheckinModal';
 
 /**
  * Dashboard chrome — sidebar, header, tab bar (mounted inside the layout's
@@ -107,6 +108,7 @@ export function DashboardLayout() {
           </ErrorBoundary>
         </main>
         <Footer />
+        <QuickCheckinModal />
       </div>
     </div>
   );

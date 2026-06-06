@@ -343,15 +343,6 @@ export function AboutPage() {
                 honest where most are vague, and respectful of your attention
                 where most fight for it.
               </p>
-              <p className="mt-4 text-[15.5px] leading-[1.8] text-ink-soft">
-                That shapes every decision. We use one warm accent instead of
-                alarming red. We show real numbers derived from your own data
-                rather than invented history. Cloud is currently free
-                during early access; when server costs make a fee necessary,
-                it will be small, honest, and transparent — never ads or data.
-                The goal is a tool you can trust precisely because its
-                incentives point at you, not past you.
-              </p>
             </section>
 
 

@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
-import { Check, RotateCcw, Heart } from "lucide-react";
+import { Check, RotateCcw, Heart, Camera } from "lucide-react";
 import { useAccountActions } from "@/hooks/useApiSync";
 import { Illustration } from "@/components/ui/Illustration";
 import { MaskDivider } from "@/components/layout/MaskDivider";
 import { initials } from "@/lib/format";
 import { usePaymentMethodStore } from "@/stores/paymentMethod";
 import { PaymentCardVisual } from "@/components/ui/PaymentCardVisual";
-import { type CardShade } from "@/lib/cardTheme";
+import { PaymentMethodModal } from "@/components/ui/PaymentMethodModal";
+import { type PaymentMethod } from "@/types/paymentMethod";
+import { Avatar } from "@/components/ui/Avatar";
 
 const inputClass =
   "mt-1.5 w-full rounded-md border border-ink/10 bg-canvas px-4 py-2.5 text-[15px] focus:border-rausch focus:outline-none";
@@ -16,7 +18,7 @@ const inputClass =
 export function ProfilePage() {
   const { profile, updateProfile, resetAccount } = useAccountActions();
   const paymentMethods = usePaymentMethodStore((s) => s.paymentMethods);
-  const setCardShade = usePaymentMethodStore((s) => s.setCardShade);
+  const [editingCard, setEditingCard] = useState<PaymentMethod | null>(null);
   const [name, setName] = useState(profile.name);
   const [email, setEmail] = useState(profile.email);
   const [currency, setCurrency] = useState(profile.currency);
@@ -24,6 +26,45 @@ export function ProfilePage() {
     profile.reminderLeadDays,
   );
   const [saved, setSaved] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_SIZE = 128;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height *= MAX_SIZE / width;
+            width = MAX_SIZE;
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width *= MAX_SIZE / height;
+            height = MAX_SIZE;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        updateProfile({ avatar: compressedDataUrl });
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
 
   const dirty =
     name !== profile.name ||
@@ -88,6 +129,31 @@ export function ProfilePage() {
           <div className="rounded-xl bg-surface p-7">
             <h2 className="text-[18px] font-semibold">Account settings</h2>
             <div className="mt-5 space-y-4">
+              {/* Avatar Uploader */}
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Avatar className="h-16 w-16 text-[18px]" />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-rausch text-white shadow-sm transition-transform hover:scale-105"
+                    aria-label="Upload custom avatar"
+                  >
+                    <Camera size={12} />
+                  </button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleAvatarChange}
+                    accept="image/*"
+                    className="hidden"
+                  />
+                </div>
+                <div>
+                  <p className="text-[13px] font-medium text-ink">Profile picture</p>
+                  <p className="text-[12px] text-muted">JPEG or PNG, max 1MB</p>
+                </div>
+              </div>
               <label className="block">
                 <span className="text-[13px] font-medium text-ink/70">
                   Name
@@ -207,25 +273,49 @@ export function ProfilePage() {
         {/* Card appearance */}
         {paymentMethods.length > 0 && (
           <section className="pb-10">
-            <h2 className="text-[18px] font-semibold">Card appearance</h2>
+            <h2 className="text-[18px] font-semibold">Card management</h2>
             <p className="mt-1 text-[13px] text-muted">
-              Choose a color accent for each payment card.
+              Manage your payment cards and their colors.
             </p>
-            <div className="mt-5 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-5 flex flex-col gap-4">
               {paymentMethods.map((pm) => (
-                <div key={pm.id} className="flex flex-col items-center gap-3 rounded-xl bg-surface p-5">
-                  <PaymentCardVisual
-                    card={pm}
-                    shade={pm.shade ?? 'coral'}
-                    showShadePicker={true}
-                    onShadeChange={(shade: CardShade) => setCardShade(pm.id, shade)}
-                  />
-                  <p className="text-[12px] font-medium text-ink-soft">{pm.label}</p>
+                <div key={pm.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-2xl bg-surface p-5 shadow-[0_0_0_1px_var(--color-hairline),var(--shadow-xs)]">
+                  <div className="flex items-center gap-6">
+                    <div className="w-[160px] shrink-0">
+                      <PaymentCardVisual
+                        card={pm}
+                        shade={pm.shade ?? 'coral'}
+                        showShadePicker={false}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[15px] font-semibold text-ink">{pm.label}</p>
+                      <p className="text-[13px] text-muted font-mono mt-1">
+                        •••• {pm.last4}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-6 pt-4 sm:pt-0 sm:border-l border-ink/5 sm:pl-6">
+                    <button
+                      type="button"
+                      onClick={() => setEditingCard(pm)}
+                      className="rounded-full px-4 py-2 text-[13px] font-medium text-ink bg-canvas hover:bg-ink/5 transition-colors shadow-[0_0_0_1px_var(--color-hairline)]"
+                    >
+                      Edit details
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
         )}
+
+        <PaymentMethodModal
+          isOpen={!!editingCard}
+          onClose={() => setEditingCard(null)}
+          initialData={editingCard}
+        />
       </div>
 
       <MaskDivider />

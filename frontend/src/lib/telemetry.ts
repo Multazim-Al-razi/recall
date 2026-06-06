@@ -17,7 +17,8 @@ type TelemetryEvent =
   | 'subscription_paused'
   | 'subscription_resumed'
   | 'onboarding_completed'
-  | 'reminder_sent';
+  | 'reminder_sent'
+  | 'quick_checkin_response';
 
 /** Buckets amounts into broad ranges to avoid transmitting exact spend. */
 function bucketAmount(amount: number): string {

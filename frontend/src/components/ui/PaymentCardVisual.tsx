@@ -80,7 +80,7 @@ function ShadePicker({
   className?: string;
 }) {
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn('flex items-center gap-3', className)}>
       {CARD_SHADE_LIST.map((shade) => {
         const meta = CARD_SHADES[shade];
         const isActive = shade === currentShade;
@@ -90,8 +90,10 @@ function ShadePicker({
             type="button"
             onClick={() => onChange(shade)}
             className={cn(
-              'h-6 w-6 rounded-full transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-white/50',
-              isActive ? 'scale-125 ring-2 ring-white/80' : 'hover:scale-110',
+              'h-6 w-6 rounded-full transition-all duration-200 focus:outline-none',
+              isActive
+                ? 'scale-110 ring-2 ring-ink ring-offset-2 ring-offset-surface shadow-sm'
+                : 'hover:scale-105 border border-ink/10',
             )}
             style={{ background: meta.swatch }}
             title={meta.label}
@@ -135,12 +137,11 @@ export function PaymentCardVisual({
   const smokeColor = SMOKE_COLORS[shade];
 
   return (
-    <div className={cn('flex w-full max-w-[320px] flex-col gap-3', className)}>
+    <div className={cn('flex w-full max-w-[320px] flex-col gap-3 @container', className)}>
       <div
-        className="relative aspect-[1.586/1] w-full overflow-hidden rounded-[1.2rem] text-white"
+        className="relative aspect-[1.586/1] w-full overflow-hidden rounded-[6cqw] text-white bg-[#181512]"
         style={{
-          boxShadow:
-            '0 1px 2px rgba(0,0,0,0.10), 0 8px 20px rgba(0,0,0,0.14), 0 24px 48px rgba(0,0,0,0.12)',
+          boxShadow: 'var(--shadow-md)',
         }}
       >
         {/* WebGL smoke background — different shade per card */}
@@ -154,13 +155,13 @@ export function PaymentCardVisual({
         <div className="relative z-10 flex h-full flex-col justify-between p-[5%]">
           {/* Top row: network logo (left) + contactless mark (right) */}
           <div className="flex items-start justify-between">
-            <CardBrandLogo brand={card.brand} className="h-10 w-16 shrink-0" />
-            <ContactlessIcon className="h-6 w-6 text-white/90" />
+            <CardBrandLogo brand={card.brand} className="h-[16cqw] w-[26cqw] shrink-0" />
+            <ContactlessIcon className="h-[10cqw] w-[10cqw] text-white/90" />
           </div>
 
           {/* Masked PAN — **** **** **** 1234 (large) */}
           <p
-            className="self-start font-mono text-[15px] font-light tracking-[0.1em] text-white sm:text-[17px] md:text-[19px]"
+            className="self-start font-mono text-[5.8cqw] font-light tracking-[0.1em] text-white whitespace-nowrap"
             style={{ fontVariantNumeric: 'tabular-nums' }}
           >
             {`**** **** **** ${last4}`}
@@ -169,7 +170,7 @@ export function PaymentCardVisual({
           {/* Bottom row: CVV (left, no labels) */}
           <div className="flex items-end gap-5">
             <p
-              className="font-mono text-[14px] font-semibold tabular-nums text-white sm:text-[15.5px] md:text-[17px]"
+              className="font-mono text-[4.8cqw] font-semibold text-white whitespace-nowrap"
               style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               ***

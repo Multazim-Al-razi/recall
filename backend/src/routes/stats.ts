@@ -14,6 +14,7 @@ const VALID_EVENTS = new Set([
   "subscription_resumed",
   "onboarding_completed",
   "reminder_sent",
+  "quick_checkin_response",
 ]);
 
 export const statsRoutes: Router = express.Router();
@@ -122,6 +123,12 @@ export async function getStats(req: Request, res: Response, next: NextFunction) 
 
     const trials = active.filter((s) => s.isFreeTrial).length;
 
+    // ── Spend Health score (0–100) ──────────────────────────────────
+    const spendHealth = computeSpendHealth(subs, active, monthlyBurnByCategory, trials);
+
+    // ── Monthly spending history (last 6 months) ────────────────────
+    const monthlySpending = computeMonthlySpending(subs, 6);
+
     return res.json({
       mode: "lowdb",
       note: "Single-user mode — stats reflect the default account only.",
@@ -135,6 +142,8 @@ export async function getStats(req: Request, res: Response, next: NextFunction) 
       renewalsNext30d: renewals30d,
       activeFreeTrials: trials,
       onboarded: account.onboarded,
+      spendHealth,
+      monthlySpending,
       timestamp: new Date().toISOString(),
     });
   } catch (err) {
@@ -272,4 +281,76 @@ function toMonthly(amount: number, cycle: string, customDays?: number): number {
     case "custom": return (amount / (customDays ?? 30)) * 30;
     default: return 0;
   }
+}
+
+/**
+ * Computes a 0–100 "Spend Health" composite score from 4 sub-factors, each
+ * contributing 0–25 points. Higher is healthier.
+ */
+function computeSpendHealth(
+  allSubs: { amount: number; billingCycle: string; customCycleDays?: number; status: string; category: string; isFreeTrial: boolean; startDate: string }[],
+  active: { amount: number; billingCycle: string; customCycleDays?: number; status: string; category: string; isFreeTrial: boolean; autoRenews?: boolean }[],
+  categoryBurn: Record<string, number>,
+  trialCount: number,
+): { score: number; label: string; factors: { trendScore: number; trialScore: number; diversityScore: number; savingsScore: number } } {
+  // 1. Trend Score (0–25): MoM change — lower rise is better
+  const history = computeMonthlySpending(allSubs, 2);
+  const prev = history[0]?.amount ?? 0;
+  const curr = history[1]?.amount ?? 0;
+  const momChange = prev > 0 ? ((curr - prev) / prev) * 100 : 0;
+  const trendScore = Math.round(Math.max(0, Math.min(25, 25 - (momChange * 25) / 20)));
+
+  // 2. Trial Score (0–25): fewer unconverted trials = better
+  const trialScore = Math.max(0, 25 - trialCount * 5);
+
+  // 3. Diversity Score (0–25): Herfindahl index — spread across categories is better
+  const cats = Object.values(categoryBurn);
+  const totalCatBurn = cats.reduce((a, b) => a + b, 0);
+  let diversityScore = 25;
+  if (cats.length <= 1) {
+    diversityScore = cats.length === 0 ? 25 : 5;
+  } else if (totalCatBurn > 0) {
+    const hhi = cats.reduce((sum, v) => sum + (v / totalCatBurn) ** 2, 0);
+    // hhi ranges from 1/n (perfectly spread) to 1 (single category)
+    // Scale: hhi=1 → 5, hhi=1/n → 25
+    const minHhi = 1 / cats.length;
+    diversityScore = Math.round(5 + (1 - (hhi - minHhi) / (1 - minHhi || 1)) * 20);
+  }
+
+  // 4. Savings Score (0–25): fewer duplicate-category subs = better
+  const categoryCounts: Record<string, number> = {};
+  for (const s of active) categoryCounts[s.category] = (categoryCounts[s.category] ?? 0) + 1;
+  const duplicates = Object.values(categoryCounts).reduce((sum, c) => sum + Math.max(0, c - 1), 0);
+  const savingsScore = Math.max(0, 25 - duplicates * 4);
+
+  const score = Math.min(100, trendScore + trialScore + diversityScore + savingsScore);
+  const label = score >= 76 ? "Excellent" : score >= 51 ? "Good" : score >= 26 ? "Fair" : "At Risk";
+
+  return { score, label, factors: { trendScore, trialScore, diversityScore, savingsScore } };
+}
+
+/**
+ * Generates the trailing N months of total subscription spend for the bar chart.
+ * Mirrors the frontend `getSpendHistory` logic.
+ */
+function computeMonthlySpending(
+  subs: { amount: number; billingCycle: string; customCycleDays?: number; status: string; startDate: string }[],
+  months: number,
+): { month: string; amount: number }[] {
+  const now = new Date();
+  const result: { month: string; amount: number }[] = [];
+
+  for (let i = months - 1; i >= 0; i--) {
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+    const total = subs
+      .filter((s) => s.status !== "cancelled")
+      .filter((s) => new Date(s.startDate) <= monthEnd)
+      .reduce((sum, s) => sum + toMonthly(s.amount, s.billingCycle, s.customCycleDays), 0);
+    result.push({
+      month: monthEnd.toLocaleDateString("en-US", { month: "short" }),
+      amount: Math.round(total * 100) / 100,
+    });
+  }
+
+  return result;
 }

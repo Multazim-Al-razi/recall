@@ -16,19 +16,7 @@ const BENEFITS = [
  */
 export function OrganicGrowthHero() {
   return (
-    <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2 md:[&>*:first-child]:order-2">
-      <motion.div
-        initial={{ opacity: 0, x: 30 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        <Illustration
-          name="cherryTree"
-          decorative={false}
-          className="mx-auto h-[240px] w-full max-w-[360px] object-contain md:h-[320px]"
-        />
-      </motion.div>
+    <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
       <div>
         <h2 className="mb-6 font-display text-[32px] font-light tracking-[-1px] md:text-[40px]">
           Growing with the <span className="text-gradient-rausch font-normal">community</span>
@@ -64,6 +52,18 @@ export function OrganicGrowthHero() {
           </Link>
         </div>
       </div>
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <Illustration
+          name="cherryTree"
+          decorative={false}
+          className="mx-auto h-[240px] w-full max-w-[360px] object-contain md:h-[320px]"
+        />
+      </motion.div>
     </div>
   );
 }

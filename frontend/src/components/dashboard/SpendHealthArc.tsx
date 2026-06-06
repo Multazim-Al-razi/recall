@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { useSubscriptionStore, getSpendHistory, getExpiringTrials, getByCategory, getSavingsOpportunities } from '@/stores/subscription';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { Link } from 'react-router';
 
 // ── Arc geometry ──────────────────────────────────────────────────────────────
 const CX = 100;
@@ -149,25 +150,40 @@ function Needle({ score, reduced }: { score: number; reduced: boolean }) {
   const startPos = pointOnArc(180);
 
   return (
-    <motion.circle
-      cx={reduced ? finalPos.x : startPos.x}
-      cy={reduced ? finalPos.y : startPos.y}
-      r={STROKE / 2 + 2}
-      fill={color}
-      stroke="var(--color-surface)"
-      strokeWidth={3}
-      animate={reduced ? undefined : { cx: finalPos.x, cy: finalPos.y }}
-      transition={{ duration: 1, ease: 'easeOut' }}
-      style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))' }}
-    />
+    <>
+      {/* Glow halo behind the needle dot */}
+      <motion.circle
+        cx={reduced ? finalPos.x : startPos.x}
+        cy={reduced ? finalPos.y : startPos.y}
+        r={STROKE / 2 + 8}
+        fill={color}
+        opacity={0.2}
+        animate={reduced ? undefined : { cx: finalPos.x, cy: finalPos.y }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        style={{ filter: 'blur(6px)' }}
+      />
+      {/* Main needle dot */}
+      <motion.circle
+        cx={reduced ? finalPos.x : startPos.x}
+        cy={reduced ? finalPos.y : startPos.y}
+        r={STROKE / 2 + 2}
+        fill={color}
+        stroke="var(--color-surface)"
+        strokeWidth={3}
+        animate={reduced ? undefined : { cx: finalPos.x, cy: finalPos.y }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+        style={{ filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.2))' }}
+      />
+    </>
   );
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
 /**
- * Spend Health arc gauge — a segmented semicircle speedometer showing a
- * composite 0–100 health score computed from trend, trial risk, category
- * diversity, and savings opportunities.
+ * Spend Health arc gauge — a premium Bankio-inspired vertical card with a
+ * centered segmented semicircle speedometer showing a composite 0–100 health
+ * score computed from trend, trial risk, category diversity, and savings
+ * opportunities.
  */
 export function SpendHealthArc() {
   const subscriptions = useSubscriptionStore((s) => s.subscriptions);
@@ -177,21 +193,34 @@ export function SpendHealthArc() {
   const status = getStatus(score);
 
   return (
-    <div className="card-premium flex flex-col items-center gap-4 p-6">
-      {/* Header */}
-      <h3 className="text-[10px] font-bold uppercase tracking-[2px] text-muted">
-        Spend Health
-      </h3>
+    <motion.div
+      className="card-premium flex flex-col items-center p-6"
+      initial={reduced ? undefined : { opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
+    >
+      {/* ── Header row: title + "See More" link ── */}
+      <div className="flex w-full items-center justify-between mb-4">
+        <h3 className="text-[13px] font-semibold tracking-wide text-ink">
+          Spend Health
+        </h3>
+        <Link
+          to="/dashboard/analytics"
+          className="text-[12px] font-medium text-[var(--color-rausch)] transition-colors hover:text-[var(--color-rausch-hover)]"
+        >
+          See More
+        </Link>
+      </div>
 
-      {/* Arc gauge */}
-      <div className="relative w-full max-w-[220px]">
+      {/* ── Arc gauge hero — centered, with score overlay ── */}
+      <div className="relative w-full max-w-[240px]">
         <svg
           viewBox="0 0 200 120"
           className="h-auto w-full overflow-visible"
           role="img"
           aria-label={`Spend health score: ${score} out of 100, ${status.label}`}
         >
-          {/* Background segments */}
+          {/* Background segments (faded) */}
           {SEGMENTS.map((seg, i) => {
             const startDeg = pctToDeg(seg.startPct) + (i === 0 ? 0 : GAP_DEG);
             const endDeg = pctToDeg(seg.endPct) - (i === SEGMENTS.length - 1 ? 0 : GAP_DEG);
@@ -203,7 +232,7 @@ export function SpendHealthArc() {
                 stroke={seg.color}
                 strokeWidth={STROKE}
                 strokeLinecap="round"
-                opacity={0.18}
+                opacity={0.15}
               />
             );
           })}
@@ -235,13 +264,13 @@ export function SpendHealthArc() {
             );
           })}
 
-          {/* Needle dot */}
+          {/* Needle dot with glow */}
           <Needle score={score} reduced={reduced} />
         </svg>
 
-        {/* Center content — overlaid on the SVG area */}
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center pb-1">
-          <span className="font-display text-[42px] font-light leading-none tabular-nums text-ink">
+        {/* ── Score + status pill — absolutely positioned inside the arc ── */}
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-1 pointer-events-none">
+          <span className="font-display text-[40px] font-light leading-none tabular-nums text-ink">
             <AnimatedNumber value={score} reduced={reduced} />
           </span>
           <span
@@ -251,6 +280,20 @@ export function SpendHealthArc() {
           </span>
         </div>
       </div>
-    </div>
+
+      {/* ── Subtitle ── */}
+      <p className="mt-4 text-center text-[11px] text-muted leading-relaxed">
+        Based on spending trends, trial risks,<br />
+        category diversity &amp; savings signals.
+      </p>
+
+      {/* ── Bottom CTA pill button ── */}
+      <Link
+        to="/dashboard/analytics"
+        className="mt-5 inline-flex items-center justify-center rounded-full bg-[var(--color-teal)]/10 px-5 py-2 text-[12px] font-semibold text-[var(--color-teal)] transition-all hover:bg-[var(--color-teal)]/18 hover:shadow-sm active:scale-[0.97]"
+      >
+        Explore Details
+      </Link>
+    </motion.div>
   );
 }

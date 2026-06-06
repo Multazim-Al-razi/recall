@@ -37,7 +37,7 @@ export function HeroPreview() {
             segments={RING}
             size={224}
             thickness={20}
-            gap={3}
+            gap={0}
             ariaLabel="$184 per month across four categories"
           >
             <span className="font-display text-[46px] font-light leading-none tracking-[-2px] tabular-nums">

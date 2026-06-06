@@ -116,6 +116,34 @@ export function SegmentRing({
             </motion.circle>
           );
         })}
+        {/* Draw the start cap of the first arc on top of the last arc to create a perfect cyclic loop */}
+        {arcs.length > 1 && (
+          <motion.circle
+            key={`${arcs[0].key}-cyclic-cap`}
+            cx={cx}
+            cy={cx}
+            r={r}
+            fill="none"
+            stroke={arcs[0].color}
+            strokeWidth={activeKey === arcs[0].key ? active : thickness}
+            strokeLinecap="round"
+            strokeDasharray={`0.01 ${c - 0.01}`}
+            strokeDashoffset={-arcs[0].start}
+            transform={`rotate(-90 ${cx} ${cx})`}
+            initial={reduce ? false : { opacity: 0 }}
+            animate={{ opacity: (activeKey != null && activeKey !== arcs[0].key) ? 0.3 : 1 }}
+            transition={{
+              opacity: { duration: 0.35, delay: reduce ? 0 : 0.15 + arcs.length * 0.08 },
+            }}
+            style={{
+              cursor: onSelect ? 'pointer' : 'default',
+              transition: 'stroke-width 0.25s var(--ease-out-soft)',
+            }}
+            onMouseEnter={() => onActivate?.(arcs[0].key)}
+            onMouseLeave={() => onActivate?.(null)}
+            onClick={() => onSelect?.(arcs[0].key)}
+          />
+        )}
       </svg>
       {children && (
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">

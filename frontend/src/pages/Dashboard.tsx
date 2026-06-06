@@ -3,15 +3,11 @@ import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { Plus, LineChart } from "lucide-react";
 import { useAccountStore } from "@/stores/account";
-import { PaymentMethodCard } from "@/components/dashboard/PaymentMethodCard";
-import { FlowTiles } from "@/components/dashboard/FlowTiles";
-import { SavingsGauge } from "@/components/dashboard/SavingsGauge";
-import { StatusLockCard } from "@/components/dashboard/StatusLockCard";
-import { TrialCountdownCard } from "@/components/dashboard/TrialCountdownCard";
-import { SpendTrendCard } from "@/components/dashboard/SpendTrendCard";
-import { CategoryRingsCard } from "@/components/dashboard/CategoryRingsCard";
+import { MyCardsWidget } from "@/components/dashboard/MyCardsWidget";
 import { ActivityManager } from "@/components/dashboard/ActivityManager";
-import { SpendHealthCard } from "@/components/dashboard/SpendHealthCard";
+import { SpendingBarChart } from "@/components/dashboard/SpendingBarChart";
+import { SpendTrendCard } from "@/components/dashboard/SpendTrendCard";
+import { SpendHealthArc } from "@/components/dashboard/SpendHealthArc";
 import { SubscriptionFormModal } from "@/components/subscriptions/SubscriptionFormModal";
 
 const fadeUp = {
@@ -83,29 +79,23 @@ export function DashboardPage() {
           </div>
         </header>
 
-        {/* Bento grid — three aligned columns mirroring the reference regions */}
+        {/* Bento grid — clean 3-column layout */}
         <div className="flex flex-col gap-3.5 lg:flex-row lg:items-start">
-          {/* Column 1 — linked card + category bullseye */}
+          {/* Column 1 — Cards + Activity */}
           <div className="flex flex-col gap-3.5 lg:flex-[1.05]">
-            <PaymentMethodCard />
-            <CategoryRingsCard />
-          </div>
-
-          {/* Column 2 — spend lenses + activity hub */}
-          <div className="flex flex-col gap-3.5 lg:flex-[1.15]">
-            <FlowTiles />
+            <MyCardsWidget />
             <ActivityManager />
           </div>
 
-          {/* Column 3 — status dials, trend, check-in */}
-          <div className="flex flex-col gap-3.5 lg:flex-[0.95]">
-            <div className="grid grid-cols-2 gap-3.5">
-              <StatusLockCard />
-              <SavingsGauge />
-            </div>
-            <TrialCountdownCard />
+          {/* Column 2 — Charts */}
+          <div className="flex flex-col gap-3.5 lg:flex-[1.15]">
+            <SpendingBarChart />
             <SpendTrendCard />
-            <SpendHealthCard />
+          </div>
+
+          {/* Column 3 — Health gauge */}
+          <div className="flex flex-col gap-3.5 lg:flex-[0.80]">
+            <SpendHealthArc />
           </div>
         </div>
       </div>
